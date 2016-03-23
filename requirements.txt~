@@ -1,7 +1,9 @@
 altgraph==0.10.2
 bdist-mpkg==0.5.0
 bonjour-py==0.3
+dj-database-url==0.4.0
 Django==1.8
+gunicorn==19.4.5
 macholib==1.5.1
 matplotlib==1.3.1
 modulegraph==0.10.4
@@ -55,5 +57,6 @@ vboxapi==1.0
 virtualenv==14.0.6
 virtualenv-clone==0.2.6
 virtualenvwrapper==4.7.1
+whitenoise==2.0.6
 xattr==0.6.4
 zope.interface==4.1.1

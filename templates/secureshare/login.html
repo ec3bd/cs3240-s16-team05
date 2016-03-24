@@ -1,0 +1,42 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html>
+	<head>
+        <meta name="description" content="A platform to securely share files and messages.">
+                
+        <title>SecureShare</title>
+
+        <!-- Bootstrap core, style CSS -->
+        <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+        <link href="{% static "css/bootstrap-theme.min.css" %}" rel="stylesheet">
+        <link href="{% static "css/signin.css" %}" rel="stylesheet">
+        
+        <!-- Bootstrap core JS -->
+        <script src="{% static "js/bootstrap.min.js" %}"></script>
+    </head>
+
+	<title>hello</title>
+
+	<body>
+		<div class="container">
+			<div align="center">
+    			<h3 class="form-signin-heading">SecureShare</h3>
+    			<p>This platform allows for encrypted file and message sharing. It was created for <b>Advanced Software Development (CS 3240)</b>, taught by Prof. Mary Smith, at the University of Virginia.</p>
+    			<br>
+    			<p>Ready to start? Sign in below.</p>
+    		</div>
+	    	<form class="form-signin" action="../secureshare/auth/" method="post">
+	    		{% csrf_token %}  			
+        		<label for="inputUsername" class="sr-only">Username</label>
+        		<input type="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+        		<label for="inputPassword" class="sr-only">Password</label>
+        		<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      		</form>
+      		<p align="center">Not registered? <a href="">Sign up</a>.</p>
+      		<br><br>
+      		<p align="center">Developed by Hudson Ayers, Srikanth Chelluri, Marina Sanusi, and Sabina Yim.</p>
+    	</div> <!-- /container -->
+	</body>
+</html>

@@ -2,9 +2,10 @@ from django.conf.urls import patterns, url
 from secureshare import views
 
 urlpatterns = [
-    url(r'^$', views.login, name='login'),
-    url(r'^auth/$', views.auth, name='auth'),
+    url(r'^$', views.user_login, name='login'),
+    url(r'^auth/$', views.user_login, name='auth'),
     url(r'^register/$', views.register, name='register'),
-    url(r'^authregister/$', views.authregister, name='authregister'),
     url(r'^home/$', views.home, name='home'),
+    url(r'^login/$', views.user_login, name='login'),
+    url(r'^logout/$', views.user_logout, name='logout'),
 ]

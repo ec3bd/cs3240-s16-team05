@@ -23,15 +23,15 @@
 			<div align="center">
     			<h3 class="form-signin-heading">SecureShare</h3>
     		</div>
-	    	<form class="form-signin" action="../secureshare/auth/" method="post">
-	    		{% csrf_token %} 
+            <form id="login_form" method="post" action="/secureshare/login/">
+	    		{% csrf_token %}
                 <p align="center">This platform allows for encrypted file and message sharing. It was created for <b>Advanced Software Development (CS 3240)</b>, taught by Prof. Mary Smith, at the University of Virginia.</p>
                 <br>
                 <p align="center">Ready to start? Sign in below.</p>
-        		<label for="inputUsername" class="sr-only">Username</label>
-        		<input type="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+        		<label for="username" class="sr-only">Username</label>
+        		<input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
         		<label for="inputPassword" class="sr-only">Password</label>
-        		<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        		<input type="password" name="password" class="form-control" placeholder="Password" required>
         		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       		</form>
       		<p align="center">Not registered? <a href="/secureshare/register">Sign up</a>.</p>

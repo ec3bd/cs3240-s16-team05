@@ -21,30 +21,62 @@
 	<body>
 		<div class="container">
 			<div align="center">
-    			<h3 class="form-signin-heading">SecureShare Account Registration</h3>
+    			<h3 class="form-signin-heading"><b>SecureShare</b> - Register</h3>
     		</div>
+
             {% if registered %}
-            <strong>Thank you for registering!</strong>
-            <a href="/secureshare/login/">Log in now.</a><br />
+            <div class="welcome" align="center">
+                <br>
+                <b align="center">Welcome to the club!</b>
+                <a href="/secureshare/login/">Log in now.</a><br />
+            </div>
+            
             {% else %}
-            <strong>Register here!</strong><br />
-
             <form id="user_form" method="post" action="/secureshare/register/"
-                    enctype="multipart/form-data">
-
+                    enctype="multipart/form-data" style="margin: 0 auto; width: 50%">
                 {% csrf_token %}
-
+                <p align="center">This platform allows for encrypted file and message sharing. It was created for <b>Advanced Software Development (CS 3240)</b>, taught by Prof. Mary Smith, at the University of Virginia.</p>
+                <br>
+                <p align="center">Ready to start? Register below.</p>
                 <!-- Display each form. The as_p method wraps each element in a paragraph
                      (<p>) element. This ensures each element appears on a new line,
                      making everything look neater. -->
-                {{ user_form.as_p }}
-                {{ profile_form.as_p }}
+
+                <div class="row" align="center" style="margin: 0 auto; width: 50%">
+                    <div class="col-md-6" align="right"><label>Username:</label></div>
+                    <div class="col-md-6" align="left">{{ user_form.username }}</div>
+                </div>
+                <div class="row" align="center" style="margin: 0 auto; width: 50%">
+                    <div class="col-md-6" align="right"><label>Email:</label></div>
+                    <div class="col-md-6" align="left">{{ user_form.email }}</div>
+                </div>
+                <div class="row" align="center" style="margin: 0 auto; width: 50%">
+                    <div class="col-md-6" align="right"><label>Password:</label></div>
+                    <div class="col-md-6" align="left">{{ user_form.password }}</div>
+                </div>
+
+                <br>
+
+                <p align="center">Optionally, provide the following.</p>
+                <div class="row" align="center" style="margin: 0 auto; width: 50%">
+                    <div class="col-md-6" align="right"><label>Website:</label></div>
+                    <div class="col-md-6" align="left">{{ profile_form.website }}</div>
+                </div>
+                <div class="row" align="center" style="margin: 0 auto; width: 50%">
+                    <div class="col-md-6" align="right"><label>Profile Picture:</label></div>
+                    <div class="col-md-6" align="left">{{ profile_form.picture }}</div>
+                </div>
+
+                <br>
 
                 <!-- Provide a button to click to submit the form. -->
-                <input type="submit" name="submit" value="Register" />
+                <div class="button" style="text-align: center">
+                    <input type="submit" name="submit" style="" value="Register" />
+                </div>
             </form>
-            {% endif %}
+            <br>
       		<p align="center">Already registered? <a href="/secureshare">Sign in</a>.</p>
+            {% endif %}
       		<br><br>
       		<p align="center">Developed by Hudson Ayers, Srikanth Chelluri, Marina Sanusi, and Sabina Yim.</p>
     	</div> <!-- /container -->

@@ -133,3 +133,44 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/secureshare/')
+
+
+def createreport(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    return render(request, 'secureshare/create-report.html')
+
+def managereports(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    return render(request, 'secureshare/manage-reports.html')
+
+def viewreports(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    return render(request, 'secureshare/view-reports.html')
+
+def viewmessages(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    return render(request, 'secureshare/view-messages.html')
+
+def managegroups(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    return render(request, 'secureshare/manage-groups.html')
+
+def creategroup(request):
+    if not request.user.is_authenticated():
+        return render(request, 'securesshare/failed')
+    return render(request, 'secureshare/create-group.html')
+
+def manageaccount(request):
+    if not request.user.is_authenticated():
+        return render(request, 'securesshare/failed')
+    return render(request, 'secureshare/manage-account.html')
+
+def manageusersreports(request):
+    if not request.user.is_authenticated():
+        return render(request, 'securesshare/failed')
+    return render(request, 'secureshare/manage-users-and-reports.html')

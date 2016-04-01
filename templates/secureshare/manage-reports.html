@@ -42,14 +42,14 @@
     </div>
 
     <div class="container-fluid">
-    	<div class="row">
-        	<div class="col-sm-3 col-md-2 sidebar">
-          		<ul class="nav nav-sidebar">
-                <li class="active"><a href="/secureshare/home"><b>Home</b></a></li>
+      <div class="row">
+          <div class="col-sm-3 col-md-2 sidebar">
+              <ul class="nav nav-sidebar">
+                <li><a href="/secureshare/home"><b>Home</b></a></li>
               </ul>
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/createreport">Create a report</a></li>
-                <li><a href="/secureshare/managereports">Manage my reports</a></li>
+                <li class="active"><a href="/secureshare/managereports">Manage my reports</a></li>
                 <li><a href="/secureshare/viewreports">View all reports</a></li>
               </ul>
               <ul class="nav nav-sidebar">
@@ -61,40 +61,21 @@
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
                 <li><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
-            		<!-- {% if user.is_sm %}
-            		<li><a href=""><b>Manage users and reports</b></a></li>
-            		{% endif %} -->
-          		</ul>
-        	</div>
-      	</div>
+                <!-- {% if user.is_sm %}
+                <li><a href=""><b>Manage users and reports</b></a></li>
+                {% endif %} -->
+              </ul>
+          </div>
+        </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Welcome back, {{ request.user }}!</h1>
+          <h1 class="page-header">Manage reports</h1>
 
-          <p>You're are authenticated and at the home page. User the links below or on the left to perform actions.</p>
+          <p>This page allows you to manage your reports.</p>
           <br><br>
-
-          <div class="row placeholders">
-            <div class="col-sm-4 placeholder">
-              <h4>Reports</h4><br>
-              <span class="text-muted"><a href="">Create a report</a></span><br>
-              <span class="text-muted"><a href="">Manage my reports</a></span><br>
-              <span class="text-muted"><a href="">View all reports</a></span>
-            </div>
-            <div class="col-sm-4 placeholder">
-              <h4>Users</h4><br>
-              <span class="text-muted"><a href="">View messages</a></span><br>
-              <span class="text-muted"><a href="">Manage my groups</a></span><br>
-              <span class="text-muted"><a href="">Create a new group</a></span>             
-            </div>
-            <div class="col-sm-4 placeholder">
-              <h4>Management</h4><br>
-              <span class="text-muted"><a href=""><b>Manage my account</b></a></span><br>
-              <span class="text-muted"><a href=""><b>Manage users and reports</a></span>
-            </div>
-          </div>
+        </div>
 
     </div>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
+   <script src="{% static "js/bootstrap.min.js" %}"></script>
   </body>
 </html>

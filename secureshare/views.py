@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from secureshare.models import Message
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from secureshare.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
+import datetime
 
 # Create your views here.
 
@@ -135,40 +137,74 @@ def user_logout(request):
     return HttpResponseRedirect('/secureshare/')
 
 
+
+
+
 def createreport(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/create-report.html')
+
 
 def managereports(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
     return render(request, 'secureshare/manage-reports.html')
 
+
 def viewreports(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
     return render(request, 'secureshare/view-reports.html')
 
+
 def viewmessages(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
     return render(request, 'secureshare/view-messages.html')
+def sendmessage(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    if request.method == 'POST':
+        recepient = request.POST.get('recepient')
+        message = request.POST.get('message')
+        user = request.user
+        if user.is_active:
+            # Check if recepient exists
+            recepientUser = User.objects.filter(username=recepient)[0]
+            if recepientUser == None:
+                return render(request, 'secureshare/view-messages.html')
+
+            # Save to database
+            t = datetime.datetime.now()
+            msg = Message(sender=user, receiver=recepientUser, content=message, created_at=t)
+            msg.save()
+
+            return HttpResponseRedirect('/secureshare/viewmessages/')
+        else:
+            return render(request, 'secureshare/failed')
+    else:
+        if(request.user.is_authenticated()):
+            return HttpResponseRedirect('/secureshare/home/')
+        return render(request, 'secureshare/login.html')
 
 def managegroups(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
     return render(request, 'secureshare/manage-groups.html')
 
+
 def creategroup(request):
     if not request.user.is_authenticated():
         return render(request, 'securesshare/failed')
     return render(request, 'secureshare/create-group.html')
 
+
 def manageaccount(request):
     if not request.user.is_authenticated():
         return render(request, 'securesshare/failed')
     return render(request, 'secureshare/manage-account.html')
+
 
 def manageusersreports(request):
     if not request.user.is_authenticated():

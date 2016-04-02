@@ -73,6 +73,17 @@
 
           <p>This page allows you to view and respond to messages (and optionally encrypt them).</p>
           <br><br>
+
+          <div class="messaging">
+            <form id="login_form" method="post" action="/secureshare/sendmessage/">
+              {% csrf_token %}
+              <label for="recepient" class="sr-only">To</label>
+              <input type="text" name="recepient" class="form-control" placeholder="To" required autofocus><br>
+              <label for="message" class="sr-only">Message</label>
+              <input type="text" name="message" class="form-control" placeholder="Message" required><br>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+            </form>
+          </div>
         </div>
 
     </div>

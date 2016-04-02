@@ -71,26 +71,26 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Welcome back, {{ request.user }}!</h1>
 
-          <p>You're are authenticated and at the home page. User the links below or on the left to perform actions.</p>
+          <p>You're are authenticated and at the home page. Use the links below or on the left to perform actions.</p>
           <br><br>
 
           <div class="row placeholders">
             <div class="col-sm-4 placeholder">
               <h4>Reports</h4><br>
-              <span class="text-muted"><a href="">Create a report</a></span><br>
-              <span class="text-muted"><a href="">Manage my reports</a></span><br>
-              <span class="text-muted"><a href="">View all reports</a></span>
+              <span class="text-muted"><a href="/secureshare/createreport">Create a report</a></span><br>
+              <span class="text-muted"><a href="/secureshare/managereports">Manage my reports</a></span><br>
+              <span class="text-muted"><a href="/secureshare/viewreports">View all reports</a></span>
             </div>
             <div class="col-sm-4 placeholder">
               <h4>Users</h4><br>
-              <span class="text-muted"><a href="">View messages</a></span><br>
-              <span class="text-muted"><a href="">Manage my groups</a></span><br>
-              <span class="text-muted"><a href="">Create a new group</a></span>             
+              <span class="text-muted"><a href="/secureshare/viewmessages">View messages</a></span><br>
+              <span class="text-muted"><a href="/secureshare/managegroups">Manage my groups</a></span><br>
+              <span class="text-muted"><a href="/secureshare/creategroup">Create a new group</a></span>             
             </div>
             <div class="col-sm-4 placeholder">
               <h4>Management</h4><br>
-              <span class="text-muted"><a href=""><b>Manage my account</b></a></span><br>
-              <span class="text-muted"><a href=""><b>Manage users and reports</a></span>
+              <span class="text-muted"><a href="/secureshare/manageaccount"><b>Manage my account</b></a></span><br>
+              <span class="text-muted"><a href="/secureshare/manageusersreports"><b>Manage users and reports</a></span>
             </div>
           </div>
 

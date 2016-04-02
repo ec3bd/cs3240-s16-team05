@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^viewreports/$', views.viewreports, name='viewreports'),
 
     url(r'^viewmessages/$', views.viewmessages, name='viewmessages'),
+    url(r'^sendmessage/$', views.sendmessage, name='sendmessage'),
+
     url(r'^managegroups/$', views.managegroups, name='managegroups'),
     url(r'^creategroup/$', views.creategroup, name='creategroup'),
 

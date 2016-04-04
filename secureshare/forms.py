@@ -17,7 +17,7 @@ class UploadFileForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+        fields = ('website', 'picture', 'siteManager')
 
 class DocumentForm(forms.Form):
   docfile = forms.FileField(

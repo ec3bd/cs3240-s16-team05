@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from secureshare.models import UserProfile
 from django.contrib.auth.models import User
 from secureshare.models import Message
 from django.contrib.auth.decorators import login_required
@@ -125,7 +126,7 @@ def authregister(request):
 def home(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
-	return render(request, 'secureshare/home.html')
+	return render(request, 'secureshare/home.html', {'siteManager': UserProfile.objects.get(user_id=request.user.id).siteManager})
 
 # Use the login_required() decorator to ensure only those logged in can access the view.
 @login_required

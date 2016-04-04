@@ -1,5 +1,4 @@
 from django import forms
-from django import forms
 from django.contrib.auth.models import User
 from secureshare.models import UserProfile
 
@@ -13,4 +12,4 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+        fields = ('website', 'picture', 'siteManager')

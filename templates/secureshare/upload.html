@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html>
+	<head>
+        <meta name="description" content="A platform to securely share files and messages.">
+                
+        <title>SecureShare</title>
+
+        <!-- Bootstrap core, style CSS -->
+        <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+        <link href="{% static "css/bootstrap-theme.min.css" %}" rel="stylesheet">
+        <link href="{% static "css/signin.css" %}" rel="stylesheet">
+        
+        <!-- Bootstrap core JS -->
+        <script src="{% static "js/bootstrap.min.js" %}"></script>
+    </head>
+
+	<title>Home</title>
+
+	<body>
+		<div class="container">
+			<div align="center">
+      <h1>home sweet home</h1><br><br>
+
+            <form action="../confirmation" method='post' enctype='multipart/form-data'>
+              {%csrf_token %}
+              <p>{{ form.non_field_errors}}</p>
+              <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }} </p>
+              <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+              </p>
+              <input type="file" name="f">
+              <input class="btn btn-primary" type="submit">
+            </form>
+            <br>
+            <br>
+      <a href="/secureshare/logout/">Logout</a><br />
+    		</div>
+	    		{% csrf_token %}
+    	</div> <!-- /container -->
+	</body>
+</html>

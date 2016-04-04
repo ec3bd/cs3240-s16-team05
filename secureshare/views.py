@@ -161,7 +161,8 @@ def viewreports(request):
 def viewmessages(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
-    return render(request, 'secureshare/view-messages.html')
+    messageList = Message.objects.all()
+    return render(request, 'secureshare/view-messages.html', {'messageList': messageList,})
 def sendmessage(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')

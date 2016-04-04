@@ -83,7 +83,25 @@
               <input type="text" name="message" class="form-control" placeholder="Message" required><br>
               <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
             </form>
+
+            <br>
+
+            <table>
+              <tr>
+                <th>From</th>
+                <th>Message</th>
+                <th>Time</th>
+              </tr>
+              {% for message in messageList %}
+              <tr>
+                <td>{{ message.sender }}</td>
+                <td>{{ message.created_at }}</td>
+                <td>{{ message.content }}</td>
+              </tr>
+              {% endfor %}
+            </table>
           </div>
+
         </div>
 
     </div>

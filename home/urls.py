@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from secureshare import views
+
 
 urlpatterns = patterns('',
 	# [home page, index]
@@ -25,4 +27,5 @@ urlpatterns = patterns('',
     
     # admin
     url(r'^admin/', admin.site.urls),
+    url(r'^secureshare/home/', views.home, name='home'),
 )

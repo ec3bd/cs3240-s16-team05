@@ -1,14 +1,55 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.contrib.auth.models import User
 from secureshare.models import Message
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from secureshare.forms import UserForm, UserProfileForm
+from secureshare.models import User, Document, UploadFile
+from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
+from django.template import RequestContext
+from django.core.urlresolvers import reverse
 import datetime
 
-# Create your views here.
+def list(request):
+    # Handle file upload
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            newdoc = Document(docfile=request.FILES['docfile'])
+            newdoc.save()
+
+            # Redirect to the document list after POST
+            return HttpResponseRedirect(reverse('secureshare.views.home'))
+    else:
+        form = DocumentForm()  # A empty, unbound form
+
+    # Load documents for the list page
+    documents = Document.objects.all()
+
+    # Render list page with the documents and the form
+    return render_to_response(
+        'secureshare/home.html',
+        {'documents': documents, 'form': form},
+        context_instance=RequestContext(request)
+    )
+    
+def handle_uploaded_file(f):
+  with open('write_file.txt', 'wb+') as dest:
+    for chunk in f.chunks():
+      destination.write(chunk)
+
+
+def upload_file(request):
+  if request.method == 'POST':
+    form = UploadFileForm(request.POST, request.FILES)
+    if form.is_valid():
+      inst = UploadFileForm(file_field=request.FILES['file'])
+      inst.save()
+      return HttpResponseRedirect('/success/url/')
+  else:
+    form = UploadFileForm()
+  return render(request, 'upload.html', {'form': form})
 
 def user_login(request):
 
@@ -122,12 +163,30 @@ def authregister(request):
 		return login(request)
 
 
+def upload(request):
+  if request.method == 'POST':
+    form = UploadFileForm(request.POST, request.FILES)
+    if form.is_valid():
+      new_file = UploadFile(file = request.FILES['file'])
+      new_file.save()
+      return HttpResponseRedirect(reverse('main:upload'))
+  else:
+    form = UploadFileForm()
+
+  data = {'form': form}
+  return render_to_response('secureshare/upload.html', data, context_instance=RequestContext(request))
+
+def confirmation(request):
+	return render(request, 'secureshare/confirmation.html')
+
 def home(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
 	return render(request, 'secureshare/home.html')
 
+"""
 # Use the login_required() decorator to ensure only those logged in can access the view.
+"""
 @login_required
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
@@ -135,9 +194,6 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/secureshare/')
-
-
-
 
 
 def createreport(request):

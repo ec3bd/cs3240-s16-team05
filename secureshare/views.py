@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 from django.shortcuts import render, render_to_response
+=======
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from secureshare.models import Message
+>>>>>>> adb205faf6c16a56a84bedca604ad3b94429db99
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from secureshare.models import User, Document, UploadFile
@@ -7,6 +13,7 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+import datetime
 
 def list(request):
     # Handle file upload
@@ -136,7 +143,8 @@ def register(request):
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-            print(user_form.errors, profile_form.errors)
+            return render(request, 'secureshare/failed.html')
+            #print(user_form.errors, profile_form.errors)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -191,3 +199,75 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect('/secureshare/')
 
+
+def createreport(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    return render(request, 'secureshare/create-report.html')
+
+
+def managereports(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    return render(request, 'secureshare/manage-reports.html')
+
+
+def viewreports(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    return render(request, 'secureshare/view-reports.html')
+
+
+def viewmessages(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    messageList = Message.objects.all()
+    return render(request, 'secureshare/view-messages.html', {'messageList': messageList,})
+def sendmessage(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    if request.method == 'POST':
+        recepient = request.POST.get('recepient')
+        message = request.POST.get('message')
+        user = request.user
+        if user.is_active:
+            # Check if recepient exists
+            recepientUser = User.objects.filter(username=recepient)[0]
+            if recepientUser == None:
+                return render(request, 'secureshare/view-messages.html')
+
+            # Save to database
+            t = datetime.datetime.now()
+            msg = Message(sender=user, receiver=recepientUser, content=message, created_at=t)
+            msg.save()
+
+            return HttpResponseRedirect('/secureshare/viewmessages/')
+        else:
+            return render(request, 'secureshare/failed')
+    else:
+        if(request.user.is_authenticated()):
+            return HttpResponseRedirect('/secureshare/home/')
+        return render(request, 'secureshare/login.html')
+
+def managegroups(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    return render(request, 'secureshare/manage-groups.html')
+
+
+def creategroup(request):
+    if not request.user.is_authenticated():
+        return render(request, 'securesshare/failed')
+    return render(request, 'secureshare/create-group.html')
+
+
+def manageaccount(request):
+    if not request.user.is_authenticated():
+        return render(request, 'securesshare/failed')
+    return render(request, 'secureshare/manage-account.html')
+
+
+def manageusersreports(request):
+    if not request.user.is_authenticated():
+        return render(request, 'securesshare/failed')
+    return render(request, 'secureshare/manage-users-and-reports.html')

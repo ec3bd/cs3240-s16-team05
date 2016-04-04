@@ -72,27 +72,18 @@
           <h1 class="page-header">View messages</h1>
 
           <p>This page allows you to view and respond to messages (and optionally encrypt them).</p>
-          <br><br>
+          <br>
 
           <div class="messaging">
-            <form id="login_form" method="post" action="/secureshare/sendmessage/">
-              {% csrf_token %}
-              <label for="recepient" class="sr-only">To</label>
-              <input type="text" name="recepient" class="form-control" placeholder="To" required autofocus><br>
-              <label for="message" class="sr-only">Message</label>
-              <input type="text" name="message" class="form-control" placeholder="Message" required><br>
-              <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
-            </form>
 
-            <br>
-
-            <table>
+            <h3>Inbox</h3>
+            <table class="table">
               <tr>
                 <th>From</th>
-                <th>Message</th>
                 <th>Time</th>
+                <th>Message</th>
               </tr>
-              {% for message in messageList %}
+              {% for message in messageIn %}
               <tr>
                 <td>{{ message.sender }}</td>
                 <td>{{ message.created_at }}</td>
@@ -100,6 +91,42 @@
               </tr>
               {% endfor %}
             </table>
+
+            <br>
+
+            <h3>Outbox</h3>
+            <table class="table">
+              <tr>
+                <th>To</th>
+                <th>Time</th>
+                <th>Message</th>
+              </tr>
+              {% for message in messageOut %}
+              <tr>
+                <td>{{ message.sender }}</td>
+                <td>{{ message.created_at }}</td>
+                <td>{{ message.content }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+
+            <br>
+
+            <h3>Compose a new message</h3>
+            <form id="login_form" method="post" action="/secureshare/sendmessage/" style="width:50%">
+              {% csrf_token %}
+              <label for="recepient" class="sr-only">To</label>
+              <input type="text" name="recepient" class="form-control" placeholder="To" required autofocus><br>
+              <label for="message" class="sr-only">Message</label>
+              <input type="text" name="message" class="form-control" placeholder="Message" required><br>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+              <p style="color:red"><b>{{ message }}</b></p>
+            </form>
+
+            <br>
+
+            
+
           </div>
 
         </div>

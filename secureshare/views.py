@@ -160,9 +160,18 @@ def viewreports(request):
 
 def viewmessages(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     messageList = Message.objects.all()
-    return render(request, 'secureshare/view-messages.html', {'messageList': messageList,})
+    # Inbox/outbox
+    messageIn = []
+    messageOut = []
+    for message in messageList:
+        if message.receiver == request.user:
+            messageIn.append(message)
+        elif message.sender == request.user:
+            messageOut.append(message)
+    #return render(request, 'secureshare/view-messages.html', {'messageList': messageList, 'messageIn': messageIn, 'messageOut': messageOut,})
+    return render(request, 'secureshare/view-messages.html', {'messageIn': messageIn, 'messageOut': messageOut,})
 def sendmessage(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
@@ -172,9 +181,10 @@ def sendmessage(request):
         user = request.user
         if user.is_active:
             # Check if recepient exists
+            listUser = User.objects.filter(username=recepient)
+            if len(listUser) == 0:
+                return render(request, 'secureshare/view-messages.html', {'message': "That user doesn't exist."})
             recepientUser = User.objects.filter(username=recepient)[0]
-            if recepientUser == None:
-                return render(request, 'secureshare/view-messages.html')
 
             # Save to database
             t = datetime.datetime.now()

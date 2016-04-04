@@ -15,7 +15,6 @@ class UserProfile(models.Model):
 
     # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
-<<<<<<< HEAD
         return self.user.username
 
 class UploadFile(models.Model):
@@ -23,12 +22,9 @@ class UploadFile(models.Model):
 
 class Document(models.Model):
   docfile = models.FileField(upload_to='documents/%Y/%m/%d')
-=======
-        return self.user
 
 class Message(models.Model):
 	sender = models.ForeignKey(User, related_name="sender")
 	receiver = models.ForeignKey(User, related_name="receiver")
 	content = models.TextField()
 	created_at = models.TimeField()
->>>>>>> adb205faf6c16a56a84bedca604ad3b94429db99

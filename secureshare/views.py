@@ -1,4 +1,10 @@
 from django.shortcuts import render, render_to_response
+<<<<<<< HEAD
+=======
+from secureshare.models import UserProfile
+from django.contrib.auth.models import User
+from secureshare.models import Message
+>>>>>>> c5da34a21763640b54087e27c7ab50be057b0521
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from secureshare.models import User, Document, UploadFile, Message
@@ -180,7 +186,7 @@ def confirmation(request):
 def home(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
-	return render(request, 'secureshare/home.html')
+	return render(request, 'secureshare/home.html', {'siteManager': UserProfile.objects.get(user_id=request.user.id).siteManager})
 
 """
 # Use the login_required() decorator to ensure only those logged in can access the view.
@@ -214,9 +220,18 @@ def viewreports(request):
 
 def viewmessages(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     messageList = Message.objects.all()
-    return render(request, 'secureshare/view-messages.html', {'messageList': messageList,})
+    # Inbox/outbox
+    messageIn = []
+    messageOut = []
+    for message in messageList:
+        if message.receiver == request.user:
+            messageIn.append(message)
+        elif message.sender == request.user:
+            messageOut.append(message)
+    #return render(request, 'secureshare/view-messages.html', {'messageList': messageList, 'messageIn': messageIn, 'messageOut': messageOut,})
+    return render(request, 'secureshare/view-messages.html', {'messageIn': messageIn, 'messageOut': messageOut,})
 def sendmessage(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
@@ -226,9 +241,10 @@ def sendmessage(request):
         user = request.user
         if user.is_active:
             # Check if recepient exists
+            listUser = User.objects.filter(username=recepient)
+            if len(listUser) == 0:
+                return render(request, 'secureshare/view-messages.html', {'message': "That user doesn't exist."})
             recepientUser = User.objects.filter(username=recepient)[0]
-            if recepientUser == None:
-                return render(request, 'secureshare/view-messages.html')
 
             # Save to database
             t = datetime.datetime.now()
@@ -263,5 +279,7 @@ def manageaccount(request):
 
 def manageusersreports(request):
     if not request.user.is_authenticated():
+        return render(request, 'securesshare/failed')
+    if not UserProfile.objects.get(user_id=request.user.id).siteManager:
         return render(request, 'securesshare/failed')
     return render(request, 'secureshare/manage-users-and-reports.html')

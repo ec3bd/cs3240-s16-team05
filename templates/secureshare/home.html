@@ -60,10 +60,9 @@
               </ul>
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
-                <li><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
-            		<!-- {% if user.is_sm %}
-            		<li><a href=""><b>Manage users and reports</b></a></li>
-            		{% endif %} -->
+            		{% if siteManager %}
+                        <li><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
+            		{% endif %}
           		</ul>
         	</div>
       	</div>
@@ -90,7 +89,9 @@
             <div class="col-sm-4 placeholder">
               <h4>Management</h4><br>
               <span class="text-muted"><a href="/secureshare/manageaccount"><b>Manage my account</b></a></span><br>
+              {% if siteManager %}
               <span class="text-muted"><a href="/secureshare/manageusersreports"><b>Manage users and reports</a></span>
+              {% endif %}
             </div>
           </div>
 

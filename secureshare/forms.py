@@ -1,14 +1,13 @@
 from django import forms
-from django import forms
 from django.contrib.auth.models import User
 from secureshare.models import UserProfile, UploadFile
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
-
+    password2 = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'email', 'password', 'password2')
 
 class UploadFileForm(forms.ModelForm):
   class Meta:
@@ -18,9 +17,12 @@ class UploadFileForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+
+        fields = ('website', 'picture', 'siteManager')
 
 class DocumentForm(forms.Form):
-  docfile = forms.FileField(
-    label='Select a file'
-  )
+  docfile = forms.FileField(label='Select a file')
+
+class UploadFileForm(forms.ModelForm):
+  title = forms.CharField(max_length=50)
+  file = forms.FileField()

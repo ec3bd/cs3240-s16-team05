@@ -1,9 +1,8 @@
 from django.shortcuts import render, render_to_response
-from django.contrib.auth.models import User
-from secureshare.models import Message
+from secureshare.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from secureshare.models import User, Document, UploadFile
+from secureshare.models import User, Document, UploadFile, Message
 from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
@@ -84,6 +83,7 @@ def register(request):
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
         if user_form.is_valid() and profile_form.is_valid():
+            # Save the user's form data to the database.
             user = user_form.save()
             user.set_password(user.password)
             user.save()
@@ -128,13 +128,13 @@ def upload(request):
 
 
 def confirmation(request):
-	return render(request, 'secureshare/confirmation.html')
+	return render(request, 'secureshare/confirmation.html/')
 
 
 def home(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
-	return render(request, 'secureshare/home.html')
+	return render(request, 'secureshare/home.html', {'siteManager': UserProfile.objects.get(user_id=request.user.id).siteManager})
 
 
 @login_required
@@ -282,6 +282,6 @@ def manageaccount(request):
 
 
 def manageusersreports(request):
-    if not request.user.is_authenticated():
+    if not UserProfile.objects.get(user_id=request.user.id).siteManager:
         return render(request, 'securesshare/failed')
     return render(request, 'secureshare/manage-users-and-reports.html')

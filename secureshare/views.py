@@ -277,4 +277,6 @@ def manageaccount(request):
 def manageusersreports(request):
     if not request.user.is_authenticated():
         return render(request, 'securesshare/failed')
+    if not UserProfile.objects.get(user_id=request.user.id).siteManager:
+        return render(request, 'securesshare/failed')
     return render(request, 'secureshare/manage-users-and-reports.html')

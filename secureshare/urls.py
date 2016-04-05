@@ -16,6 +16,9 @@ urlpatterns = [
 
     url(r'^viewmessages/$', views.viewmessages, name='viewmessages'),
     url(r'^sendmessage/$', views.sendmessage, name='sendmessage'),
+    # url(r'^decryptmessage/$', views.decryptmessage, name='decryptmessage'),
+    url(r'^decryptmessage/(?P<message_pk>.*)$', views.decryptmessage, name='decryptmessage'),
+    url(r'^deletemessage/(?P<message_pk>.*)$', views.deletemessage, name='deletemessage'),
 
     url(r'^managegroups/$', views.managegroups, name='managegroups'),
     url(r'^creategroup/$', views.creategroup, name='creategroup'),

@@ -18,7 +18,6 @@ class UploadFileForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-<<<<<<< HEAD
         fields = ('website', 'picture')
 
 class DocumentForm(forms.Form):
@@ -31,6 +30,3 @@ class UploadFileForm(forms.ModelForm):
   title = forms.CharField(max_length=50)
   file = forms.FileField()
   """
-=======
-        fields = ('website', 'picture')
->>>>>>> adb205faf6c16a56a84bedca604ad3b94429db99

@@ -1,10 +1,5 @@
 from django.shortcuts import render, render_to_response
-<<<<<<< HEAD
-=======
 from secureshare.models import UserProfile
-from django.contrib.auth.models import User
-from secureshare.models import Message
->>>>>>> c5da34a21763640b54087e27c7ab50be057b0521
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from secureshare.models import User, Document, UploadFile, Message
@@ -114,6 +109,7 @@ def register(request):
 
         # If the two forms are valid...
         if user_form.is_valid() and profile_form.is_valid():
+
             # Save the user's form data to the database.
             user = user_form.save()
 

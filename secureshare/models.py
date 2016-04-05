@@ -15,7 +15,11 @@ class UserProfile(models.Model):
 
     # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
+<<<<<<< HEAD
+      return self.user.username
+=======
         return self.user.username
+>>>>>>> c5da34a21763640b54087e27c7ab50be057b0521
 
 class UploadFile(models.Model):
   file = models.FileField(upload_to='files/%Y/%m/%d')

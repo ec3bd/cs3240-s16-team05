@@ -17,7 +17,11 @@ class UploadFileForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
+<<<<<<< HEAD
+        fields = ('website', 'picture')
+=======
         fields = ('website', 'picture', 'siteManager')
+>>>>>>> c5da34a21763640b54087e27c7ab50be057b0521
 
 class DocumentForm(forms.Form):
   docfile = forms.FileField(label='Select a file')
@@ -25,3 +29,7 @@ class DocumentForm(forms.Form):
 class UploadFileForm(forms.ModelForm):
   title = forms.CharField(max_length=50)
   file = forms.FileField()
+<<<<<<< HEAD
+  """
+=======
+>>>>>>> c5da34a21763640b54087e27c7ab50be057b0521

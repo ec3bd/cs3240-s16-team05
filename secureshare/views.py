@@ -1,10 +1,13 @@
 from django.shortcuts import render, render_to_response
+<<<<<<< HEAD
+=======
 from secureshare.models import UserProfile
 from django.contrib.auth.models import User
 from secureshare.models import Message
+>>>>>>> c5da34a21763640b54087e27c7ab50be057b0521
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from secureshare.models import User, Document, UploadFile
+from secureshare.models import User, Document, UploadFile, Message
 from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
@@ -178,7 +181,7 @@ def upload(request):
   return render_to_response('secureshare/upload.html', data, context_instance=RequestContext(request))
 
 def confirmation(request):
-	return render(request, 'secureshare/confirmation.html')
+	return render(request, 'secureshare/confirmation.html/')
 
 def home(request):
 	if not request.user.is_authenticated():

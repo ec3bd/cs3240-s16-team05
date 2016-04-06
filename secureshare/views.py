@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response
 from secureshare.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from secureshare.models import User, Document, UploadFile, Message
+from secureshare.models import User, Group, Document, UploadFile, Message
 from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
@@ -238,7 +238,6 @@ def sendmessage(request):
                 databaseMessage = message
                 msg = Message(sender=user, receiver=recepientUser, content=databaseMessage, created_at=timeStr, encrypt=False)
             msg.save()
-
             return HttpResponseRedirect('/secureshare/viewmessages/')
         else:
             return render(request, 'secureshare/failed.html')
@@ -253,35 +252,88 @@ def decryptmessage(request, message_pk):
     if message.encrypt:
         aesObj = AESCipher(key)
         decrypted = aesObj.decrypt(message.content)
-        return HttpResponse(decrypted)
+        return HttpResponse(decrypted + "<br><br><a href='/secureshare/viewmessages/'>Go back</a>")
     else:
-        return HttpResponse("That message was not encrypted. Go back to see the plaintext.")
+        return HttpResponse("That message was not encrypted. Go back to see the plaintext." + "<br><br><a href='/secureshare/viewmessages/'>Go back</a>")
 def deletemessage(request, message_pk):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
     Message.objects.filter(id=message_pk).delete()
     return HttpResponseRedirect('/secureshare/viewmessages/')
-
+def deletesentmessages(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    Message.objects.filter(sender=request.user).delete()
+    return HttpResponseRedirect('/secureshare/viewmessages')
+def deletereceivedmessages(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    Message.objects.filter(receiver=request.user).delete()
+    return HttpResponseRedirect('/secureshare/viewmessages')
 
 def managegroups(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
-    return render(request, 'secureshare/manage-groups.html')
-
+    user = User.objects.filter(username=request.user)[0]
+    groupList = user.groups.all()
+    return render(request, 'secureshare/manage-groups.html', {'groupList': groupList})
+def requestnewusertogroup(request, group_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    if request.method == 'POST':
+        user = request.user
+        groupList = user.groups.all()
+        userToAddUsername = request.POST.get('user')
+        userToAddList = User.objects.filter(username=userToAddUsername)
+        if len(userToAddList) == 0:
+            return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'message': 'Couldn\'t find that user.'})
+        userToAdd = userToAddList[0]
+        if userToAdd.groups.filter(id=group_pk).exists():
+            return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'message': "That user is already a member."})
+        else:
+            group = Group.objects.filter(id=group_pk)[0]
+            group.user_set.add(userToAdd)
+            return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'message': "Added successfully."})
+def requestdeletefromgroup(request, group_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    group = Group.objects.filter(id=group_pk)[0]
+    group.user_set.remove(request.user)
+    return HttpResponseRedirect('/secureshare/managegroups/')
 
 def creategroup(request):
     if not request.user.is_authenticated():
-        return render(request, 'securesshare/failed')
+        return render(request, 'secureshare/failed')
     return render(request, 'secureshare/create-group.html')
+def requestgroup(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed')
+    if request.method == 'POST':
+        groupName = request.POST.get('groupName')
+        user = request.user
+        if user.is_active:
+            groupList = Group.objects.filter(name=groupName)
+            user = User.objects.filter(username=request.user)[0]
+            if len(groupList) == 0: # Group does not exist
+                group = Group(name=groupName)
+                group.save()
+                user.groups.add(group)
+                return render(request, 'secureshare/create-group.html', {'message': "You have been added."})
+            else:
+                return render(request, 'secureshare/create-group.html', {'message': "That group already exists."})
+        else:
+            return render(request, 'secureshare/failed.html')
+    else:
+        return render(request, 'secureshare/failed.html')
 
 
 def manageaccount(request):
     if not request.user.is_authenticated():
-        return render(request, 'securesshare/failed')
+        return render(request, 'secureshare/failed')
     return render(request, 'secureshare/manage-account.html')
 
 
 def manageusersreports(request):
     if not UserProfile.objects.get(user_id=request.user.id).siteManager:
-        return render(request, 'securesshare/failed')
+        return render(request, 'secureshare/failed')
     return render(request, 'secureshare/manage-users-and-reports.html')

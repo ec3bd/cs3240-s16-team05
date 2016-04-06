@@ -71,8 +71,17 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Create a new group</h1>
 
-          <p>This page allows you to create a new group.</p>
+          <p>This page allows you to create a new group. When you create a new group, you will automatically be added to it.</p>
           <br><br>
+
+          <form id="login_form" method="post" action="/secureshare/requestgroup/" style="width:50%">
+              {% csrf_token %}
+              <label for="groupName" class="sr-only">Group name</label>
+              <input type="text" name="groupName" class="form-control" placeholder="Group name" required autofocus><br>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Check and add</button>
+              <p style="color:red"><b>{{ message }}</b></p>
+            </form>
+
         </div>
 
     </div>

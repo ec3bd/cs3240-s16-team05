@@ -273,13 +273,13 @@ def deletereceivedmessages(request):
 
 def managegroups(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     user = User.objects.filter(username=request.user)[0]
     groupList = user.groups.all()
     return render(request, 'secureshare/manage-groups.html', {'groupList': groupList})
 def requestnewusertogroup(request, group_pk):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     if request.method == 'POST':
         user = request.user
         groupList = user.groups.all()
@@ -296,18 +296,18 @@ def requestnewusertogroup(request, group_pk):
             return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'message': "Added successfully."})
 def requestdeletefromgroup(request, group_pk):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     group = Group.objects.filter(id=group_pk)[0]
     group.user_set.remove(request.user)
     return HttpResponseRedirect('/secureshare/managegroups/')
 
 def creategroup(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/create-group.html')
 def requestgroup(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     if request.method == 'POST':
         groupName = request.POST.get('groupName')
         user = request.user
@@ -329,11 +329,11 @@ def requestgroup(request):
 
 def manageaccount(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/manage-account.html')
 
 
 def manageusersreports(request):
     if not UserProfile.objects.get(user_id=request.user.id).siteManager:
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/manage-users-and-reports.html')

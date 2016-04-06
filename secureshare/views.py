@@ -2,8 +2,8 @@ from django.shortcuts import render, render_to_response
 from secureshare.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from secureshare.models import User, Group, Document, UploadFile, Message
-from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm
+from secureshare.models import User, Group, Report, Document, UploadFile, Message
+from secureshare.forms import UserForm, UserProfileForm, ReportForm, UploadFileForm, DocumentForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
@@ -146,8 +146,22 @@ def user_logout(request):
 def createreport(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
-    return render(request, 'secureshare/create-report.html')
-
+    if request.method == 'POST':
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            owner = request.user
+            t = datetime.datetime.now()
+            timeStr = str(t)[:-7]
+            short_description = report_form.cleaned_data['short_description']
+            detailed_description = report_form.cleaned_data['detailed_description']
+            private = report_form.cleaned_data['private']
+            report = Report(owner=owner, created_at=timeStr, short_description=short_description, detailed_description=detailed_description, private=private)
+            report.save()
+            # return render(request, 'secureshare/create-report.html', {'report_form': report_form, 'message': "The report was successfully submitted."})
+            return render(request, 'secureshare/create-report.html', {'report_form': report_form, 'message': "The report was successfully submitted."})
+    else:
+        report_form = ReportForm()
+    return render(request, 'secureshare/create-report.html', {'report_form': report_form})
 
 def managereports(request):
     if not request.user.is_authenticated():

@@ -285,3 +285,4 @@ def manageusersreports(request):
     if not UserProfile.objects.get(user_id=request.user.id).siteManager:
         return render(request, 'securesshare/failed')
     return render(request, 'secureshare/manage-users-and-reports.html')
+

@@ -339,7 +339,21 @@ def requestgroup(request):
             return render(request, 'secureshare/failed.html')
     else:
         return render(request, 'secureshare/failed.html')
-
+def grouppage(request, group_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    groupList = Group.objects.filter(name=group_pk)
+    if len(groupList) == 0:
+        return render(request, 'secureshare/group-page.html', {'message': "That group does not exist."})
+    else:
+        group = groupList[0]
+        name = group.name
+        members = group.user_set.all()
+        if request.user in group.user_set.all():
+            return render(request, 'secureshare/group-page.html', {'group': group, 'name': name, 'members': members})    
+        else:
+            return render(request, 'secureshare/group-page.html', {'message': "You are not authorized to see this group."})
+        
 
 def manageaccount(request):
     if not request.user.is_authenticated():
@@ -351,15 +365,3 @@ def manageusersreports(request):
     if not UserProfile.objects.get(user_id=request.user.id).siteManager:
         return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/manage-users-and-reports.html')
-
-def grouppage(request, groupname):
-    context_dict = {}
-    try:
-        group = Group.objects.get(name=groupname)
-        users = group.user_set.all()
-        context_dict['group_name'] = group.name
-        context_dict['group'] = group
-    except Group.DoesNotExist:
-        pass
-
-    return render(request, 'secureshare/grouppage.html', context_dict)

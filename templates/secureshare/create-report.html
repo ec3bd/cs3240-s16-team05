@@ -61,9 +61,9 @@
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
                 <li><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
-                <!-- {% if user.is_sm %}
-                <li><a href=""><b>Manage users and reports</b></a></li>
-                {% endif %} -->
+                {% if siteManager %}
+                <span class="text-muted"><a href="/secureshare/manageusersreports"><b>Manage users and reports</a></span>
+                {% endif %}
               </ul>
           </div>
         </div>
@@ -73,6 +73,26 @@
 
           <p>This page allows you to create a new report.</p>
           <br><br>
+
+          <form id="report_form" method="post" action="/secureshare/createreport/">
+            {% csrf_token %}
+            <div>
+              <label>Short description:</label><br>
+              {{ report_form.short_description }}
+            </div>
+            <br>
+            <div>
+              <label>Detailed description:</label><br>
+              {{ report_form.detailed_description }}
+            </div>
+            <br>
+            <div>
+              {{ report_form.private }} Private
+              {{ report_form.errors }}
+            </div><br>
+            <input type="submit" name="submit" style="" value="Submit report" />
+            <p style="color:red"><b>{{ message }}</b></p>
+          </form>
         </div>
 
     </div>

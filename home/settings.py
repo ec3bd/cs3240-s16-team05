@@ -30,9 +30,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-#redirect users to this url if they are not logged in and try to access restricted material
-LOGIN_URL = '/rango/login/'
-
+LOGIN_REDIRECT_URL = '/secureshare/home/'  # The page you want users to arrive at after they successful log in
+LOGIN_URL = '/secureshare/login/'  # The page users are directed to if they are not logged in,
+                                                                # and are trying to access pages requiring authentication
 
 # Application definition
 

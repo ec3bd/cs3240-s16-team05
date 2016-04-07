@@ -16,16 +16,11 @@ Including another URLconf
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from secureshare import views
-
+# from django.views.generic import RedirectView
 
 urlpatterns = patterns('',
-	# [home page, index]
-	# url(r'^', views.index), 
-
-	# secureshare
+    # url(r'^$', RedirectView.as_view(url='/secureshare/')),
     url(r'^secureshare/', include('secureshare.urls')),
-    
-    # admin
-    url(r'^admin/', admin.site.urls),
     url(r'^secureshare/home/', views.home, name='home'),
+    url(r'^admin/', admin.site.urls),
 )

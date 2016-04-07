@@ -2,13 +2,19 @@ from django.shortcuts import render, render_to_response
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from secureshare.models import User, UserProfile, Document, UploadFile, Message
-from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm
+from secureshare.models import User, UserProfile, Document, UploadFile, Message, Group, Report
+from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm, ReportForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from Crypto.Cipher import AES
 import datetime
+import binascii
+
+# For AES encryption/decryption
+key = "7AqDiyLmzcjmPO7n"
+
 
 def list(request):
     # Handle file upload
@@ -32,7 +38,8 @@ def list(request):
         {'documents': documents, 'form': form},
         context_instance=RequestContext(request)
     )
-    
+
+
 def handle_uploaded_file(f):
   with open('write_file.txt', 'wb+') as dest:
     for chunk in f.chunks():
@@ -50,107 +57,51 @@ def upload_file(request):
     form = UploadFileForm()
   return render(request, 'upload.html', {'form': form})
 
-def user_login(request):
 
-    # If the request is a HTTP POST, try to pull out the relevant information.
+def user_login(request):
     if request.method == 'POST':
-        # Gather the username and password provided by the user.
-        # This information is obtained from the login form.
-                # We use request.POST.get('<variable>') as opposed to request.POST['<variable>'],
-                # because the request.POST.get('<variable>') returns None, if the value does not exist,
-                # while the request.POST['<variable>'] will raise key error exception
         username = request.POST.get('username')
         password = request.POST.get('password')
-
-        # Use Django's machinery to attempt to see if the username/password
-        # combination is valid - a User object is returned if it is.
         user = authenticate(username=username, password=password)
-
-        # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
-        # with matching credentials was found.
         if user:
-            # Is the account active? It could have been disabled.
             if user.is_active:
-                # If the account is valid and active, we can log the user in.
-                # We'll send the user back to the homepage.
                 login(request, user)
                 return HttpResponseRedirect('/secureshare/home/')
             else:
-                # An inactive account was used - no logging in!
                 return HttpResponse("Your account is disabled.")
         else:
-            # Bad login details were provided. So we can't log the user in.
-            print("Invalid login details: {0}, {1}".format(username, password))
             return render(request, 'secureshare/failed.html')
-
-    # The request is not a HTTP POST, so display the login form.
-    # This scenario would most likely be a HTTP GET.
     else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
         if(request.user.is_authenticated()):
             return HttpResponseRedirect('/secureshare/home/')
+        return render(request, 'secureshare/login.html')
 
-        return render(request, 'secureshare/login.html', {})
 
 def register(request):
-
-    # A boolean value for telling the template whether the registration was successful.
-    # Set to False initially. Code changes value to True when registration succeeds.
     registered = False
-
-    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
-
-        # If the two forms are valid...
         if user_form.is_valid() and profile_form.is_valid():
             # Save the user's form data to the database.
             user = user_form.save()
-
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
             user.set_password(user.password)
             user.save()
-
-            # Now sort out the UserProfile instance.
-            # Since we need to set the user attribute ourselves, we set commit=False.
-            # This delays saving the model until we're ready to avoid integrity problems.
             profile = profile_form.save(commit=False)
             profile.user = user
-
-            # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
-
-            # Now we save the UserProfile model instance.
             profile.save()
-
-            # Update our variable to tell the template registration was successful.
             registered = True
-
-        # Invalid form or forms - mistakes or something else?
-        # Print problems to the terminal.
-        # They'll also be shown to the user.
         else:
             return render(request, 'secureshare/failed.html')
-            #print(user_form.errors, profile_form.errors)
-
-    # Not a HTTP POST, so we render our form using two ModelForm instances.
-    # These forms will be blank, ready for user input.
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-
-    # Render the template depending on the context.
     return render(request,
             'secureshare/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
+
 
 def authregister(request):
 	if request.method == 'POST':
@@ -175,31 +126,42 @@ def upload(request):
   data = {'form': form}
   return render_to_response('secureshare/upload.html', data, context_instance=RequestContext(request))
 
+
 def confirmation(request):
 	return render(request, 'secureshare/confirmation.html/')
+
 
 def home(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
 	return render(request, 'secureshare/home.html', {'siteManager': UserProfile.objects.get(user_id=request.user.id).siteManager})
 
-"""
-# Use the login_required() decorator to ensure only those logged in can access the view.
-"""
+
 @login_required
 def user_logout(request):
-    # Since we know the user is logged in, we can now just log them out.
     logout(request)
-
-    # Take the user back to the homepage.
     return HttpResponseRedirect('/secureshare/')
 
 
 def createreport(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
-    return render(request, 'secureshare/create-report.html')
-
+    if request.method == 'POST':
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            owner = request.user
+            t = datetime.datetime.now()
+            timeStr = str(t)[:-7]
+            short_description = report_form.cleaned_data['short_description']
+            detailed_description = report_form.cleaned_data['detailed_description']
+            private = report_form.cleaned_data['private']
+            report = Report(owner=owner, created_at=timeStr, short_description=short_description, detailed_description=detailed_description, private=private)
+            report.save()
+            # return render(request, 'secureshare/create-report.html', {'report_form': report_form, 'message': "The report was successfully submitted."})
+            return render(request, 'secureshare/create-report.html', {'report_form': report_form, 'message': "The report was successfully submitted."})
+    else:
+        report_form = ReportForm()
+    return render(request, 'secureshare/create-report.html', {'report_form': report_form})
 
 def managereports(request):
     if not request.user.is_authenticated():
@@ -213,6 +175,37 @@ def viewreports(request):
     return render(request, 'secureshare/view-reports.html')
 
 
+'''
+Adapted from GitHub
+'''
+class AESCipher:
+    def __init__(self, key):
+        self.key = bytes(key, encoding='utf-8')
+        self.BLOCK_SIZE = 16
+    def __pad(self, raw):
+        if (len(raw) % self.BLOCK_SIZE == 0):
+            return raw
+        padding_required = self.BLOCK_SIZE - (len(raw) % self.BLOCK_SIZE)
+        padChar = b'\x00'
+        data = raw.encode('utf-8') + padding_required * padChar
+        return data
+    def __unpad(self, s):
+        s = s.rstrip(b'\x00')
+        return s
+    def encrypt(self, raw):
+        if (raw is None) or (len(raw) == 0):
+            raise ValueError('input text cannot be null or empty set')
+        raw = self.__pad(raw)
+        cipher = AES.new(self.key[:32], AES.MODE_ECB)
+        ciphertext = cipher.encrypt(raw)
+        return  binascii.hexlify(bytearray(ciphertext)).decode('utf-8')
+    def decrypt(self, enc):
+        if (enc is None) or (len(enc) == 0):
+            raise ValueError('input text cannot be null or empty set')
+        enc = binascii.unhexlify(enc)
+        cipher = AES.new(self.key[:32], AES.MODE_ECB)
+        enc = self.__unpad(cipher.decrypt(enc))
+        return enc.decode('utf-8')
 def viewmessages(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
@@ -223,58 +216,138 @@ def viewmessages(request):
     for message in messageList:
         if message.receiver == request.user:
             messageIn.append(message)
-        elif message.sender == request.user:
+        if message.sender == request.user:
             messageOut.append(message)
-    #return render(request, 'secureshare/view-messages.html', {'messageList': messageList, 'messageIn': messageIn, 'messageOut': messageOut,})
     return render(request, 'secureshare/view-messages.html', {'messageIn': messageIn, 'messageOut': messageOut,})
 def sendmessage(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     if request.method == 'POST':
         recepient = request.POST.get('recepient')
         message = request.POST.get('message')
+        encrypt = request.POST.get('encrypt')
         user = request.user
         if user.is_active:
             # Check if recepient exists
             listUser = User.objects.filter(username=recepient)
             if len(listUser) == 0:
-                return render(request, 'secureshare/view-messages.html', {'message': "That user doesn't exist."})
-            recepientUser = User.objects.filter(username=recepient)[0]
-
+                messageList = Message.objects.all()
+                messageIn = []
+                messageOut = []
+                for message in messageList:
+                    if message.receiver == request.user:
+                        messageIn.append(message)
+                    if message.sender == request.user:
+                        messageOut.append(message)
+                return render(request, 'secureshare/view-messages.html', {'messageIn': messageIn, 'messageOut': messageOut, 'message': "That user doesn't exist."})
             # Save to database
+            recepientUser = User.objects.filter(username=recepient)[0]
             t = datetime.datetime.now()
-            msg = Message(sender=user, receiver=recepientUser, content=message, created_at=t)
+            timeStr = str(t)[:-7]
+            if encrypt == "encrypted":
+                aesObj = AESCipher(key)
+                encryptedMsg = aesObj.encrypt(message)
+                msg = Message(sender=user, receiver=recepientUser, content=encryptedMsg, created_at=timeStr, encrypt=True)
+            else:
+                databaseMessage = message
+                msg = Message(sender=user, receiver=recepientUser, content=databaseMessage, created_at=timeStr, encrypt=False)
             msg.save()
-
             return HttpResponseRedirect('/secureshare/viewmessages/')
         else:
-            return render(request, 'secureshare/failed')
+            return render(request, 'secureshare/failed.html')
     else:
         if(request.user.is_authenticated()):
             return HttpResponseRedirect('/secureshare/home/')
         return render(request, 'secureshare/login.html')
+def decryptmessage(request, message_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    message = Message.objects.filter(id=message_pk)[0]
+    if message.encrypt:
+        aesObj = AESCipher(key)
+        decrypted = aesObj.decrypt(message.content)
+        return HttpResponse(decrypted + "<br><br><a href='/secureshare/viewmessages/'>Go back</a>")
+    else:
+        return HttpResponse("That message was not encrypted. Go back to see the plaintext." + "<br><br><a href='/secureshare/viewmessages/'>Go back</a>")
+def deletemessage(request, message_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    Message.objects.filter(id=message_pk).delete()
+    return HttpResponseRedirect('/secureshare/viewmessages/')
+def deletesentmessages(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    Message.objects.filter(sender=request.user).delete()
+    return HttpResponseRedirect('/secureshare/viewmessages')
+def deletereceivedmessages(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    Message.objects.filter(receiver=request.user).delete()
+    return HttpResponseRedirect('/secureshare/viewmessages')
 
 def managegroups(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
-    return render(request, 'secureshare/manage-groups.html')
-
+        return render(request, 'secureshare/failed.html')
+    user = User.objects.filter(username=request.user)[0]
+    groupList = user.groups.all()
+    return render(request, 'secureshare/manage-groups.html', {'groupList': groupList})
+def requestnewusertogroup(request, group_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    if request.method == 'POST':
+        user = request.user
+        groupList = user.groups.all()
+        userToAddUsername = request.POST.get('user')
+        userToAddList = User.objects.filter(username=userToAddUsername)
+        if len(userToAddList) == 0:
+            return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'message': 'Couldn\'t find that user.'})
+        userToAdd = userToAddList[0]
+        if userToAdd.groups.filter(id=group_pk).exists():
+            return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'message': "That user is already a member."})
+        else:
+            group = Group.objects.filter(id=group_pk)[0]
+            group.user_set.add(userToAdd)
+            return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'message': "Added successfully."})
+def requestdeletefromgroup(request, group_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    group = Group.objects.filter(id=group_pk)[0]
+    group.user_set.remove(request.user)
+    return HttpResponseRedirect('/secureshare/managegroups/')
 
 def creategroup(request):
     if not request.user.is_authenticated():
-        return render(request, 'securesshare/failed')
+        return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/create-group.html')
+def requestgroup(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    if request.method == 'POST':
+        groupName = request.POST.get('groupName')
+        user = request.user
+        if user.is_active:
+            groupList = Group.objects.filter(name=groupName)
+            user = User.objects.filter(username=request.user)[0]
+            if len(groupList) == 0: # Group does not exist
+                group = Group(name=groupName)
+                group.save()
+                user.groups.add(group)
+                return render(request, 'secureshare/create-group.html', {'message': "You have been added."})
+            else:
+                return render(request, 'secureshare/create-group.html', {'message': "That group already exists."})
+        else:
+            return render(request, 'secureshare/failed.html')
+    else:
+        return render(request, 'secureshare/failed.html')
 
 
 def manageaccount(request):
     if not request.user.is_authenticated():
-        return render(request, 'securesshare/failed')
+        return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/manage-account.html')
 
 
 def manageusersreports(request):
-    if not request.user.is_authenticated():
-        return render(request, 'securesshare/failed')
     if not UserProfile.objects.get(user_id=request.user.id).siteManager:
-        return render(request, 'securesshare/failed')
+        return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/manage-users-and-reports.html')

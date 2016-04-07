@@ -61,9 +61,9 @@
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
                 <li><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
-                <!-- {% if user.is_sm %}
-                <li><a href=""><b>Manage users and reports</b></a></li>
-                {% endif %} -->
+                {% if siteManager %}
+                <span class="text-muted"><a href="/secureshare/manageusersreports"><b>Manage users and reports</a></span>
+                {% endif %}
               </ul>
           </div>
         </div>
@@ -77,38 +77,48 @@
           <div class="messaging">
 
             <h3>Inbox</h3>
-            <table class="table">
+            <table class="table table-hover">
               <tr>
-                <th>From</th>
-                <th>Time</th>
-                <th>Message</th>
+                <th class="col-md-2">From</th>
+                <th class="col-md-2">Time</th>
+                <th class="col-md-7">Message</th>
+                <th class="col-md-1">Decrypt?</th>
+                <th class="col-md-1">Delete?</th>
               </tr>
               {% for message in messageIn %}
               <tr>
                 <td>{{ message.sender }}</td>
                 <td>{{ message.created_at }}</td>
                 <td>{{ message.content }}</td>
+                <td><a href="/secureshare/decryptmessage/{{ message.id }}">Decrypt</a></td>
+                <td><a href="/secureshare/deletemessage/{{ message.id }}">Delete</a></td>
               </tr>
               {% endfor %}
             </table>
+            <a href="/secureshare/deletereceivedmessages">Delete all received messages</a><br>
 
             <br>
 
             <h3>Outbox</h3>
-            <table class="table">
+            <table class="table table-hover">
               <tr>
-                <th>To</th>
-                <th>Time</th>
-                <th>Message</th>
+                <th class="col-md-2">To</th>
+                <th class="col-md-2">Time</th>
+                <th class="col-md-6">Message</th>
+                <th class="col-md-1">Decrypt?</th>
+                <th class="col-md-1">Delete?</th>
               </tr>
               {% for message in messageOut %}
               <tr>
-                <td>{{ message.sender }}</td>
+                <td>{{ message.receiver }}</td>
                 <td>{{ message.created_at }}</td>
                 <td>{{ message.content }}</td>
+                <td><a href="/secureshare/decryptmessage/{{ message.id }}">Decrypt</a></td>
+                <td><a href="/secureshare/deletemessage/{{ message.id }}">Delete</a></td>
               </tr>
               {% endfor %}
             </table>
+            <a href="/secureshare/deletesentmessages">Delete all sent messages</a><br>
 
             <br>
 
@@ -119,13 +129,13 @@
               <input type="text" name="recepient" class="form-control" placeholder="To" required autofocus><br>
               <label for="message" class="sr-only">Message</label>
               <input type="text" name="message" class="form-control" placeholder="Message" required><br>
+              <input type="radio" name="encrypt" value="unecrypted" checked>Unencrypted</input><br>
+              <input type="radio" name="encrypt" value="encrypted">Encrypted</input><br><br>
               <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
               <p style="color:red"><b>{{ message }}</b></p>
             </form>
 
             <br>
-
-            
 
           </div>
 

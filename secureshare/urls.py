@@ -32,4 +32,5 @@ urlpatterns = [
 
     url(r'^manageaccount/$', views.manageaccount, name='manageaccount'),
     url(r'^manageusersreports/$', views.manageusersreports, name='manageusersreports'),
+    url(r'^grouppage/(?P<groupname>.*)$', views.grouppage, name='groupname'),
 ]

@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from secureshare.models import User, UserProfile, Document, UploadFile, Message, Group, Report
+from secureshare.models import User, UserProfile, Document, UploadFile, Message, Group, Report, GroupPage
 from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm, ReportForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
@@ -351,3 +351,15 @@ def manageusersreports(request):
     if not UserProfile.objects.get(user_id=request.user.id).siteManager:
         return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/manage-users-and-reports.html')
+
+def grouppage(request, groupname):
+    context_dict = {}
+    try:
+        group = Group.objects.get(name=groupname)
+        users = group.user_set.all()
+        context_dict['group_name'] = group.name
+        context_dict['group'] = group
+    except Group.DoesNotExist:
+        pass
+
+    return render(request, 'secureshare/grouppage.html', context_dict)

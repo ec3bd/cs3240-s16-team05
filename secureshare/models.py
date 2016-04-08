@@ -12,12 +12,6 @@ class UserProfile(models.Model):
     def __unicode__(self):
       return self.user.username
 
-class UploadFile(models.Model):
-  file = models.FileField(upload_to='files/%Y/%m/%d')
-
-class Document(models.Model):
-  docfile = models.FileField(upload_to='documents/%Y/%m/%d')
-
 # MESSAGES
 class Message(models.Model):
 	sender = models.ForeignKey(User, related_name="sender")
@@ -32,23 +26,25 @@ class Report(models.Model):
   created_at = models.TextField()
   short_description = models.CharField(max_length=200)
   detailed_description = models.TextField()
-  # collection of files here
+  # upload_path = 'files/' + owner.username + '/%Y%m%d'
+  upload_path = 'files/' + '%Y%m%d'
+  file1 = models.FileField(upload_to=upload_path, null=True)
+  file2 = models.FileField(upload_to=upload_path, null=True)
+  file3 = models.FileField(upload_to=upload_path, null=True)
+  file4 = models.FileField(upload_to=upload_path, null=True)
+  file5 = models.FileField(upload_to=upload_path, null=True)
   private = models.BooleanField(default=False)
+  encrypt = models.BooleanField(default=False)
   # collection of user permissions
   # collection of group permissions
   # collection of tags  
 # class Tag(models.Model):
 #   word = models.CharField(max_length=35)
-class UploadFile(models.Model):
-  file = models.FileField(upload_to='files/%Y/%m/%d')
-class Document(models.Model):
-  docfile = models.FileField(upload_to='documents/%Y/%m/%d')
 
 
 class GroupPage(models.Model):
     group = models.OneToOneField(Group)
     url = models.URLField(blank=True)
     #add a list of reports associated with that group
-
     def __unicode__(self):
         return self.group.name

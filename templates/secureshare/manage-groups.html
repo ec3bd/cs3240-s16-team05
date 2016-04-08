@@ -75,25 +75,25 @@
           <br><br>
 
           <table class="table table-hover">
-              <tr>
-                <th class="col-md-8">Group</th>
-                <th class="col-md-2">Add a new user?</th>
-                <th class="col-md-2">Remove yourself?</th>
-              </tr>
-              {% for group in groupList %}
-              <tr>
-                <td><a href="/secureshare/grouppage/{{ group.name }}">{{ group.name }}</td>
-                <td>
-                  <form id="login_form" method="post" action="/secureshare/requestnewusertogroup/{{ group.id }}" style="width:90%">
-                    {% csrf_token %}
-                    <input type="text" name="user" class="form-control" placeholder="Username" required><br>
-                    <p style="color:red"><b>{{ message }}</b></p>
-                  </form>
-                </td>
-                <td><a href="/secureshare/requestdeletefromgroup/{{ group.id }}">Remove</a></td>
-              </tr>
-              {% endfor %}
-            </table>
+            <tr>
+              <th class="col-md-8">Group</th>
+              <th class="col-md-2">Add a new user?</th>
+              <th class="col-md-2">Remove yourself?</th>
+            </tr>
+            {% for group in groupList %}
+            <tr>
+              <td><a href="/secureshare/grouppage/{{ group.name }}">{{ group.name }}</td>
+              <td>
+                <form id="login_form" method="post" action="/secureshare/requestnewusertogroup/{{ group.id }}" style="width:90%">
+                  {% csrf_token %}
+                  <input type="text" name="user" class="form-control" placeholder="Username" required><br>
+                  <p style="color:red"><b>{{ message }}</b></p>
+                </form>
+              </td>
+              <td><a href="/secureshare/requestdeletefromgroup/{{ group.id }}">Remove</a></td>
+            </tr>
+            {% endfor %}
+          </table>
 
         </div>
 

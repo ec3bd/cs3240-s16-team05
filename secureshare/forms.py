@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User, Group
-from secureshare.models import Report, UserProfile, UploadFile
+from secureshare.models import Report, UserProfile
 
 # USERS
 class UserForm(forms.ModelForm):
@@ -15,16 +15,11 @@ class UserProfileForm(forms.ModelForm):
 
 # REPORTS
 class ReportForm(forms.ModelForm):
+  file1 = forms.FileField(required=False)
+  file2 = forms.FileField(required=False)
+  file3 = forms.FileField(required=False)
+  file4 = forms.FileField(required=False)
+  file5 = forms.FileField(required=False)
   class Meta:
     model = Report
-    fields = {'short_description', 'detailed_description', 'private'}
-class UploadFileForm(forms.ModelForm):
-  class Meta:
-    model = UploadFile
-    fields = '__all__'
-class DocumentForm(forms.Form):
-  docfile = forms.FileField(label='Select a file')
-
-class UploadFileForm(forms.Form):
-  title = forms.CharField(max_length=50)
-  file = forms.FileField()
+    fields = {'short_description', 'detailed_description', 'file1', 'file2', 'file3', 'file4', 'file5', 'private', 'encrypt'}

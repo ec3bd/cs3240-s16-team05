@@ -73,6 +73,37 @@
 
           <p>This page allows you to manage your reports.</p>
           <br><br>
+
+          <table class="table table-hover">
+            <tr>
+              <th class="col-md-1">Created at</th>
+              <th class="col-md-1">Short description</th>
+              <th class="col-md-3">Detailed description</th>
+              <th class="col-md-1">File 1</th>
+              <th class="col-md-1">File 2</th>
+              <th class="col-md-1">File 3</th>
+              <th class="col-md-1">File 4</th>
+              <th class="col-md-1">File 5</th>
+              <th class="col-md-1">Private?</th>
+              <th class="col-md-1">Encrypted?</th>
+              <!-- <th class="col-md-1">Tags</th> -->
+            </tr>
+            {% for report in reportList %}
+            <tr>
+              <td>{{ report.created_at }}</td>
+              <td>{{ report.short_description }}</td>
+              <td>{{ report.detailed_description }}</td>
+              <td>{{ report.file1 }}</td>
+              <td>{{ report.file2 }}</td>
+              <td>{{ report.file3 }}</td>
+              <td>{{ report.file4 }}</td>
+              <td>{{ report.file5 }}</td>
+              <td>{{ report.private }}</td>
+              <td>{{ report.encrypt }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+
         </div>
 
     </div>

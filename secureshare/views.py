@@ -2,8 +2,8 @@ from django.shortcuts import render, render_to_response
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from secureshare.models import User, UserProfile, Document, UploadFile, Message, Group, Report, GroupPage
-from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm, ReportForm
+from secureshare.models import User, UserProfile, Message, Group, Report, GroupPage
+from secureshare.forms import UserForm, UserProfileForm, ReportForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
@@ -12,53 +12,9 @@ from Crypto.Cipher import AES
 import datetime
 import binascii
 
-# For AES encryption/decryption
-key = "7AqDiyLmzcjmPO7n"
 
 
-def list(request):
-    # Handle file upload
-    if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            newdoc = Document(docfile=request.FILES['docfile'])
-            newdoc.save()
-
-            # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('secureshare.views.home'))
-    else:
-        form = DocumentForm()  # A empty, unbound form
-
-    # Load documents for the list page
-    documents = Document.objects.all()
-
-    # Render list page with the documents and the form
-    return render_to_response(
-        'secureshare/home.html',
-        {'documents': documents, 'form': form},
-        context_instance=RequestContext(request)
-    )
-
-
-def handle_uploaded_file(f):
-  with open('write_file.txt', 'wb+') as dest:
-    for chunk in f.chunks():
-      destination.write(chunk)
-
-
-def upload_file(request):
-  if request.method == 'POST':
-    form = UploadFileForm(request.POST, request.FILES)
-    if form.is_valid():
-      inst = UploadFileForm(file_field=request.FILES['file'])
-      inst.save()
-      return HttpResponseRedirect('/success/url/')
-  else:
-    form = UploadFileForm()
-  return render(request, 'upload.html', {'form': form})
-
-
-def user_login(request):
+def userlogin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -100,35 +56,7 @@ def register(request):
         profile_form = UserProfileForm()
     return render(request,
             'secureshare/register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
-
-
-def authregister(request):
-	if request.method == 'POST':
-		usernameIn = request.POST.get('inputUsername', '')
-		emailIn = request.POST.get('inputEmail', '')
-		passwordIn = request.POST.get('inputPassword', '')
-		user = User.objects.create_user(usernameIn, emailIn, passwordIn)
-		user.save()
-		return login(request)
-
-
-def upload(request):
-  if request.method == 'POST':
-    form = UploadFileForm(request.POST, request.FILES)
-    if form.is_valid():
-      new_file = UploadFile(file = request.FILES['file'])
-      new_file.save()
-      return HttpResponseRedirect(reverse('main:upload'))
-  else:
-    form = UploadFileForm()
-
-  data = {'form': form}
-  return render_to_response('secureshare/upload.html', data, context_instance=RequestContext(request))
-
-
-def confirmation(request):
-	return render(request, 'secureshare/confirmation.html/')
+            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 
 def home(request):
@@ -138,7 +66,7 @@ def home(request):
 
 
 @login_required
-def user_logout(request):
+def userlogout(request):
     logout(request)
     return HttpResponseRedirect('/secureshare/')
 
@@ -147,17 +75,40 @@ def createreport(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
     if request.method == 'POST':
-        report_form = ReportForm(request.POST)
+        report_form = ReportForm(request.POST or None, request.FILES or None)
         if report_form.is_valid():
             owner = request.user
             t = datetime.datetime.now()
             timeStr = str(t)[:-7]
             short_description = report_form.cleaned_data['short_description']
             detailed_description = report_form.cleaned_data['detailed_description']
+            file1 = file2 = file3 = file4 = file5 = ''
+            if 'file1' in request.FILES:
+                file1 = request.FILES['file1']
+            if 'file2' in request.FILES:
+                file2 = request.FILES['file2']
+            if 'file3' in request.FILES:
+                file3 = request.FILES['file3']
+            if 'file4' in request.FILES:
+                file4 = request.FILES['file4']
+            if 'file5' in request.FILES:
+                file5 = request.FILES['file5']
             private = report_form.cleaned_data['private']
-            report = Report(owner=owner, created_at=timeStr, short_description=short_description, detailed_description=detailed_description, private=private)
+            encrypt = report_form.cleaned_data['encrypt']
+            report = Report(
+                owner=owner,
+                created_at=timeStr,
+                short_description=short_description,
+                detailed_description=detailed_description,
+                file1=file1,
+                file2=file2,
+                file3=file3,
+                file4=file4,
+                file5=file5,
+                private=private,
+                encrypt=encrypt,
+            )
             report.save()
-            # return render(request, 'secureshare/create-report.html', {'report_form': report_form, 'message': "The report was successfully submitted."})
             return render(request, 'secureshare/create-report.html', {'report_form': report_form, 'message': "The report was successfully submitted."})
     else:
         report_form = ReportForm()
@@ -166,7 +117,8 @@ def createreport(request):
 def managereports(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed')
-    return render(request, 'secureshare/manage-reports.html')
+    reportList = Report.objects.filter(owner=request.user)
+    return render(request, 'secureshare/manage-reports.html', {'reportList': reportList})
 
 
 def viewreports(request):
@@ -174,6 +126,9 @@ def viewreports(request):
         return render(request, 'secureshare/failed')
     return render(request, 'secureshare/view-reports.html')
 
+
+# For AES encryption/decryption
+key = "7AqDiyLmzcjmPO7n"
 
 '''
 Adapted from GitHub

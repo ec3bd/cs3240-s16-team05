@@ -93,6 +93,23 @@
             <input type="submit" name="submit" style="" value="Submit report" />
             <p style="color:red"><b>{{ message }}</b></p>
           </form>
+          <!-- upload stuff -->
+            <form action="../confirmation/" method='post' enctype='multipart/form-data'>
+              {%csrf_token %}
+              <p>{{ form.non_field_errors}}</p>
+              <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }} </p>
+              <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+              </p>
+              <p>
+              <input type="file" name="f">
+              </p>
+              <p>
+              <input class="btn btn-default" type="submit">
+              </p>
+            </form>
+
         </div>
 
     </div>

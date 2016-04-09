@@ -14,11 +14,12 @@ class UserProfile(models.Model):
 
 # MESSAGES
 class Message(models.Model):
-	sender = models.ForeignKey(User, related_name="sender")
-	receiver = models.ForeignKey(User, related_name="receiver")
-	content = models.TextField()
-	created_at = models.TextField()
-	encrypt = models.BooleanField(default=False)
+  sender = models.ForeignKey(User, related_name="sender")
+  receiver = models.ForeignKey(User, related_name="receiver")
+  content = models.TextField()
+  created_at = models.TextField()
+  encrypt = models.BooleanField(default=False)
+  read = models.BooleanField(default=False)
 
 # REPORTS
 class Report(models.Model):

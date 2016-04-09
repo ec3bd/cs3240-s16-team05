@@ -71,6 +71,15 @@
           <h1 class="page-header">Welcome back, {{ request.user }}!</h1>
 
           <p>You are are authenticated and at the home page. Use the links below or on the left to perform actions.</p>
+          <br>
+
+          <div>
+            <p>Here are some updates:</p>
+            <ul>
+              <li>You have {{ unreadMessageCount }} unread message(s) in your inbox.</li>
+              <li>You currently own {{ reportCount }} report(s).
+            </ul>
+          </div>
           <br><br>
 
           <div class="row placeholders">

@@ -60,9 +60,12 @@ def register(request):
 
 
 def home(request):
-	if not request.user.is_authenticated():
-		return render(request, 'secureshare/failed.html')
-	return render(request, 'secureshare/home.html', {'siteManager': UserProfile.objects.get(user_id=request.user.id).siteManager})
+    if not request.user.is_authenticated():
+       return render(request, 'secureshare/failed.html')
+    unreadMessageCount = len(Message.objects.filter(receiver=request.user, read=False))
+    reportCount = len(Report.objects.filter(owner=request.user))
+    siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+    return render(request, 'secureshare/home.html', {'unreadMessageCount': unreadMessageCount, 'reportCount': reportCount, 'siteManager': siteManager})
 
 
 @login_required
@@ -119,6 +122,37 @@ def managereports(request):
         return render(request, 'secureshare/failed')
     reportList = Report.objects.filter(owner=request.user)
     return render(request, 'secureshare/manage-reports.html', {'reportList': reportList})
+def requestdeletereport(request, report_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    report = Report.objects.filter(id=report_pk).delete()
+    return HttpResponseRedirect('/secureshare/managereports/')
+def reportpage(request, report_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    reportList = Report.objects.filter(id=report_pk)
+    if len(reportList) == 0:
+        return render(request, 'secureshare/report-page.html', {'message': "That report does not exist"})
+    else:
+        report = reportList[0]
+        # CHECK TO SEE IF USER IS ALLOWED TO SEE REPORT HERE
+        return render(request, 'secureshare/report-page.html', {'report': report})
+def requesteditreport(request, report_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    if request.method == 'POST':
+        report = Report.objects.filter(id=report_pk)[0]
+        short_description = request.POST.get('shortdescription')
+        detailed_description = request.POST.get('detaileddescription')
+        user = request.user
+        if user.is_active:
+            if short_description != '':
+                report.short_description = short_description
+            if detailed_description != '':
+                report.detailed_description = detailed_description
+        return render(request, 'secureshare/report-page.html', {'report': report})
+    else:
+        return render(request, 'secureshare/report-page.html', {'report': report})
 
 
 def viewreports(request):
@@ -164,16 +198,10 @@ class AESCipher:
 def viewmessages(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
-    messageList = Message.objects.all()
-    # Inbox/outbox
-    messageIn = []
-    messageOut = []
-    for message in messageList:
-        if message.receiver == request.user:
-            messageIn.append(message)
-        if message.sender == request.user:
-            messageOut.append(message)
-    return render(request, 'secureshare/view-messages.html', {'messageIn': messageIn, 'messageOut': messageOut,})
+    messageIn = Message.objects.filter(receiver=request.user)
+    Message.objects.filter(receiver=request.user).update(read=True)
+    messageOut = Message.objects.filter(sender=request.user)
+    return render(request, 'secureshare/view-messages.html', {'messageIn': messageIn, 'messageOut': messageOut})
 def sendmessage(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
@@ -202,10 +230,10 @@ def sendmessage(request):
             if encrypt == "encrypted":
                 aesObj = AESCipher(key)
                 encryptedMsg = aesObj.encrypt(message)
-                msg = Message(sender=user, receiver=recepientUser, content=encryptedMsg, created_at=timeStr, encrypt=True)
+                msg = Message(sender=user, receiver=recepientUser, content=encryptedMsg, created_at=timeStr, encrypt=True, read=False)
             else:
                 databaseMessage = message
-                msg = Message(sender=user, receiver=recepientUser, content=databaseMessage, created_at=timeStr, encrypt=False)
+                msg = Message(sender=user, receiver=recepientUser, content=databaseMessage, created_at=timeStr, encrypt=False, read=False)
             msg.save()
             return HttpResponseRedirect('/secureshare/viewmessages/')
         else:

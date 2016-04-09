@@ -11,6 +11,10 @@ urlpatterns = [
 
     url(r'^createreport/$', views.createreport, name='createreport'),
     url(r'^managereports/$', views.managereports, name='managereports'),
+    url(r'^reportpage/(?P<report_pk>.*)$', views.reportpage, name='reportpage'),
+    url(r'^requestdeletereport/(?P<report_pk>.*)$', views.requestdeletereport, name='requestdeletereport'),
+    url(r'^requesteditreport/(?P<report_pk>.*)$', views.requesteditreport, name='requesteditreport'),
+
     url(r'^viewreports/$', views.viewreports, name='viewreports'),
     # Files should not be able to be accessed via the web application, hence we provide no URL
 

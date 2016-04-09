@@ -68,45 +68,84 @@
           </div>
         </div>
 
+        {% if message %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Manage reports</h1>
+          <p style="color: red">{{ message }}</p>
+        </div>
+        {% else %}
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1>Report created at {{ report.created_at }}</h1>
+          <h3 class="page-header">Report Page</h3>
 
-          <p>This page allows you to manage your reports.</p>
+          <p>This page presents information on the report that you created at <b>{{ report.created_at }}</b>.</p>
+          <br>
+
+          <h4><b>Short description:</b></h4>
+          <p>{{ report.short_description }}</p>
+
+          <h4><b>Detailed description:</b></h4>
+          <p>{{ report.detailed_description }}</p>
+
+          <h4><b>File(s):</b></h4>
+          <p>
+            {{ report.file1 }}<br>
+            {{ report.file2 }}<br>
+            {{ report.file3 }}<br>
+            {{ report.file4 }}<br>
+            {{ report.file5 }}<br>
+          </p>
+
+          <h4><b>Private?</b></h4>
+          <p>{{ report.private }}</p>
+
+          <h4><b>Encrypted?</b></h4>
+          <p>{{ report.encrypt }}</p>
+
           <br><br>
 
-          <table class="table table-hover">
-            <tr>
-              <th class="col-md-1">Created at</th>
-              <th class="col-md-1">Short description</th>
-              <th class="col-md-2">Detailed description</th>
-              <th class="col-md-5">File(s)</th>
-              <th class="col-md-1">Private?</th>
-              <th class="col-md-1">Encrypted?</th>
-              <th class="col-md-1">Delete?</th>
-              <!-- <th class="col-md-1">Tags</th> -->
-            </tr>
-            {% for report in reportList %}
-            <tr>
-              <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
-              <td>{{ report.short_description }}</td>
-              <td>{{ report.detailed_description }}</td>
-              <td>
-                {{ report.file1 }}<br>
-                {{ report.file2 }}<br>
-                {{ report.file3 }}<br>
-                {{ report.file4 }}<br>
-                {{ report.file5 }}<br>
-              </td>
-              <td>{{ report.private }}</td>
-              <td>{{ report.encrypt }}</td>
-              <td><a href="/secureshare/requestdeletereport/{{ report.id }}">Delete</a></td>
-            </tr>
-            {% endfor %}
-          </table>
-
+          <h2>Edit properties:</h2>
+          <h4>This form will overwrite the properties of the report shown above.</h4>
+          <form id="report_form" method="post" action="/secureshare/requesteditreport/{{ report.id }}" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <p style="color:red"><b>{{ message }}</b></p>
+            <div>
+              <label>Short description:</label><br>
+              <input type="text" name="shortdescription">
+            </div>
+            <br>
+            <div>
+              <label>Detailed description:</label><br>
+              <input type="text" name="detaileddescription">
+            </div>
+            <br>
+            <!-- User cannot edit attachments, privacy, or encryption - they will need to delete and/or create a new report -->
+            <!-- <div>
+              <p><b>Add your attachments below:</b></p>
+              <ul>
+                <li>{{ report_form.file1 }}</li><br>
+                <li>{{ report_form.file2 }}</li><br>
+                <li>{{ report_form.file3 }}</li><br>
+                <li>{{ report_form.file4 }}</li><br>
+                <li>{{ report_form.file5 }}</li><br>
+              </ul>
+            </div> -->
+            <!-- <div>
+              {{ report_form.private }} Private
+            </div>
+            <br>
+            <div>
+              {{ report_form.encrypt }} Encrypted
+            </div> -->
+            <br>
+            <input type="submit" name="submit" class="btn btn-lg btn-primary btn-block" style="width: 200px" value="Edit report" />
+            <!-- <p style="color:red"><b>{{ report_form.errors }}</b></p> -->
+          </form>
+          
         </div>
 
-    </div>
-   <script src="{% static "js/bootstrap.min.js" %}"></script>
+        {% endif %}
+
+      </div>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
   </body>
 </html>

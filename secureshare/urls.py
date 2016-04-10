@@ -5,7 +5,8 @@ urlpatterns = [
     url(r'^$', views.userlogin, name='login'),
     url(r'^auth/$', views.userlogin, name='auth'),
     url(r'^register/$', views.register, name='register'),
-    url(r'^home/$', include('home.urls', namespace="home", app_name="home")),
+    # url(r'^home/$', include('home.urls', namespace="home", app_name="home")),
+    url(r'^home/', views.home, name='home'),
     url(r'^login/$', views.userlogin, name='login'),
     url(r'^logout/$', views.userlogout, name='logout'),
 

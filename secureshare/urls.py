@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^requesteditreport/(?P<report_pk>.*)$', views.requesteditreport, name='requesteditreport'),
 
     url(r'^viewreports/$', views.viewreports, name='viewreports'),
+    # url(r'^requestfiledownload/(?P<report_pk>.*)$', views.requestfiledownload, name='requestfiledownload'),
+    url(r'^requestfiledownload/(?P<report_pk>.*)/(?P<file_pk>.*)$', views.requestfiledownload, name='requestfiledownload'),
     # Files should not be able to be accessed via the web application, hence we provide no URL
 
     url(r'^viewmessages/$', views.viewmessages, name='viewmessages'),

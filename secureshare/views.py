@@ -11,6 +11,8 @@ from django.core.urlresolvers import reverse
 from Crypto.Cipher import AES
 import datetime
 import binascii
+import mimetypes
+import os
 
 
 
@@ -157,8 +159,37 @@ def requesteditreport(request, report_pk):
 
 def viewreports(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/view-reports.html')
+def requestfiledownload(request, report_pk, file_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    # Add check to see if report exists (for invalid URL)
+    report_id = report_pk[0:report_pk.index("/")]
+    file_directory = report_pk[report_pk.index("/"):] + "/"
+    report = Report.objects.filter(id=report_id)[0]
+    if not report.encrypt:
+        fp = open(file_directory[1:] + file_pk, 'rb')
+        response = HttpResponse(fp.read())
+        fp.close()
+        type, encoding = mimetypes.guess_type(file_pk)
+        if type is None:
+            type = 'application/octet-stream'
+        response['Content-Type'] = type
+        if encoding is not None:
+            response['Content-Encoding'] = encoding
+        if u'WebKit' in request.META['HTTP_USER_AGENT']:
+            filename_header = 'filename=%s' % file_pk.encode('utf-8')
+        elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+            filename_header = ''
+        else:
+            filename_header = 'filename*=UTF-8\'\'%s' & urllib.quote(original_filename.encode('utf-8'))
+        filename_header = filename_header[2:] # fixes byte string output
+        response['Content-Disposition'] = 'attachment; ' + filename_header
+        return response
+    return HttpResponseRedirect('/secureshare/viewreports/')
+
+
 
 
 # For AES encryption/decryption

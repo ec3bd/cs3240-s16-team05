@@ -2,28 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9b27bcf-32c3-4dd4-822b-965bf9b90019" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/secureshare/migrations/0007_tag.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/secureshare/migrations/0008_auto_20160406_1314.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/secureshare/migrations/0009_auto_20160406_1419.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/secureshare/grouppage.html" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/secureshare/drop.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbsqlite3" afterPath="$PROJECT_DIR$/dbsqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/urls.py" afterPath="$PROJECT_DIR$/home/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/secureshare/admin.py" afterPath="$PROJECT_DIR$/secureshare/admin.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/secureshare/forms.py" afterPath="$PROJECT_DIR$/secureshare/forms.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/secureshare/models.py" afterPath="$PROJECT_DIR$/secureshare/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/secureshare/urls.py" afterPath="$PROJECT_DIR$/secureshare/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/secureshare/views.py" afterPath="$PROJECT_DIR$/secureshare/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/create-group.html" afterPath="$PROJECT_DIR$/templates/secureshare/create-group.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/create-report.html" afterPath="$PROJECT_DIR$/templates/secureshare/create-report.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/home.html" afterPath="$PROJECT_DIR$/templates/secureshare/home.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/manage-account.html" afterPath="$PROJECT_DIR$/templates/secureshare/manage-account.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/manage-groups.html" afterPath="$PROJECT_DIR$/templates/secureshare/manage-groups.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/manage-reports.html" afterPath="$PROJECT_DIR$/templates/secureshare/manage-reports.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/manage-users-and-reports.html" afterPath="$PROJECT_DIR$/templates/secureshare/manage-users-and-reports.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/view-messages.html" afterPath="$PROJECT_DIR$/templates/secureshare/view-messages.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/view-reports.html" afterPath="$PROJECT_DIR$/templates/secureshare/view-reports.html" />
     </list>
     <ignored path="cs3240-s16-team05.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,31 +30,41 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="home.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/secureshare/home.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.0">
-              <caret line="90" column="20" selection-start-line="90" selection-start-column="20" selection-end-line="90" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/secureshare/forms.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="manage-account.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-account.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.791667">
-              <caret line="73" column="61" selection-start-line="73" selection-start-column="61" selection-end-line="73" selection-end-column="61" />
+            <state vertical-scroll-proportion="-11.458333">
+              <caret line="74" column="128" selection-start-line="74" selection-start-column="128" selection-end-line="74" selection-end-column="128" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="forms.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/secureshare/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.51619434">
+              <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="confirmation.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/secureshare/confirmation.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="upload.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/secureshare/upload.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="9.791667">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -83,28 +75,32 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="65.458336">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="register.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/secureshare/register.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.416666">
-              <caret line="56" column="22" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
               <folding>
-                <element signature="n#style#0;n#div#2;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <marker date="1460053368772" expanded="true" signature="1572:6062" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="1596:2975" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="1646:2960" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="1689:1778" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="1821:2087" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="2130:2499" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="2542:2943" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="2754:2924" placeholder="{% if siteManager ... %}" />
+                <marker date="1460053368772" expanded="true" signature="3054:6050" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="3259:6034" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="3333:4074" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="3352:3617" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="3633:4054" placeholder="{% for message in messageIn ... %}" />
+                <marker date="1460053368772" expanded="true" signature="3681:4026" placeholder="..." />
+                <marker date="1460053368772" expanded="true" signature="4560:4984" placeholder="{% for message in messageOut ... %}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/home/settings.py">
+      <file leaf-file-name="view-reports.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/secureshare/view-reports.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -114,7 +110,7 @@
         <entry file="file://$PROJECT_DIR$/secureshare/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="31" selection-start-line="12" selection-start-column="31" selection-end-line="12" selection-end-column="31" />
+              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -122,11 +118,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="manage-users-and-reports.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-users-and-reports.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="31.041666">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="manage-reports.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-reports.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="9.375">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/secureshare/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="11.716738">
-              <caret line="364" column="70" selection-start-line="364" selection-start-column="70" selection-end-line="364" selection-end-column="70" />
+            <state vertical-scroll-proportion="150.0">
+              <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
               <folding>
                 <element signature="e#0#55#0" expanded="true" />
               </folding>
@@ -165,9 +181,10 @@
         <option value="$PROJECT_DIR$/home/settings.py" />
         <option value="$PROJECT_DIR$/home/urls.py" />
         <option value="$PROJECT_DIR$/templates/secureshare/register.html" />
-        <option value="$PROJECT_DIR$/secureshare/forms.py" />
         <option value="$PROJECT_DIR$/secureshare/models.py" />
         <option value="$PROJECT_DIR$/secureshare/views.py" />
+        <option value="$PROJECT_DIR$/templates/secureshare/manage-account.html" />
+        <option value="$PROJECT_DIR$/secureshare/forms.py" />
       </list>
     </option>
   </component>
@@ -543,7 +560,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1604" height="872" extended-state="7" />
+    <frame x="-2" y="-3" width="1604" height="872" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -780,14 +797,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/secureshare/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.75">
-          <caret line="30" column="55" selection-start-line="30" selection-start-column="55" selection-end-line="30" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/secureshare/apps.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -814,26 +823,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-users-and-reports.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3346856">
           <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/secureshare/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -862,9 +855,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-groups.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="5.625">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/secureshare/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/secureshare/register.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.416666">
+        <state vertical-scroll-proportion="-27.708334">
           <caret line="56" column="22" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
           <folding>
             <element signature="n#style#0;n#div#2;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -872,10 +881,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-account.html">
+    <entry file="file://$PROJECT_DIR$/templates/secureshare/login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.791667">
-          <caret line="73" column="61" selection-start-line="73" selection-start-column="61" selection-end-line="73" selection-end-column="61" />
+        <state vertical-scroll-proportion="-11.25">
+          <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -884,14 +893,54 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="65.458336">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1460053368772" expanded="true" signature="1572:6062" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="1596:2975" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="1646:2960" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="1689:1778" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="1821:2087" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="2130:2499" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="2542:2943" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="2754:2924" placeholder="{% if siteManager ... %}" />
+            <marker date="1460053368772" expanded="true" signature="3054:6050" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="3259:6034" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="3333:4074" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="3352:3617" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="3633:4054" placeholder="{% for message in messageIn ... %}" />
+            <marker date="1460053368772" expanded="true" signature="3681:4026" placeholder="..." />
+            <marker date="1460053368772" expanded="true" signature="4560:4984" placeholder="{% for message in messageOut ... %}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/secureshare/view-reports.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/secureshare/forms.py">
+    <entry file="file://$PROJECT_DIR$/templates/secureshare/confirmation.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-users-and-reports.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="31.041666">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/secureshare/upload.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="9.791667">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -899,7 +948,7 @@
     <entry file="file://$PROJECT_DIR$/secureshare/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="31" selection-start-line="12" selection-start-column="31" selection-end-line="12" selection-end-column="31" />
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
@@ -908,11 +957,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/secureshare/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="11.716738">
-          <caret line="364" column="70" selection-start-line="364" selection-start-column="70" selection-end-line="364" selection-end-column="70" />
+        <state vertical-scroll-proportion="150.0">
+          <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
           <folding>
             <element signature="e#0#55#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-reports.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="9.375">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-account.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.458333">
+          <caret line="74" column="128" selection-start-line="74" selection-start-column="128" selection-end-line="74" selection-end-column="128" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/secureshare/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.51619434">
+          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'secureshare',
-    'morning-brook-97831'
 ]
 
 MIDDLEWARE_CLASSES = [

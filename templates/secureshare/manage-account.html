@@ -72,6 +72,13 @@
           <h1 class="page-header">Manage my account ({{ request.user }})</h1>
 
           <p>This page allows you to manage your account.</p>
+             <form id="password_change_form" method="post" action="/secureshare/manageaccount/" style="margin: 0 auto; width: 25%">
+	    		{% csrf_token %}
+                <p align="center">Reset your password below</p>
+                <br>
+                {{ password_change_form.as_p }}
+        		<button class="btn btn-lg btn-primary btn-block" type="submit">Reset Password</button>
+      		</form><br><br>
           <br><br>
         </div>
 

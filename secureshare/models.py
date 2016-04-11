@@ -12,6 +12,16 @@ class UserProfile(models.Model):
     def __unicode__(self):
       return self.user.username
 
+class PasswordChange(models.Model):
+	oldPassword = models.CharField(max_length = 100)
+	newPassword = models.CharField(max_length = 100)
+
+class UploadFile(models.Model):
+  file = models.FileField(upload_to='files/%Y/%m/%d')
+
+class Document(models.Model):
+  docfile = models.FileField(upload_to='documents/%Y/%m/%d')
+
 # MESSAGES
 class Message(models.Model):
   sender = models.ForeignKey(User, related_name="sender")

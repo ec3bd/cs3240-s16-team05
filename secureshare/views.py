@@ -1,9 +1,8 @@
 from django.shortcuts import render, render_to_response
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from secureshare.models import User, UserProfile, Message, Group, Report, GroupPage
-from secureshare.forms import UserForm, UserProfileForm, ReportForm
+from django.contrib.auth import logout, update_session_auth_hash
+from secureshare.models import User, UserProfile, Document, UploadFile, Message, Group, Report, GroupPage
+from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm, ReportForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
@@ -388,10 +387,38 @@ def grouppage(request, group_pk):
 def manageaccount(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
-    return render(request, 'secureshare/manage-account.html')
+    if request.method == 'POST':
+        password_change_form = PasswordChangeForm(data=request.POST)
+        if password_change_form.is_valid():
+	        user = request.user
+        oldpassword = request.POST.get('oldPassword')
+        newpassword = request.POST.get('newPassword')
+        if user.check_password(oldpassword):
+	        user.set_password(newpassword)
+	        user.save()
+	        update_session_auth_hash(request, user)
+
+	        return render(request, 'secureshare/home.html')
+        else:
+            return render(request, 'secureshare/failed.html')
+    else:
+        password_change_form = PasswordChangeForm(data=request.POST)
+    return render(request, 'secureshare/manage-account.html', {'password_change_form': password_change_form})
 
 
 def manageusersreports(request):
     if not UserProfile.objects.get(user_id=request.user.id).siteManager:
         return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/manage-users-and-reports.html')
+
+def grouppage(request, groupname):
+    context_dict = {}
+    try:
+        group = Group.objects.get(name=groupname)
+        users = group.user_set.all()
+        context_dict['group_name'] = group.name
+        context_dict['group'] = group
+    except Group.DoesNotExist:
+        pass
+
+    return render(request, 'secureshare/grouppage.html', context_dict)

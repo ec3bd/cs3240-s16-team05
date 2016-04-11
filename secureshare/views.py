@@ -48,9 +48,11 @@ def register(request):
             print(pass2)
             if user.password != profile.password2:
 	            print('passwordsDontMatch')
+	            user.delete()
 	            return render(request, 'secureshare/failed.html')
             user.set_password(user.password)
             user.save()
+            profile.password2 = 'Secret' #dont save any copy of the users actual password!!
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
             profile.save()

@@ -5,5 +5,9 @@
       <auth-required>false</auth-required>
       <first-sync>true</first-sync>
     </data-source>
+    <data-source name="Django default2" uuid="e8456c4d-a44a-42f0-980a-4bb6cc9da94b">
+      <auth-required>false</auth-required>
+      <first-sync>true</first-sync>
+    </data-source>
   </component>
 </project>

@@ -74,6 +74,7 @@
           <p>This page allows you to manage your groups. You are currently logged in as <b>{{ request.user }}</b>.</p>
           <br><br>
 
+          <p style="color:red"><b>{{ message }}</b></p>
           <table class="table table-hover">
             <tr>
               <th class="col-md-8">Group</th>
@@ -87,7 +88,6 @@
                 <form id="login_form" method="post" action="/secureshare/requestnewusertogroup/{{ group.id }}" style="width:90%">
                   {% csrf_token %}
                   <input type="text" name="user" class="form-control" placeholder="Username" required><br>
-                  <p style="color:red"><b>{{ message }}</b></p>
                 </form>
               </td>
               <td><a href="/secureshare/requestdeletefromgroup/{{ group.id }}">Remove</a></td>

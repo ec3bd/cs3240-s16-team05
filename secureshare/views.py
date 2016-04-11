@@ -40,16 +40,23 @@ def register(request):
         if user_form.is_valid() and profile_form.is_valid():
             # Save the user's form data to the database.
             user = user_form.save()
-            user.set_password(user.password)
-            user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
+            print(user.password)
+            pass2 = profile.password2
+            print(pass2)
+            if user.password != profile.password2:
+	            print('passwordsDontMatch')
+	            return render(request, 'secureshare/failed.html')
+            user.set_password(user.password)
+            user.save()
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
             profile.save()
             registered = True
         else:
-            return render(request, 'secureshare/failed.html')
+	        print('form not valid')
+	        return render(request, 'secureshare/failed.html')
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()

@@ -6,6 +6,8 @@ from django.contrib.auth.models import User, Group
 # USERS
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    password2 = models.CharField(max_length = 100)
+    random = models.CharField(max_length = 100)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     siteManager = models.BooleanField(default=False)

@@ -73,6 +73,38 @@
 
           <p>This page allows you to view all reports that you are authorized to access, aside from your own. You can access your own reports <a href="/secureshare/managereports/">here</a>.</p>
           <br><br>
+
+          <p style="color:red"><b>{{ message }}</b></p>
+          <table class="table table-hover">
+            <tr>
+              <th class="col-md-1">Created at</th>
+              <th class="col-md-2">Owner</th>
+              <th class="col-md-1">Short description</th>
+              <th class="col-md-2">Detailed description</th>
+              <th class="col-md-4">File(s)</th>
+              <th class="col-md-1">Private?</th>
+              <th class="col-md-1">Encrypted?</th>
+              <!-- <th class="col-md-1">Tags</th> -->
+            </tr>
+            {% for report in authReportList %}
+            <tr>
+              <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
+              <td>{{ report.owner }}</td>
+              <td>{{ report.short_description }}</td>
+              <td>{{ report.detailed_description }}</td>
+              <td>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file1 }}">{{ report.file1 }}</a><br>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file2 }}">{{ report.file2 }}</a><br>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file3 }}">{{ report.file3 }}</a><br>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file4 }}">{{ report.file4 }}</a><br>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file5 }}">{{ report.file5 }}</a><br>
+              </td>
+              <td>{{ report.private }}</td>
+              <td>{{ report.encrypt }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+
         </div>
 
     </div>

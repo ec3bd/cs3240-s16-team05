@@ -47,10 +47,12 @@ class Report(models.Model):
   file5 = models.FileField(upload_to=upload_path, null=True)
   private = models.BooleanField(default=False)
   encrypt = models.BooleanField(default=False)
+  int_hash = models.CharField(max_length=100, default="")
   # collection of user permissions
   auth_users = models.ManyToManyField(User)
   # collection of group permissions
   auth_groups = models.ManyToManyField(Group)
+
   # collection of tags  
 # class Tag(models.Model):
 #   word = models.CharField(max_length=35)

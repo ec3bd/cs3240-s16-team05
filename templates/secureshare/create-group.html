@@ -76,10 +76,10 @@
 
           <form id="login_form" method="post" action="/secureshare/requestgroup/" style="width:50%">
               {% csrf_token %}
+              <p style="color:red"><b>{{ message }}</b></p>
               <label for="groupName" class="sr-only">Group name</label>
               <input type="text" name="groupName" class="form-control" placeholder="Group name" required autofocus><br>
               <button class="btn btn-lg btn-primary btn-block" type="submit">Check and add</button>
-              <p style="color:red"><b>{{ message }}</b></p>
             </form>
 
         </div>

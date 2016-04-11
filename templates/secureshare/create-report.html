@@ -74,8 +74,9 @@
           <p>This page allows you to create a new report.</p>
           <br><br>
 
-          <form id="report_form" method="post" action="/secureshare/createreport/">
+          <form id="report_form" method="post" action="/secureshare/createreport/" enctype='multipart/form-data'>
             {% csrf_token %}
+            <p style="color:red"><b>{{ message }}</b></p>
             <div>
               <label>Short description:</label><br>
               {{ report_form.short_description }}
@@ -87,12 +88,27 @@
             </div>
             <br>
             <div>
+              <p><b>Add your attachments below:</b></p>
+              <ul>
+                <li>{{ report_form.file1 }}</li><br>
+                <li>{{ report_form.file2 }}</li><br>
+                <li>{{ report_form.file3 }}</li><br>
+                <li>{{ report_form.file4 }}</li><br>
+                <li>{{ report_form.file5 }}</li><br>
+              </ul>
+            </div>
+            <div>
               {{ report_form.private }} Private
-              {{ report_form.errors }}
-            </div><br>
-            <input type="submit" name="submit" style="" value="Submit report" />
-            <p style="color:red"><b>{{ message }}</b></p>
+            </div>
+            <br>
+            <div>
+              {{ report_form.encrypt }} Encrypted
+            </div>
+            <br>
+            <input type="submit" name="submit" class="btn btn-lg btn-primary btn-block" style="width: 200px" value="Submit report" />
+            <!-- <p style="color:red"><b>{{ report_form.errors }}</b></p> -->
           </form>
+
         </div>
 
     </div>

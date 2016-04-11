@@ -73,6 +73,37 @@
 
           <p>This page allows you to manage your reports.</p>
           <br><br>
+
+          <table class="table table-hover">
+            <tr>
+              <th class="col-md-1">Created at</th>
+              <th class="col-md-1">Short description</th>
+              <th class="col-md-2">Detailed description</th>
+              <th class="col-md-5">File(s)</th>
+              <th class="col-md-1">Private?</th>
+              <th class="col-md-1">Encrypted?</th>
+              <th class="col-md-1">Delete?</th>
+              <!-- <th class="col-md-1">Tags</th> -->
+            </tr>
+            {% for report in reportList %}
+            <tr>
+              <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
+              <td>{{ report.short_description }}</td>
+              <td>{{ report.detailed_description }}</td>
+              <td>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file1 }}">{{ report.file1 }}</a><br>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file2 }}">{{ report.file2 }}</a><br>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file3 }}">{{ report.file3 }}</a><br>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file4 }}">{{ report.file4 }}</a><br>
+                <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file5 }}">{{ report.file5 }}</a><br>
+              </td>
+              <td>{{ report.private }}</td>
+              <td>{{ report.encrypt }}</td>
+              <td><a href="/secureshare/requestdeletereport/{{ report.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+          </table>
+
         </div>
 
     </div>

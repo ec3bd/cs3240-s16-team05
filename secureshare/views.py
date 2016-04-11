@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, update_session_auth_hash
 from secureshare.models import User, UserProfile, Document, UploadFile, Message, Group, Report, GroupPage
-from secureshare.forms import UserForm, UserProfileForm, UploadFileForm, DocumentForm, ReportForm, PasswordChangeForm
+from secureshare.forms import UserForm, UserProfileForm, ReportForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
@@ -11,7 +11,6 @@ from Crypto.Cipher import AES
 import datetime
 import binascii
 import mimetypes
-
 
 
 def userlogin(request):
@@ -119,7 +118,7 @@ def createreport(request):
 
 def managereports(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     reportList = Report.objects.filter(owner=request.user)
     return render(request, 'secureshare/manage-reports.html', {'reportList': reportList})
 def requestnewusertoreport(request, report_pk):

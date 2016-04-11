@@ -27,7 +27,6 @@ class Report(models.Model):
   created_at = models.TextField()
   short_description = models.CharField(max_length=200)
   detailed_description = models.TextField()
-  # upload_path = 'files/' + owner.username + '/%Y%m%d'
   upload_path = 'files/' + '%Y%m%d'
   file1 = models.FileField(upload_to=upload_path, null=True)
   file2 = models.FileField(upload_to=upload_path, null=True)
@@ -37,7 +36,9 @@ class Report(models.Model):
   private = models.BooleanField(default=False)
   encrypt = models.BooleanField(default=False)
   # collection of user permissions
+  auth_users = models.ManyToManyField(User)
   # collection of group permissions
+  auth_groups = models.ManyToManyField(Group)
   # collection of tags  
 # class Tag(models.Model):
 #   word = models.CharField(max_length=35)

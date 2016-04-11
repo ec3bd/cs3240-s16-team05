@@ -79,12 +79,14 @@
               <th class="col-md-1">Created at</th>
               <th class="col-md-1">Short description</th>
               <th class="col-md-2">Detailed description</th>
-              <th class="col-md-5">File(s)</th>
+              <th class="col-md-4">File(s)</th>
               <th class="col-md-1">Private?</th>
               <th class="col-md-1">Encrypted?</th>
+              <th class="col-md-1">Share with user?</th>
               <th class="col-md-1">Delete?</th>
               <!-- <th class="col-md-1">Tags</th> -->
             </tr>
+            <p style="color:red"><b>{{ messageOne }}</b></p>
             {% for report in reportList %}
             <tr>
               <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
@@ -99,6 +101,13 @@
               </td>
               <td>{{ report.private }}</td>
               <td>{{ report.encrypt }}</td>
+              <td>
+                <form id="login_form" method="post" action="/secureshare/requestnewusertoreport/{{ report.id }}" style="width:90%">
+                  {% csrf_token %}
+                  <input type="text" name="user" class="form-control" placeholder="Username" required><br>
+                  <p style="color:red"><b>{{ message }}</b></p>
+                </form>
+              </td>
               <td><a href="/secureshare/requestdeletereport/{{ report.id }}">Delete</a></td>
             </tr>
             {% endfor %}

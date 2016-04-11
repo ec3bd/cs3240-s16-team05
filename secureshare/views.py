@@ -12,7 +12,6 @@ from Crypto.Cipher import AES
 import datetime
 import binascii
 import mimetypes
-import os
 
 
 
@@ -124,6 +123,23 @@ def managereports(request):
         return render(request, 'secureshare/failed')
     reportList = Report.objects.filter(owner=request.user)
     return render(request, 'secureshare/manage-reports.html', {'reportList': reportList})
+def requestnewusertoreport(request, report_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    if request.method == 'POST':
+        reportList = Report.objects.filter(owner=request.user)
+        user = request.user
+        report = Report.objects.filter(id=report_pk)[0]
+        userToAddUsername = request.POST.get('user')
+        userToAddList = User.objects.filter(username=userToAddUsername)
+        if len(userToAddList) == 0:
+            return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'messageOne': 'Couldn\'t find that user.'})
+        userToAdd = userToAddList[0]
+        if userToAdd in report.auth_users.all():
+            return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'messageOne': "That user is already shared."})
+        else:
+            report.auth_users.add(userToAdd)
+            return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'messageOne': "Shared successfully."})
 def requestdeletereport(request, report_pk):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')

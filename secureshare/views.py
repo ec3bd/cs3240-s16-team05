@@ -70,8 +70,7 @@ def home(request):
 	unreadMessageCount = len(Message.objects.filter(receiver=request.user, read=False))
 	reportCount = len(Report.objects.filter(owner=request.user))
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
-	return render(request, 'secureshare/home.html',
-	              {'unreadMessageCount': unreadMessageCount, 'reportCount': reportCount, 'siteManager': siteManager})
+	return render(request, 'secureshare/home.html', {'unreadMessageCount': unreadMessageCount, 'reportCount': reportCount, 'siteManager': siteManager})
 
 
 @login_required

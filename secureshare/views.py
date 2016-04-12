@@ -193,6 +193,19 @@ def reportpage(request, report_pk):
 		# CHECK TO SEE IF USER IS ALLOWED TO SEE REPORT HERE
 		return render(request, 'secureshare/report-page.html', {'report': report})
 
+def userprofile(request, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	modUserList = UserProfile.objects.filter(user_id=user_pk)
+	if len(modUserList) == 0:
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		return render(request, 'secureshare/user-profile.html',
+		              {'message': "That user does not exist", 'siteManager': siteManager})
+	else:
+		modUser = modUserList[0]
+		# CHECK TO SEE IF USER IS ALLOWED TO SEE REPORT HERE
+		return render(request, 'secureshare/user-profile.html', {'profile': modUser})
+
 
 def requesteditreport(request, report_pk):
 	if not request.user.is_authenticated():
@@ -212,6 +225,21 @@ def requesteditreport(request, report_pk):
 	else:
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/report-page.html', {'siteManager': siteManager})
+
+def requestedituser(request, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.method == 'POST':
+		modUser = UserProfile.objects.filter(user_id=user_pk)[0]
+		siteM = request.POST.get('siteM')
+		user = request.user
+		modUser.siteManager = siteM
+		modUser.save()
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager})
+	else:
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		return render(request, 'secureshare/manage-users-and-reports.html.html', {'siteManager': siteManager})
 
 
 def viewreports(request):
@@ -507,5 +535,8 @@ def manageaccount(request):
 def manageusersreports(request):
 	if not UserProfile.objects.get(user_id=request.user.id).siteManager:
 		return render(request, 'secureshare/failed.html')
+	allUserList = UserProfile.objects.all()
+	for user1 in allUserList:
+		print(user1.user.username)
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
-	return render(request, 'secureshare/manage-users-and-reports.html', {'siteManager': siteManager})
+	return render(request, 'secureshare/manage-users-and-reports.html', {'allUserList':allUserList, 'siteManager': siteManager})

@@ -60,38 +60,55 @@
               </ul>
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
-                <{% if siteManager %}
-                <li><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
-                {% endif %}
+                <li class="active"><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
               </ul>
           </div>
         </div>
 
+        {% if message %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Manage users and reports ({{ request.user }})</h1>
+          <p style="color: red">{{ message }}</p>
+        </div>
+        {% else %}
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1>User: {{ profile.user.username }}</h1>
+          <h3 class="page-header">Profile Page</h3>
 
-          <p>This page allows site managers to manage users and reports.</p>
+          <p>This page presents information on the user <b>{{ profile.user.username }}</b>.</p>
+          <br>
+
+          <h4><b>Email:</b></h4>
+          <p>{{ profile.user.email }}</p>
+
+          <h4><b>Website:</b></h4>
+          <p>{{ profile.website }}</p>
+
+          <h4><b>Site Manager?</b></h4>
+          <p>{{ profile.siteManager }}</p>
+          
           <br><br>
 
-          <p style="color:red"><b>{{ message }}</b></p>
-          <table class="table table-hover">
-            <tr>
-              <th class="col-md-1">Username</th>
-              <th class="col-md-2">Email</th>
-              <th class="col-md-1">Site Manager?</th>
-              <!-- <th class="col-md-1">Tags</th> -->
-            </tr>
-            {% for profile in allUserList %}
-            <tr>
-              <td><a href="/secureshare/userprofile/{{ profile.user_id}}">{{ profile.user.username }}</a></td>
-              <td>{{ profile.user.email }}</td>
-              <td>{{ profile.siteManager }}</td>
-            </tr>
-            {% endfor %}
-          </table>
+          <h2>Edit User:</h2>
+          <h4>This form will allow you to edit properties of this user.</h4>
+          <form id="user_form" method="post" action="/secureshare/requestedituser/{{ profile.user_id }}" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <p style="color:red"><b>{{ message }}</b></p>
+            <div>
+              <label>Do you want this user to be a site Manager?:</label><br>
+              <input type="checkbox" name="siteM">
+            </div>
+            <br>
+
+            <br>
+            <input type="submit" name="submit" class="btn btn-lg btn-primary btn-block" style="width: 200px" value="Update user" />
+            <!-- <p style="color:red"><b>{{ report_form.errors }}</b></p> -->
+          </form>
+          
         </div>
 
-    </div>
-   <script src="{% static "js/bootstrap.min.js" %}"></script>
+        {% endif %}
+
+      </div>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
   </body>
 </html>

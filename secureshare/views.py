@@ -213,11 +213,14 @@ def requestedituser(request, user_pk):
 	if request.method == 'POST':
 		modUser = UserProfile.objects.filter(user_id=user_pk)[0]
 		siteM = request.POST.get('siteM')
+		modEmail = request.POST.get('email')
 		siteMBool = False
 		if siteM == "True":
 			siteMBool = True
 		user = request.user
 		modUser.siteManager = siteMBool
+		modUser.user.email = modEmail
+		modUser.user.save()
 		modUser.save()
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager})

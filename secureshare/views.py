@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, update_session_auth_hash
-from secureshare.models import User, UserProfile, Message, Group, Report, GroupPage
+from secureshare.models import User, UserProfile, Message, Group, Report, Folder
 from secureshare.forms import UserForm, UserProfileForm, ReportForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
@@ -161,8 +161,10 @@ def reportpage(request, report_pk):
         return render(request, 'secureshare/report-page.html', {'message': "That report does not exist"})
     else:
         report = reportList[0]
-        # CHECK TO SEE IF USER IS ALLOWED TO SEE REPORT HERE
-        return render(request, 'secureshare/report-page.html', {'report': report})
+        if request.user in report.auth_users.all() or report.owner == request.user:
+            return render(request, 'secureshare/report-page.html', {'report': report})
+        else:
+            return render(request, 'secureshare/report-page.html', {'message': "You are not authorized to see this report."})
 def requesteditreport(request, report_pk):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
@@ -176,10 +178,65 @@ def requesteditreport(request, report_pk):
                 report.short_description = short_description
             if detailed_description != '':
                 report.detailed_description = detailed_description
+            report.save()
         return render(request, 'secureshare/report-page.html', {'report': report})
     else:
         return render(request, 'secureshare/report-page.html', {'report': report})
 
+def managefolders(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    reportList = Report.objects.filter(owner=request.user)
+    folderList = Folder.objects.filter(owner=request.user)
+    noFolderList = Report.objects.filter(owner=request.user, folders=None)
+    return render(request, 'secureshare/manage-folders.html', {'folderList': folderList, 'reportList': reportList, 'noFolderList': noFolderList})
+def requestcreatefolder(request):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    if request.method == 'POST':
+        reportList = Report.objects.filter(owner=request.user)
+        folderList = Folder.objects.filter(owner=request.user)
+        folderName = request.POST.get('folderName')
+        user = request.user
+        if user.is_active:
+            currentFolderList = Folder.objects.filter(owner=request.user, name=folderName)
+            if len(currentFolderList) == 0:
+                folder = Folder(owner=request.user, name=folderName)
+                folder.save()
+                return HttpResponseRedirect('/secureshare/managefolders')
+            else:
+                return render(request, 'secureshare/manage-folders.html', {'folderList': folderList, 'reportList': reportList, 'message': "That folder already exists."})
+        else:
+            return render(request, 'secureshare/failed.html')
+    else:
+        return render(request, 'secureshare/failed.html')
+def requestaddtofolder(request, report_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    if request.method == 'POST':
+        folderName = request.POST.get('folderName')
+        user = request.user
+        if user.is_active:
+            report = Report.objects.filter(id=report_pk)[0]
+            report.folders.add(Folder.objects.filter(owner=request.user, name=folderName)[0])
+            return HttpResponseRedirect('/secureshare/managefolders')
+        else:
+            return render(request, 'secureshare/failed.html')
+    else:
+        return render(request, 'secureshare/failed.html')
+def requestdeletefolder(request, folder_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    folder_id = folder_pk[0:len(folder_pk) - 1]
+    Folder.objects.filter(owner=request.user, id=folder_id).delete()
+    return HttpResponseRedirect('/secureshare/managefolders')
+def requestremovefromfolder(request, folder_pk, report_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    report = Report.objects.filter(id=report_pk)[0]
+    folder = Folder.objects.filter(id=folder_pk)[0]
+    report.folders.remove(folder)
+    return HttpResponseRedirect('/secureshare/managefolders')
 
 def viewreports(request):
     if not request.user.is_authenticated():

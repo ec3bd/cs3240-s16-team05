@@ -158,19 +158,13 @@ def requestnewusertoreport(request, report_pk):
 		userToAddList = User.objects.filter(username=userToAddUsername)
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		if len(userToAddList) == 0:
-			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': 'Couldn\'t find that user.',
-			               'siteManager': siteManager})
+			return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'message': 'Couldn\'t find that user.', 'siteManager': siteManager})
 		userToAdd = userToAddList[0]
 		if userToAdd in report.auth_users.all():
-			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': "That user is already shared.",
-			               'siteManager': siteManager})
+			return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'message': "That user is already shared.", 'siteManager': siteManager})
 		else:
 			report.auth_users.add(userToAdd)
-			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
-
+			return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
 
 def requestdeletereport(request, report_pk):
 	if not request.user.is_authenticated():

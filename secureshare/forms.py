@@ -9,9 +9,10 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password')
 class UserProfileForm(forms.ModelForm):
+    password2 = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture', 'siteManager')
+        fields = ('password2','website', 'picture', 'siteManager')
 
 class PasswordChangeForm(forms.Form):
     oldPassword = forms.CharField(widget=forms.PasswordInput())

@@ -6,6 +6,7 @@ from django.contrib.auth.models import User, Group
 # USERS
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    password2 = models.CharField(max_length = 100)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     siteManager = models.BooleanField(default=False)
@@ -18,9 +19,6 @@ class PasswordChange(models.Model):
 
 class UploadFile(models.Model):
   file = models.FileField(upload_to='files/%Y/%m/%d')
-
-class Document(models.Model):
-  docfile = models.FileField(upload_to='documents/%Y/%m/%d')
 
 # MESSAGES
 class Message(models.Model):

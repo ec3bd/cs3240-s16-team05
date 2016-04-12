@@ -18,6 +18,12 @@ urlpatterns = [
     url(r'^requestdeletereport/(?P<report_pk>.*)$', views.requestdeletereport, name='requestdeletereport'),
     url(r'^requesteditreport/(?P<report_pk>.*)$', views.requesteditreport, name='requesteditreport'),
 
+    url(r'^managefolders/$', views.managefolders, name='managefolders'),
+    url(r'^requestcreatefolder/$', views.requestcreatefolder, name='requestcreatefolder'),
+    url(r'^requestaddtofolder/(?P<report_pk>.*)$', views.requestaddtofolder, name='requestaddtofolder'),
+    url(r'^requestdeletefolder/(?P<folder_pk>.*)$', views.requestdeletefolder, name='requestdeletefolder'),
+    url(r'^requestremovefromfolder/(?P<folder_pk>.*)/(?P<report_pk>.*)$', views.requestremovefromfolder, name='requestremovefromfolder'),
+
     url(r'^viewreports/$', views.viewreports, name='viewreports'),
     # url(r'^requestfiledownload/(?P<report_pk>.*)$', views.requestfiledownload, name='requestfiledownload'),
     url(r'^requestfiledownload/(?P<report_pk>.*)/(?P<file_pk>.*)$', views.requestfiledownload, name='requestfiledownload'),

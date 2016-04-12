@@ -50,6 +50,7 @@
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/createreport">Create a report</a></li>
                 <li class="active"><a href="/secureshare/managereports">Manage my reports</a></li>
+                <li><a href="/secureshare/managefolders">Manage my folders</a></li>
                 <li><a href="/secureshare/viewreports">View all reports</a></li>
               </ul>
               <ul class="nav nav-sidebar">
@@ -104,7 +105,19 @@
           <p>{{ report.encrypt }}</p>
 
           <h4><b>Users with access:</b></h4>
-          <p>{{ report.auth_users.all }}</p>
+          <ul>
+            <li><b>{{ request.user }}</b></li>
+            {% for user in report.auth_users.all %}
+            <li>{{ user.username }}</li>
+            {% endfor %}
+          </ul>
+
+          <h4><b>Folder(s):</b></h4>
+          <ul>
+            {% for folder in report.folders.all %}
+            <li>{{ folder.name }}</li>
+            {% endfor %}
+          </ul>
 
           <h4><b>Hash (md5):</b></h4>
           <p>{{ report.int_hash }}</p>

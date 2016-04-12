@@ -30,6 +30,11 @@ class Message(models.Model):
   read = models.BooleanField(default=False)
 
 # REPORTS
+class Folder(models.Model):
+  owner = models.ForeignKey(User, null=True)
+  name = models.CharField(max_length=100, null=True)
+  # THIS CANNOT BE FOREIGNKEY, MUST BE MANYTOMANY
+  # reports = models.ForeignKey(Report, null=True)
 class Report(models.Model):
   owner = models.ForeignKey(User, related_name="owner")
   created_at = models.TextField()
@@ -48,15 +53,5 @@ class Report(models.Model):
   auth_users = models.ManyToManyField(User)
   # collection of group permissions
   auth_groups = models.ManyToManyField(Group)
-
-  # collection of tags  
-# class Tag(models.Model):
-#   word = models.CharField(max_length=35)
-
-
-class GroupPage(models.Model):
-    group = models.OneToOneField(Group)
-    url = models.URLField(blank=True)
-    #add a list of reports associated with that group
-    def __unicode__(self):
-        return self.group.name
+  # collection of folders
+  folders = models.ManyToManyField(Folder)

@@ -13,7 +13,6 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('password2','website', 'picture', 'siteManager')
-
 class PasswordChangeForm(forms.Form):
     oldPassword = forms.CharField(widget=forms.PasswordInput())
     newPassword = forms.CharField(widget=forms.PasswordInput())

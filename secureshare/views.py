@@ -611,8 +611,7 @@ def manageaccount(request):
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/manage-account.html',
 	              {'password_change_form': password_change_form, 'siteManager': siteManager})
-
-
+	
 def manageusersreports(request):
 	if not UserProfile.objects.get(user_id=request.user.id).siteManager:
 		return render(request, 'secureshare/failed.html')

@@ -172,6 +172,27 @@ def requestdeletereport(request, report_pk):
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return HttpResponseRedirect('/secureshare/managereports/', {'siteManager': siteManager})
 
+def deactivateuser(request, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.user.username == UserProfile.objects.get(user_id=user_pk).user.username:
+		return render(request, 'secureshare/failed.html')
+	modUser = UserProfile.objects.get(user_id=user_pk).user
+	modUser.is_active = False
+	modUser.save()
+	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+	return HttpResponseRedirect('/secureshare/manageusersreports/', {'siteManager': siteManager})
+
+def activateuser(request, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.user.username == UserProfile.objects.get(user_id=user_pk).user.username:
+		return render(request, 'secureshare/failed.html')
+	modUser = UserProfile.objects.get(user_id=user_pk).user
+	modUser.is_active = True
+	modUser.save()
+	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+	return HttpResponseRedirect('/secureshare/manageusersreports/', {'siteManager': siteManager})
 
 def reportpage(request, report_pk):
     if not request.user.is_authenticated():
@@ -182,10 +203,46 @@ def reportpage(request, report_pk):
         return render(request, 'secureshare/report-page.html', {'message': "That report does not exist", 'siteManager': siteManager})
     else:
         report = reportList[0]
-        if request.user in report.auth_users.all() or report.owner == request.user:
+        profile = UserProfile.objects.get(user=request.user)
+        if request.user in report.auth_users.all() or report.owner == request.user or profile.siteManager:
             return render(request, 'secureshare/report-page.html', {'report': report, 'siteManager': siteManager})
         else:
             return render(request, 'secureshare/report-page.html', {'message': "You are not authorized to see this report.", 'siteManager': siteManager})
+
+def userprofile(request, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	modUserList = UserProfile.objects.filter(user_id=user_pk)
+	if len(modUserList) == 0:
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		return render(request, 'secureshare/user-profile.html',
+		              {'message': "That user does not exist", 'siteManager': siteManager})
+	else:
+		modUser = modUserList[0]
+		# CHECK TO SEE IF USER IS ALLOWED TO SEE REPORT HERE
+		return render(request, 'secureshare/user-profile.html', {'profile': modUser})
+
+def requestedituser(request, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.method == 'POST':
+		modUser = UserProfile.objects.filter(user_id=user_pk)[0]
+		siteM = request.POST.get('siteM')
+		modEmail = request.POST.get('email')
+		siteMBool = False
+		if siteM == "True":
+			siteMBool = True
+		user = request.user
+		modUser.siteManager = siteMBool
+		modUser.user.email = modEmail
+		modUser.user.save()
+		modUser.save()
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager})
+	else:
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		return render(request, 'secureshare/manage-users-and-reports.html.html', {'siteManager': siteManager})
+
 def requesteditreport(request, report_pk):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
@@ -212,7 +269,9 @@ def managefolders(request):
     reportList = Report.objects.filter(owner=request.user)
     folderList = Folder.objects.filter(owner=request.user)
     noFolderList = Report.objects.filter(owner=request.user, folders=None)
-    return render(request, 'secureshare/manage-folders.html', {'folderList': folderList, 'reportList': reportList, 'noFolderList': noFolderList})
+    siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+    return render(request, 'secureshare/manage-folders.html', {'folderList': folderList, 'reportList': reportList, 'noFolderList': noFolderList,'siteManager': siteManager})
+
 def requestcreatefolder(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
@@ -265,6 +324,9 @@ def viewreports(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
 	authReportList = Report.objects.filter(auth_users__username=request.user)
+	profile = UserProfile.objects.get(user=request.user)
+	if profile.siteManager == True:
+		authReportList = Report.objects.all()
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/view-reports.html',
 	              {'authReportList': authReportList, 'siteManager': siteManager})
@@ -554,5 +616,8 @@ def manageaccount(request):
 def manageusersreports(request):
 	if not UserProfile.objects.get(user_id=request.user.id).siteManager:
 		return render(request, 'secureshare/failed.html')
+	allUserList = UserProfile.objects.all()
+	for user1 in allUserList:
+		print(user1.user.username)
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
-	return render(request, 'secureshare/manage-users-and-reports.html', {'siteManager': siteManager})
+	return render(request, 'secureshare/manage-users-and-reports.html', {'allUserList':allUserList, 'siteManager': siteManager})

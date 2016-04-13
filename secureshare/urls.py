@@ -45,5 +45,10 @@ urlpatterns = [
 
     url(r'^manageaccount/$', views.manageaccount, name='manageaccount'),
     url(r'^manageusersreports/$', views.manageusersreports, name='manageusersreports'),
+    url(r'^requestedituser/(?P<user_pk>.*)$', views.requestedituser, name='requestedituser'),
+    url(r'^userprofile/(?P<user_pk>.*)$', views.userprofile, name='userprofile'),
     url(r'^grouppage/(?P<group_pk>.*)$', views.grouppage, name='grouppage'),
+    url(r'^deactivateuser/(?P<user_pk>.*)$', views.deactivateuser, name='deactivateuser'),
+    url(r'^activateuser/(?P<user_pk>.*)$', views.activateuser, name='activateuser'),
+
 ]

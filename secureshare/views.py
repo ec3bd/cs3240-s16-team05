@@ -506,8 +506,12 @@ def managegroups(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
 	user = User.objects.filter(username=request.user)[0]
+	profile = UserProfile.objects.get(user=request.user)
 	groupList = user.groups.all()
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+	if profile.siteManager:
+		groupList2 = Group.objects.all()
+		return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'groupList2': groupList2,'siteManager': siteManager})
 	return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'siteManager': siteManager})
 
 
@@ -588,7 +592,8 @@ def grouppage(request, group_pk):
 		group = groupList[0]
 		name = group.name
 		members = group.user_set.all()
-		if request.user in group.user_set.all():
+		profile = UserProfile.objects.get(user=request.user)
+		if request.user in group.user_set.all() or profile.siteManager:
 			return render(request, 'secureshare/group-page.html',
 			              {'group': group, 'name': name, 'members': members, 'siteManager': siteManager})
 		else:

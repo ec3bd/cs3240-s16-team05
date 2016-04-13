@@ -210,7 +210,8 @@ def reportpage(request, report_pk):
         return render(request, 'secureshare/report-page.html', {'message': "That report does not exist", 'siteManager': siteManager})
     else:
         report = reportList[0]
-        if request.user in report.auth_users.all() or report.owner == request.user:
+        profile = UserProfile.objects.get(user=request.user)
+        if request.user in report.auth_users.all() or report.owner == request.user or profile.siteManager:
             return render(request, 'secureshare/report-page.html', {'report': report, 'siteManager': siteManager})
         else:
             return render(request, 'secureshare/report-page.html', {'message': "You are not authorized to see this report.", 'siteManager': siteManager})
@@ -330,6 +331,9 @@ def viewreports(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
 	authReportList = Report.objects.filter(auth_users__username=request.user)
+	profile = UserProfile.objects.get(user=request.user)
+	if profile.siteManager == True:
+		authReportList = Report.objects.all()
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/view-reports.html',
 	              {'authReportList': authReportList, 'siteManager': siteManager})

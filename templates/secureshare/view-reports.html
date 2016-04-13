@@ -84,6 +84,9 @@
               <th class="col-md-4">File(s)</th>
               <th class="col-md-1">Private?</th>
               <th class="col-md-1">Encrypted?</th>
+              {% if siteManager %}
+              <th class="col-md-1">Delete?</th>
+              {% endif %}
               <!-- <th class="col-md-1">Tags</th> -->
             </tr>
             {% for report in authReportList %}
@@ -101,6 +104,9 @@
               </td>
               <td>{{ report.private }}</td>
               <td>{{ report.encrypt }}</td>
+              {% if siteManager %}
+              <td><a href="/secureshare/requestdeletereport/{{ report.id }}">Delete</a></td>
+              {% endif %}
             </tr>
             {% endfor %}
           </table>

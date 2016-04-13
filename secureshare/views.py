@@ -179,6 +179,27 @@ def requestdeletereport(request, report_pk):
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return HttpResponseRedirect('/secureshare/managereports/', {'siteManager': siteManager})
 
+def deactivateuser(request, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.user.username == UserProfile.objects.get(user_id=user_pk).user.username:
+		return render(request, 'secureshare/failed.html')
+	modUser = UserProfile.objects.get(user_id=user_pk).user
+	modUser.is_active = False
+	modUser.save()
+	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+	return HttpResponseRedirect('/secureshare/manageusersreports/', {'siteManager': siteManager})
+
+def activateuser(request, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.user.username == UserProfile.objects.get(user_id=user_pk).user.username:
+		return render(request, 'secureshare/failed.html')
+	modUser = UserProfile.objects.get(user_id=user_pk).user
+	modUser.is_active = True
+	modUser.save()
+	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+	return HttpResponseRedirect('/secureshare/manageusersreports/', {'siteManager': siteManager})
 
 def reportpage(request, report_pk):
     if not request.user.is_authenticated():
@@ -254,7 +275,9 @@ def managefolders(request):
     reportList = Report.objects.filter(owner=request.user)
     folderList = Folder.objects.filter(owner=request.user)
     noFolderList = Report.objects.filter(owner=request.user, folders=None)
-    return render(request, 'secureshare/manage-folders.html', {'folderList': folderList, 'reportList': reportList, 'noFolderList': noFolderList})
+    siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+    return render(request, 'secureshare/manage-folders.html', {'folderList': folderList, 'reportList': reportList, 'noFolderList': noFolderList,'siteManager': siteManager})
+
 def requestcreatefolder(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')

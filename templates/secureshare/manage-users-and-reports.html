@@ -79,6 +79,7 @@
             <tr>
               <th class="col-md-1">Username</th>
               <th class="col-md-2">Email</th>
+              <th class="col-md-1">Active User?</th>
               <th class="col-md-1">Site Manager?</th>
               <!-- <th class="col-md-1">Tags</th> -->
             </tr>
@@ -86,6 +87,7 @@
             <tr>
               <td><a href="/secureshare/userprofile/{{ profile.user_id}}">{{ profile.user.username }}</a></td>
               <td>{{ profile.user.email }}</td>
+              <td>{{ profile.user.is_active }}</td>
               <td>{{ profile.siteManager }}</td>
             </tr>
             {% endfor %}

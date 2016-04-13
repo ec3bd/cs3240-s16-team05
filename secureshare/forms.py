@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User, Group
 from secureshare.models import Report, UserProfile
 
+#test
+
 # USERS
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())

@@ -13,7 +13,6 @@ import binascii
 import mimetypes
 import hashlib
 
-
 def userlogin(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')

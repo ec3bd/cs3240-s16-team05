@@ -13,7 +13,6 @@ import binascii
 import mimetypes
 import hashlib
 
-
 def userlogin(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
@@ -70,8 +69,7 @@ def home(request):
 	unreadMessageCount = len(Message.objects.filter(receiver=request.user, read=False))
 	reportCount = len(Report.objects.filter(owner=request.user))
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
-	return render(request, 'secureshare/home.html',
-	              {'unreadMessageCount': unreadMessageCount, 'reportCount': reportCount, 'siteManager': siteManager})
+	return render(request, 'secureshare/home.html', {'unreadMessageCount': unreadMessageCount, 'reportCount': reportCount, 'siteManager': siteManager})
 
 
 @login_required
@@ -158,19 +156,13 @@ def requestnewusertoreport(request, report_pk):
 		userToAddList = User.objects.filter(username=userToAddUsername)
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		if len(userToAddList) == 0:
-			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': 'Couldn\'t find that user.',
-			               'siteManager': siteManager})
+			return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'message': 'Couldn\'t find that user.', 'siteManager': siteManager})
 		userToAdd = userToAddList[0]
 		if userToAdd in report.auth_users.all():
-			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': "That user is already shared.",
-			               'siteManager': siteManager})
+			return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'message': "That user is already shared.", 'siteManager': siteManager})
 		else:
 			report.auth_users.add(userToAdd)
-			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
-
+			return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
 
 def requestdeletereport(request, report_pk):
 	if not request.user.is_authenticated():
@@ -623,8 +615,7 @@ def manageaccount(request):
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/manage-account.html',
 	              {'password_change_form': password_change_form, 'siteManager': siteManager})
-
-
+	
 def manageusersreports(request):
 	if not UserProfile.objects.get(user_id=request.user.id).siteManager:
 		return render(request, 'secureshare/failed.html')

@@ -1,6 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, update_session_auth_hash
+from django.db.models import Q
 from secureshare.models import User, UserProfile, Message, Group, Report, Folder
 from secureshare.forms import UserForm, UserProfileForm, ReportForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login
@@ -218,8 +219,22 @@ def viewreports(request):
 	if profile.siteManager == True:
 		authReportList = Report.objects.all()
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
-	return render(request, 'secureshare/view-reports.html',
-	              {'authReportList': authReportList, 'siteManager': siteManager})
+	return render(request, 'secureshare/view-reports.html', {'authReportList': authReportList, 'siteManager': siteManager})
+def searchreports(request):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.method == 'POST':
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		query = request.POST.get('query')
+		results = Report.objects.filter(
+			Q(owner__username__icontains=query) | 
+			Q(created_at__icontains=query) | 
+			Q(short_description__icontains=query) | 
+			Q(detailed_description__icontains=query)
+		)
+		return render(request, 'secureshare/search-reports.html', {'results': results, 'query': query, 'siteManager': siteManager})
+	else:
+		return HttpResponseRedirect('/secureshare/viewreports/')
 
 def managefolders(request):
     if not request.user.is_authenticated():
@@ -276,11 +291,6 @@ def requestremovefromfolder(request, folder_pk, report_pk):
     folder = Folder.objects.filter(id=folder_pk)[0]
     report.folders.remove(folder)
     return HttpResponseRedirect('/secureshare/managefolders')
-
-
-
-
-
 
 # For AES encryption/decryption
 key = "7AqDiyLmzcjmPO7n"
@@ -343,9 +353,7 @@ def sendmessage(request):
 					if message.sender == request.user:
 						messageOut.append(message)
 						siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
-				return render(request, 'secureshare/view-messages.html',
-				              {'messageIn': messageIn, 'messageOut': messageOut, 'message': "That user doesn't exist.",
-				               'siteManager': siteManager})
+				return render(request, 'secureshare/view-messages.html', {'messageIn': messageIn, 'messageOut': messageOut, 'message': "That user doesn't exist.", 'siteManager': siteManager})
 			# Save to database
 			recepientUser = User.objects.filter(username=recepient)[0]
 			t = datetime.datetime.now()

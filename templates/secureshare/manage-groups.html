@@ -70,11 +70,13 @@
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Manage groups</h1>
-
-          <p>This page allows you to manage your groups. You are currently logged in as <b>{{ request.user }}</b>.</p>
+          {% if not siteManager %}
+          <p>This table allows you to manage your groups. You are currently logged in as <b>{{ request.user }}</b>.</p>
           <br><br>
+          {% endif %}
 
           <p style="color:red"><b>{{ message }}</b></p>
+          {% if not siteManager %}
           <table class="table table-hover">
             <tr>
               <th class="col-md-8">Group</th>
@@ -93,8 +95,35 @@
               <td><a href="/secureshare/requestdeletefromgroup/{{ group.id }}">Remove</a></td>
             </tr>
             {% endfor %}
+          </table><br>
+          {%  endif %}
+          {% if siteManager %}
+          <p>You are a site manager, so this table allows you to manage all existing groups, including your own.</p>
+          <table class="table table-hover">
+            <tr>
+              <th class="col-md-8">Group</th>
+              <th class="col-md-2">Add a new user?</th>
+              <th class="col-md-2">Remove yourself?</th>
+            </tr>
+            {% for group in groupList2 %}
+            <tr>
+              <td><a href="/secureshare/grouppage/{{ group.name }}">{{ group.name }}</td>
+              <td>
+                <form id="login_form" method="post" action="/secureshare/requestnewusertogroup/{{ group.id }}" style="width:90%">
+                  {% csrf_token %}
+                  <input type="text" name="user" class="form-control" placeholder="Username" required><br>
+                </form>
+              </td>
+              {% if group in groupList %}
+              <td><a href="/secureshare/requestdeletefromgroup/{{ group.id }}">Remove</a></td>
+              {% endif %}
+              {% if group not in groupList %}
+              <td>Not in group</td>
+              {% endif %}
+            </tr>
+            {% endfor %}
           </table>
-
+          {% endif %}
         </div>
 
     </div>

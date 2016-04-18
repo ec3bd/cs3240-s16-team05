@@ -30,7 +30,7 @@ def fdalogin(request):
 	else:
 		if (request.user.is_authenticated()):
 			return HttpResponse('Success')
-		return render(request, 'secureshare/login.html')
+		return render(request, 'secureshare/fdalogin.html')
 
 def userlogin(request):
 	if request.method == 'POST':

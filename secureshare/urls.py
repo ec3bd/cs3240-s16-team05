@@ -8,6 +8,7 @@ urlpatterns = [
     # url(r'^home/$', include('home.urls', namespace="home", app_name="home")),
     url(r'^home/', views.home, name='home'),
     url(r'^login/$', views.userlogin, name='login'),
+    url(r'^fdalogin/$', views.fdalogin, name='fdalogin'),
     url(r'^logout/$', views.userlogout, name='logout'),
 
     url(r'^createreport/$', views.createreport, name='createreport'),

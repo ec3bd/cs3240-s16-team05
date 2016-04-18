@@ -21,6 +21,5 @@ from secureshare import views
 urlpatterns = patterns('',
     # url(r'^$', RedirectView.as_view(url='/secureshare/')),
     url(r'^secureshare/', include('secureshare.urls')),
-    url(r'^secureshare/home/', views.home, name='home'),
     url(r'^admin/', admin.site.urls),
 )

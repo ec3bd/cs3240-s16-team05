@@ -73,6 +73,26 @@
 
           <p>This page allows you to manage your account.</p>
           <br><br>
+
+          <h4>Reset your password:</h4>
+          <div class="passwordChange" style="margin-left: 20px">
+            <form id="password_change_form" method="post" action="/secureshare/manageaccount/">
+              {% csrf_token %}
+              <div>
+                <label>Old password:</label><br>
+                {{ password_change_form.oldPassword }}
+              </div>
+              <br>
+              <div>
+                <label>New password:</label><br>
+                {{ password_change_form.newPassword }}
+              </div>
+              <br>
+              <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 160px">Reset Password</button>
+            </form>
+          </div>
+
+          <br><br>
         </div>
 
     </div>

@@ -1,9 +1,8 @@
 from django.shortcuts import render, render_to_response
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from secureshare.models import User, UserProfile, Message, Group, Report, GroupPage
-from secureshare.forms import UserForm, UserProfileForm, ReportForm
+from django.contrib.auth import logout, update_session_auth_hash
+from secureshare.models import User, UserProfile, Document, UploadFile, Message, Group, Report, GroupPage
+from secureshare.forms import UserForm, UserProfileForm, ReportForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
@@ -11,7 +10,7 @@ from django.core.urlresolvers import reverse
 from Crypto.Cipher import AES
 import datetime
 import binascii
-
+import mimetypes
 
 
 def userlogin(request):
@@ -119,9 +118,26 @@ def createreport(request):
 
 def managereports(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     reportList = Report.objects.filter(owner=request.user)
     return render(request, 'secureshare/manage-reports.html', {'reportList': reportList})
+def requestnewusertoreport(request, report_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    if request.method == 'POST':
+        reportList = Report.objects.filter(owner=request.user)
+        user = request.user
+        report = Report.objects.filter(id=report_pk)[0]
+        userToAddUsername = request.POST.get('user')
+        userToAddList = User.objects.filter(username=userToAddUsername)
+        if len(userToAddList) == 0:
+            return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'messageOne': 'Couldn\'t find that user.'})
+        userToAdd = userToAddList[0]
+        if userToAdd in report.auth_users.all():
+            return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'messageOne': "That user is already shared."})
+        else:
+            report.auth_users.add(userToAdd)
+            return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'messageOne': "Shared successfully."})
 def requestdeletereport(request, report_pk):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
@@ -157,8 +173,37 @@ def requesteditreport(request, report_pk):
 
 def viewreports(request):
     if not request.user.is_authenticated():
-        return render(request, 'secureshare/failed')
+        return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/view-reports.html')
+def requestfiledownload(request, report_pk, file_pk):
+    if not request.user.is_authenticated():
+        return render(request, 'secureshare/failed.html')
+    # Add check to see if report exists (for invalid URL)
+    report_id = report_pk[0:report_pk.index("/")]
+    file_directory = report_pk[report_pk.index("/"):] + "/"
+    report = Report.objects.filter(id=report_id)[0]
+    if not report.encrypt:
+        fp = open(file_directory[1:] + file_pk, 'rb')
+        response = HttpResponse(fp.read())
+        fp.close()
+        type, encoding = mimetypes.guess_type(file_pk)
+        if type is None:
+            type = 'application/octet-stream'
+        response['Content-Type'] = type
+        if encoding is not None:
+            response['Content-Encoding'] = encoding
+        if u'WebKit' in request.META['HTTP_USER_AGENT']:
+            filename_header = 'filename=%s' % file_pk.encode('utf-8')
+        elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+            filename_header = ''
+        else:
+            filename_header = 'filename*=UTF-8\'\'%s' & urllib.quote(original_filename.encode('utf-8'))
+        filename_header = filename_header[2:] # fixes byte string output
+        response['Content-Disposition'] = 'attachment; ' + filename_header
+        return response
+    return HttpResponseRedirect('/secureshare/viewreports/')
+
+
 
 
 # For AES encryption/decryption
@@ -341,10 +386,38 @@ def grouppage(request, group_pk):
 def manageaccount(request):
     if not request.user.is_authenticated():
         return render(request, 'secureshare/failed.html')
-    return render(request, 'secureshare/manage-account.html')
+    if request.method == 'POST':
+        password_change_form = PasswordChangeForm(data=request.POST)
+        if password_change_form.is_valid():
+	        user = request.user
+        oldpassword = request.POST.get('oldPassword')
+        newpassword = request.POST.get('newPassword')
+        if user.check_password(oldpassword):
+	        user.set_password(newpassword)
+	        user.save()
+	        update_session_auth_hash(request, user)
+
+	        return render(request, 'secureshare/home.html')
+        else:
+            return render(request, 'secureshare/failed.html')
+    else:
+        password_change_form = PasswordChangeForm(data=request.POST)
+    return render(request, 'secureshare/manage-account.html', {'password_change_form': password_change_form})
 
 
 def manageusersreports(request):
     if not UserProfile.objects.get(user_id=request.user.id).siteManager:
         return render(request, 'secureshare/failed.html')
     return render(request, 'secureshare/manage-users-and-reports.html')
+
+def grouppage(request, groupname):
+    context_dict = {}
+    try:
+        group = Group.objects.get(name=groupname)
+        users = group.user_set.all()
+        context_dict['group_name'] = group.name
+        context_dict['group'] = group
+    except Group.DoesNotExist:
+        pass
+
+    return render(request, 'secureshare/grouppage.html', context_dict)

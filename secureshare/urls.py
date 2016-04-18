@@ -5,17 +5,22 @@ urlpatterns = [
     url(r'^$', views.userlogin, name='login'),
     url(r'^auth/$', views.userlogin, name='auth'),
     url(r'^register/$', views.register, name='register'),
-    url(r'^home/$', include('home.urls', namespace="home", app_name="home")),
+    # url(r'^home/$', include('home.urls', namespace="home", app_name="home")),
+    url(r'^home/', views.home, name='home'),
     url(r'^login/$', views.userlogin, name='login'),
     url(r'^logout/$', views.userlogout, name='logout'),
 
     url(r'^createreport/$', views.createreport, name='createreport'),
     url(r'^managereports/$', views.managereports, name='managereports'),
+    url(r'^requestnewusertoreport/(?P<report_pk>.*)$', views.requestnewusertoreport, name='requestnewusertoreport'),
+
     url(r'^reportpage/(?P<report_pk>.*)$', views.reportpage, name='reportpage'),
     url(r'^requestdeletereport/(?P<report_pk>.*)$', views.requestdeletereport, name='requestdeletereport'),
     url(r'^requesteditreport/(?P<report_pk>.*)$', views.requesteditreport, name='requesteditreport'),
 
     url(r'^viewreports/$', views.viewreports, name='viewreports'),
+    # url(r'^requestfiledownload/(?P<report_pk>.*)$', views.requestfiledownload, name='requestfiledownload'),
+    url(r'^requestfiledownload/(?P<report_pk>.*)/(?P<file_pk>.*)$', views.requestfiledownload, name='requestfiledownload'),
     # Files should not be able to be accessed via the web application, hence we provide no URL
 
     url(r'^viewmessages/$', views.viewmessages, name='viewmessages'),

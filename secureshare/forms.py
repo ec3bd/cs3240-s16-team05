@@ -13,6 +13,10 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('website', 'picture', 'siteManager')
 
+class PasswordChangeForm(forms.Form):
+    oldPassword = forms.CharField(widget=forms.PasswordInput())
+    newPassword = forms.CharField(widget=forms.PasswordInput())
+
 # REPORTS
 class ReportForm(forms.ModelForm):
   file1 = forms.FileField(required=False)

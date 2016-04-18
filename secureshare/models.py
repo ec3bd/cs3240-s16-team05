@@ -6,6 +6,7 @@ from django.contrib.auth.models import User, Group
 # USERS
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    password2 = models.CharField(max_length = 100)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     siteManager = models.BooleanField(default=False)
@@ -19,9 +20,6 @@ class PasswordChange(models.Model):
 class UploadFile(models.Model):
   file = models.FileField(upload_to='files/%Y/%m/%d')
 
-class Document(models.Model):
-  docfile = models.FileField(upload_to='documents/%Y/%m/%d')
-
 # MESSAGES
 class Message(models.Model):
   sender = models.ForeignKey(User, related_name="sender")
@@ -32,6 +30,11 @@ class Message(models.Model):
   read = models.BooleanField(default=False)
 
 # REPORTS
+class Folder(models.Model):
+  owner = models.ForeignKey(User, null=True)
+  name = models.CharField(max_length=100, null=True)
+  # THIS CANNOT BE FOREIGNKEY, MUST BE MANYTOMANY
+  # reports = models.ForeignKey(Report, null=True)
 class Report(models.Model):
   owner = models.ForeignKey(User, related_name="owner")
   created_at = models.TextField()
@@ -45,18 +48,10 @@ class Report(models.Model):
   file5 = models.FileField(upload_to=upload_path, null=True)
   private = models.BooleanField(default=False)
   encrypt = models.BooleanField(default=False)
+  int_hash = models.CharField(max_length=100, default="")
   # collection of user permissions
   auth_users = models.ManyToManyField(User)
   # collection of group permissions
   auth_groups = models.ManyToManyField(Group)
-  # collection of tags  
-# class Tag(models.Model):
-#   word = models.CharField(max_length=35)
-
-
-class GroupPage(models.Model):
-    group = models.OneToOneField(Group)
-    url = models.URLField(blank=True)
-    #add a list of reports associated with that group
-    def __unicode__(self):
-        return self.group.name
+  # collection of folders
+  folders = models.ManyToManyField(Folder)

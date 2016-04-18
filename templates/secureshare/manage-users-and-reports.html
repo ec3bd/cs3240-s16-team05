@@ -50,6 +50,7 @@
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/createreport">Create a report</a></li>
                 <li><a href="/secureshare/managereports">Manage my reports</a></li>
+                <li><a href="/secureshare/managefolders">Manage my folders</a></li>
                 <li><a href="/secureshare/viewreports">View all reports</a></li>
               </ul>
               <ul class="nav nav-sidebar">
@@ -60,9 +61,8 @@
               </ul>
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
+                {% if siteManager %}
                 <li class="active"><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
-                <{% if siteManager %}
-                <span class="text-muted"><a href="/secureshare/manageusersreports"><b>Manage users and reports</a></span>
                 {% endif %}
               </ul>
           </div>
@@ -71,8 +71,27 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Manage users and reports ({{ request.user }})</h1>
 
-          <p>If you are a superuser, this page allows you to manage users and reports.</p>
+          <p>This page allows site managers to manage users and reports.</p>
           <br><br>
+
+          <p style="color:red"><b>{{ message }}</b></p>
+          <table class="table table-hover">
+            <tr>
+              <th class="col-md-1">Username</th>
+              <th class="col-md-2">Email</th>
+              <th class="col-md-1">Active User?</th>
+              <th class="col-md-1">Site Manager?</th>
+              <!-- <th class="col-md-1">Tags</th> -->
+            </tr>
+            {% for profile in allUserList %}
+            <tr>
+              <td><a href="/secureshare/userprofile/{{ profile.user_id}}">{{ profile.user.username }}</a></td>
+              <td>{{ profile.user.email }}</td>
+              <td>{{ profile.user.is_active }}</td>
+              <td>{{ profile.siteManager }}</td>
+            </tr>
+            {% endfor %}
+          </table>
         </div>
 
     </div>

@@ -1,0 +1,225 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SecureShare</title>
+
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/dashboard.css" %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/secureshare/home">SecureShare</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            <li><a href="/secureshare/logout/">Not {{request.user}}? Logout</a></li>
+            {% else %}
+            <li><a href="{% url '/secureshare/register/' %}">Register</a></li>
+            <li><a href="{% url '/secureshare/login/' %}">Login</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+          <div class="col-sm-3 col-md-2 sidebar">
+              <ul class="nav nav-sidebar">
+                <li><a href="/secureshare/home"><b>Home</b></a></li>
+              </ul>
+              <ul class="nav nav-sidebar">
+                <li><a href="/secureshare/createreport">Create a report</a></li>
+                <li><a href="/secureshare/managereports">Manage my reports</a></li>
+                <li class="active"><a href="/secureshare/managefolders">Manage my folders</a></li>
+                <li><a href="/secureshare/viewreports">View all reports</a></li>
+              </ul>
+              <ul class="nav nav-sidebar">
+                <li><a href="/secureshare/viewmessages">View messages</a></li>
+                <!-- <li><a href="">View messages ({ unread message count })</a></li> -->
+                <li><a href="/secureshare/managegroups">Manage my groups</a></li>
+                <li><a href="/secureshare/creategroup">Create a new group</a></li>
+              </ul>
+              <ul class="nav nav-sidebar">
+                <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
+                {% if siteManager %}
+                <li><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
+                {% endif %}
+              </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Manage folders</h1>
+
+          <p>This page allows you to manage your folders.</p>
+          <br><br>
+
+          <div class="listOfFolders">
+            <h4>A list of your folders is below:</h4>
+            <table class="table table-hover">
+              <tr>
+                <th class="col-md-2">Folder</th>
+                <th class="col-md-2">Delete?</th>
+              </tr>
+              {% for folder in folderList %}
+              <tr>
+                <td>{{ folder.name }}</td>
+                <td><a href="/secureshare/requestdeletefolder/{{ folder.id }}/">Delete</a></td>
+              </tr>
+              {% endfor %}
+            </table>
+            </table>
+            <ul>
+              
+            </ul>
+          </div>
+
+          <br><br>
+
+          <div class="createFolder">
+            <h4>Create a folder:</h4>
+            <form action="/secureshare/requestcreatefolder/" method="post" style="width: 250px">
+              {% csrf_token %}
+              <p style="color:red"><b>{{ message }}</b></p>
+              <label for="groupName" class="sr-only">Folder name</label>
+              <input type="text" name="folderName" class="form-control" placeholder="Folder name" required autofocus><br>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Check and add</button>
+            </form>
+          </div>
+
+          <br><br>
+
+          <div class="addReportToFolder">
+            <h4>Add your reports to folders:</h4>
+            <table class="table table-hover">
+              <tr>
+                <th class="col-md-2">Created at</th>
+                <th class="col-md-2">Short description</th>
+                <th class="col-md-3">Detailed description</th>
+                <th class="col-md-3">Current folders</th>
+                <th class="col-md-2">Add to folder?</th>
+              </tr>
+              {% for report in reportList %}
+              <tr>
+                <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
+                <td>{{ report.short_description }}</td>
+                <td>{{ report.detailed_description }}</td>
+                <td>
+                  {% for folder in report.folders.all %}
+                  <li>{{ folder.name }}</li>
+                  {% endfor %}
+                </td>
+                <td>
+                  <form action="/secureshare/requestaddtofolder/{{ report.id }}" method="post">
+                    {% csrf_token %}
+                    <select name="folderName" placeholder="Folder">
+                    {% for folder in folderList %}
+                      <option value="{{ folder.name }}">{{ folder.name }}</li>
+                    {% endfor %}
+                    </select>
+                    <br>
+                    <input type="submit" value="Add" class="btn btn-primary">
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+
+          <br><br>
+
+          <div class="listOfReportsInFolders">
+            <h4>Folders:</h4>
+            {% for folder in folderList %}
+            <h5><b>{{ folder.name }}</b></h5>
+            <table class="table table-hover">
+              <tr>
+                <th class="col-md-1">Created at</th>
+                <th class="col-md-2">Owner</th>
+                <th class="col-md-1">Short description</th>
+                <th class="col-md-2">Detailed description</th>
+                <th class="col-md-3">File(s)</th>
+                <th class="col-md-1">Private?</th>
+                <th class="col-md-1">Encrypted?</th>
+                <th class="col-md-1>">Remove from folder?</th>
+                <!-- <th class="col-md-1">Tags</th> -->
+              </tr>
+              {% for report in folder.report_set.all %}
+              <tr>
+                <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
+                <td>{{ report.owner }}</td>
+                <td>{{ report.short_description }}</td>
+                <td>{{ report.detailed_description }}</td>
+                <td>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file1 }}">{{ report.file1 }}</a><br>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file2 }}">{{ report.file2 }}</a><br>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file3 }}">{{ report.file3 }}</a><br>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file4 }}">{{ report.file4 }}</a><br>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file5 }}">{{ report.file5 }}</a><br>
+                </td>
+                <td>{{ report.private }}</td>
+                <td>{{ report.encrypt }}</td>
+                <td><a href="/secureshare/requestremovefromfolder/{{ folder.id }}/{{ report.id }}">Remove</a></td>
+              </tr>
+              {% endfor %}
+            </table>
+            {% endfor %}
+
+            <h5><b><em>Uncategorized</em></b></h5>
+            <table class="table table-hover">
+              <tr>
+                <th class="col-md-1">Created at</th>
+                <th class="col-md-2">Owner</th>
+                <th class="col-md-1">Short description</th>
+                <th class="col-md-2">Detailed description</th>
+                <th class="col-md-4">File(s)</th>
+                <th class="col-md-1">Private?</th>
+                <th class="col-md-1">Encrypted?</th>
+                <!-- <th class="col-md-1">Tags</th> -->
+              </tr>
+              {% for report in noFolderList %}
+              <tr>
+                <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
+                <td>{{ report.owner }}</td>
+                <td>{{ report.short_description }}</td>
+                <td>{{ report.detailed_description }}</td>
+                <td>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file1 }}">{{ report.file1 }}</a><br>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file2 }}">{{ report.file2 }}</a><br>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file3 }}">{{ report.file3 }}</a><br>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file4 }}">{{ report.file4 }}</a><br>
+                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file5 }}">{{ report.file5 }}</a><br>
+                </td>
+                <td>{{ report.private }}</td>
+                <td>{{ report.encrypt }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+
+        </div>
+
+    </div>
+   <script src="{% static "js/bootstrap.min.js" %}"></script>
+  </body>
+</html>

@@ -14,6 +14,24 @@ import binascii
 import mimetypes
 import hashlib
 
+def fdalogin(request):
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		user = authenticate(username=username, password=password)
+		if user:
+			if user.is_active:
+				login(request, user)
+				return HttpResponse("Success")
+			else:
+				return HttpResponse("Failed")
+		else:
+			return render(request, 'Failed')
+	else:
+		if (request.user.is_authenticated()):
+			return HttpResponse('Success')
+		return render(request, 'secureshare/login.html')
+
 def userlogin(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
@@ -517,23 +535,6 @@ def userprofile(request, user_pk):
 		return render(request, 'secureshare/user-profile.html', {'profile': modUser})
 
 def manageusersreports(request):
-<<<<<<< HEAD
-    if not UserProfile.objects.get(user_id=request.user.id).siteManager:
-        return render(request, 'secureshare/failed.html')
-    return render(request, 'secureshare/manage-users-and-reports.html')
-
-def grouppage(request, groupname):
-    context_dict = {}
-    try:
-        group = Group.objects.get(name=groupname)
-        users = group.user_set.all()
-        context_dict['group_name'] = group.name
-        context_dict['group'] = group
-    except Group.DoesNotExist:
-        pass
-
-    return render(request, 'secureshare/grouppage.html', context_dict)
-=======
 	if not UserProfile.objects.get(user_id=request.user.id).siteManager:
 		return render(request, 'secureshare/failed.html')
 	allUserList = UserProfile.objects.all()
@@ -579,4 +580,14 @@ def activateuser(request, user_pk):
 	modUser.save()
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return HttpResponseRedirect('/secureshare/manageusersreports/', {'siteManager': siteManager})
->>>>>>> 39bb680d76c8686907ba0644705bc6f15f90eab4
+def grouppage(request, groupname):
+    context_dict = {}
+    try:
+        group = Group.objects.get(name=groupname)
+        users = group.user_set.all()
+        context_dict['group_name'] = group.name
+        context_dict['group'] = group
+    except Group.DoesNotExist:
+        pass
+
+    return render(request, 'secureshare/grouppage.html', context_dict)

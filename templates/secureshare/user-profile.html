@@ -100,11 +100,11 @@
             {% csrf_token %}
             <p style="color:red"><b>{{ message }}</b></p>
             <div>
-              <label>Do you want this user to be a site Manager?</label><br>
+              <label>Do you want this user to be a site manager?<br></label><br>Note: There can only be a total of three site managers.<br>
               <input type="radio" name="siteM" value="True">Yes<br>
               <input type="radio" name="siteM" value="False">No<br><br>
               <label>Update user email:</label><br>
-              <input type="text" name="email" value={{ profile.user.email }}>Email<br>
+              <input type="text" name="email" value={{ profile.user.email }}><br>
             </div>
             <br>
 

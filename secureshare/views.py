@@ -48,6 +48,7 @@ def register(request):
 			user.set_password(user.password)
 			user.save()
 			profile.password2 = 'Secret'  # dont save any copy of the users actual password!!
+			profile.picture = 'profile_images/Generic_Avatar.png'
 			if 'picture' in request.FILES:
 				profile.picture = request.FILES['picture']
 			profile.save()

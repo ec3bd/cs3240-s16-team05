@@ -26,7 +26,7 @@ def fdalogin(request):
 			else:
 				return HttpResponse("Failed")
 		else:
-			return render(request, 'Failed')
+			return render(request, "Failed")
 	else:
 		if (request.user.is_authenticated()):
 			return HttpResponse('Success')
@@ -142,6 +142,11 @@ def createreport(request):
 		report_form = ReportForm()
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/create-report.html', {'report_form': report_form, 'siteManager': siteManager})
+def fda_reports(request):
+	reportList = Report.objects.filter(owner=request.user)
+	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+	return render(request, 'secureshare/fda_reports.html', {'reportList': reportList, 'siteManager': siteManager})
+
 def managereports(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')

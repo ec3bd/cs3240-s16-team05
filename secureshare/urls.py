@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^logout/$', views.userlogout, name='logout'),
 
     url(r'^createreport/$', views.createreport, name='createreport'),
+    url(r'^fda_reports/$', views.fda_reports, name='fda_reports'),
     url(r'^managereports/$', views.managereports, name='managereports'),
     url(r'^requestnewusertoreport/(?P<report_pk>.*)$', views.requestnewusertoreport, name='requestnewusertoreport'),
 

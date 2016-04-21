@@ -18,6 +18,24 @@ from django.views.decorators.csrf import csrf_exempt
 import requests
 #import urllib
 
+def fdalogin(request):
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		user = authenticate(username=username, password=password)
+		if user:
+			if user.is_active:
+				login(request, user)
+				return HttpResponse("Success")
+			else:
+				return HttpResponse("Failed")
+		else:
+			return render(request, "Failed")
+	else:
+		if (request.user.is_authenticated()):
+			return HttpResponse('Success')
+		return render(request, 'secureshare/fdalogin.html')
+
 def userlogin(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
@@ -128,7 +146,14 @@ def createreport(request):
 		report_form = ReportForm()
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/create-report.html', {'report_form': report_form, 'siteManager': siteManager})
+
 @csrf_exempt
+def fda_reports(request):
+	reportList = Report.objects.filter(owner=request.user)
+	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+	return render(request, 'secureshare/fda_reports.html', {'reportList': reportList, 'siteManager': siteManager})
+
+
 def managereports(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
@@ -572,6 +597,7 @@ def activateuser(request, user_pk):
 
 
 
+
 #fda
 @csrf_exempt
 def fdalogin(request):
@@ -645,3 +671,16 @@ def fdadisplayreport(request):
 					h += "\n   Private? " + str(report1.private) + "\n   Encrypted? " + str(report1.encrypt)
 					break
 			return HttpResponse(h)
+
+def grouppage(request, groupname):
+    context_dict = {}
+    try:
+        group = Group.objects.get(name=groupname)
+        users = group.user_set.all()
+        context_dict['group_name'] = group.name
+        context_dict['group'] = group
+    except Group.DoesNotExist:
+        pass
+
+    return render(request, 'secureshare/grouppage.html', context_dict)
+

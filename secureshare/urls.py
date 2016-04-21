@@ -52,5 +52,8 @@ urlpatterns = [
     url(r'^grouppage/(?P<group_pk>.*)$', views.grouppage, name='grouppage'),
     url(r'^deactivateuser/(?P<user_pk>.*)$', views.deactivateuser, name='deactivateuser'),
     url(r'^activateuser/(?P<user_pk>.*)$', views.activateuser, name='activateuser'),
+    url(r'^fdalogin/$', views.fdalogin, name='fdalogin'),
+    url(r'^fdaviewreports/$', views.fdaviewreports, name='fdaviewreports'),
+    url(r'^fdadisplayreport/$', views.fdadisplayreport, name='fdadisplayreport'),
 
 ]

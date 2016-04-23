@@ -46,6 +46,7 @@ urlpatterns = [
 
     url(r'^creategroup/$', views.creategroup, name='creategroup'),
     url(r'^requestgroup/$', views.requestgroup, name='requestgroup'),
+    url(r'^removeuserfromgroup/(?P<group_pk>.*)/(?P<user_pk>.*)$', views.removeuserfromgroup, name='removeuserfromgroup'),
 
     url(r'^manageaccount/$', views.manageaccount, name='manageaccount'),
     url(r'^manageusersreports/$', views.manageusersreports, name='manageusersreports'),

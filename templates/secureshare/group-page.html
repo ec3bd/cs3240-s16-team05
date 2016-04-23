@@ -85,11 +85,17 @@
             <tr>
               <th class="col-md-6">Username</th>
               <th class="col-md-6">Email</th>
+              {% if siteManager %}
+                <th class="col-md-6">Remove User</th>
+              {% endif %}
             </tr>
             {% for profile in profiles %}
             <tr>
               <td><a href="/secureshare/userprofile/{{ profile.user_id}}">{{ profile.user.username }}</a></td>
-              <td>{{ profile.user.email }}</a></td>
+              <td>{{ profile.user.email }}</td>
+              {% if siteManager %}
+                <td><a href="/secureshare/removeuserfromgroup/{{ name }}/{{ profile.user_id}}">Remove</a></td>
+              {% endif %}
             </tr>
             {% endfor %}
           </table>

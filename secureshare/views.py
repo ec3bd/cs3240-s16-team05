@@ -40,6 +40,13 @@ def fdalogin(request):
 
 
 def userlogin(request):
+	if len(UserProfile.objects.filter(siteManager = True)) == 0:
+		siteManager1 = User(username='admin',email='sc5ba@virginia.edu')
+		siteManager1.set_password('admin')
+		siteManager1.save()
+		SMprofile = UserProfile(user=siteManager1,siteManager=True,picture='profile_images/Generic_Avatar.png')
+		SMprofile.save()
+
 	if request.method == 'POST':
 		username = request.POST.get('username')
 		password = request.POST.get('password')
@@ -561,8 +568,9 @@ def requestnewusertogroup(request, group_pk):
 		else:
 			group = Group.objects.filter(id=group_pk)[0]
 			group.user_set.add(userToAdd)
-			return render(request, 'secureshare/manage-groups.html',
-			              {'groupList': groupList, 'message': "Added successfully.", 'siteManager': siteManager})
+			return HttpResponseRedirect('/secureshare/grouppage/' + group.name)
+			#return render(request, 'secureshare/manage-groups.html',
+			 #             {'groupList': groupList, 'message': "Added successfully.", 'siteManager': siteManager})
 
 
 def requestdeletefromgroup(request, group_pk):
@@ -632,6 +640,14 @@ def grouppage(request, group_pk):
 			              {'message': "You are not authorized to see this group.", 'siteManager': siteManager})
 
 
+def removeuserfromgroup(request, group_pk, user_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	group = Group.objects.get(name=group_pk)
+	user = User.objects.get(id=user_pk)
+	group.user_set.remove(user)
+	return grouppage(request,group_pk)
+
 def manageaccount(request):
 	if not request.user.is_authenticated():
 		return render(request, 'secureshare/failed.html')
@@ -667,7 +683,7 @@ def userprofile(request, user_pk):
 		modUser = modUserList[0]
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		reportCount = len(Report.objects.filter(owner=modUser.user))
-		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager})
+		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager, 'reportCount': reportCount})
 
 
 def manageusersreports(request):
@@ -806,14 +822,14 @@ def fdadisplayreport(request):
 			return HttpResponse(h)
 
 
-def grouppage(request, groupname):
-	context_dict = {}
-	try:
-		group = Group.objects.get(name=groupname)
-		users = group.user_set.all()
-		context_dict['group_name'] = group.name
-		context_dict['group'] = group
-	except Group.DoesNotExist:
-		pass
-
-	return render(request, 'secureshare/grouppage.html', context_dict)
+# def grouppage(request, groupname):
+# 	context_dict = {}
+# 	try:
+# 		group = Group.objects.get(name=groupname)
+# 		users = group.user_set.all()
+# 		context_dict['group_name'] = group.name
+# 		context_dict['group'] = group
+# 	except Group.DoesNotExist:
+# 		pass
+#
+# 	return render(request, 'secureshare/grouppage.html', context_dict)

@@ -62,7 +62,7 @@
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
                 {% if siteManager %}
-                <span class="text-muted"><a href="/secureshare/manageusersreports"><b>Manage users and reports</a></span>
+                <li><a href="/secureshare/manageusersreports"><b>Manage users and reports</a></b></li>
                 {% endif %}
               </ul>
           </div>
@@ -74,10 +74,10 @@
         </div>
         {% else %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1>Report created at {{ report.created_at }}</h1>
+          <h1><b>{{ report.name }}</b>, created at {{ report.created_at }}</h1>
           <h3 class="page-header">Report Page</h3>
 
-          <p>This page presents information on the report that you created at <b>{{ report.created_at }}</b>.</p>
+          <p>This page presents information on the report named <b>{{ report.name }}</b>.</p>
           <br>
 
           <h4><b>Owner:</b></h4>
@@ -91,11 +91,21 @@
 
           <h4><b>File(s):</b></h4>
           <p>
+            {% if report.file1 %}
             <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file1 }}">{{ report.file1 }}</a><br>
+            {% endif %}
+            {% if report.file2 %}
             <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file2 }}">{{ report.file2 }}</a><br>
+            {% endif %}
+            {% if report.file3 %}
             <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file3 }}">{{ report.file3 }}</a><br>
+            {% endif %}
+            {% if report.file4 %}
             <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file4 }}">{{ report.file4 }}</a><br>
+            {% endif %}
+            {% if report.file5 %}
             <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file5 }}">{{ report.file5 }}</a><br>
+            {% endif %}
           </p>
 
           <h4><b>Private?</b></h4>
@@ -106,7 +116,6 @@
 
           <h4><b>Users with access:</b></h4>
           <ul>
-            <li><b>{{ request.user }}</b></li>
             {% for user in report.auth_users.all %}
             <li>{{ user.username }}</li>
             {% endfor %}
@@ -129,6 +138,11 @@
           <form id="report_form" method="post" action="/secureshare/requesteditreport/{{ report.id }}" enctype='multipart/form-data'>
             {% csrf_token %}
             <p style="color:red"><b>{{ message }}</b></p>
+            <div>
+              <label>Name:</label><br>
+              <input type="text" name="name">
+            </div>
+            <br>
             <div>
               <label>Short description:</label><br>
               <input type="text" name="shortdescription">

@@ -78,6 +78,11 @@
             {% csrf_token %}
             <p style="color:red"><b>{{ message }}</b></p>
             <div>
+              <label>Name:</label><br>
+              {{ report_form.name }}
+            </div>
+            <br>
+            <div>
               <label>Short description:</label><br>
               {{ report_form.short_description }}
             </div>

@@ -78,12 +78,19 @@
             <h4>A list of your folders is below:</h4>
             <table class="table table-hover">
               <tr>
-                <th class="col-md-2">Folder</th>
-                <th class="col-md-2">Delete?</th>
+                <th class="col-md-4">Folder</th>
+                <th class="col-md-4">Rename?</th>
+                <th class="col-md-4">Delete?</th>
               </tr>
               {% for folder in folderList %}
               <tr>
                 <td>{{ folder.name }}</td>
+                <td>
+                  <form id="rename_folder" method="post" action="/secureshare/requestrenamefolder/{{ folder.id }}" style="width:80%">
+                    {% csrf_token %}
+                    <input type="text" name="folderName" class="form-control" placeholder="New name" required><br>
+                  </form>
+                </td>
                 <td><a href="/secureshare/requestdeletefolder/{{ folder.id }}/">Delete</a></td>
               </tr>
               {% endfor %}
@@ -93,8 +100,6 @@
               
             </ul>
           </div>
-
-          <br><br>
 
           <div class="createFolder">
             <h4>Create a folder:</h4>
@@ -113,7 +118,7 @@
             <h4>Add your reports to folders:</h4>
             <table class="table table-hover">
               <tr>
-                <th class="col-md-2">Created at</th>
+                <th class="col-md-2">Name</th>
                 <th class="col-md-2">Short description</th>
                 <th class="col-md-3">Detailed description</th>
                 <th class="col-md-3">Current folders</th>
@@ -121,7 +126,7 @@
               </tr>
               {% for report in reportList %}
               <tr>
-                <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
+                <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.name }}</a></td>
                 <td>{{ report.short_description }}</td>
                 <td>{{ report.detailed_description }}</td>
                 <td>
@@ -146,76 +151,29 @@
             </table>
           </div>
 
-          <br><br>
-
-          <div class="listOfReportsInFolders">
-            <h4>Folders:</h4>
-            {% for folder in folderList %}
-            <h5><b>{{ folder.name }}</b></h5>
-            <table class="table table-hover">
-              <tr>
-                <th class="col-md-1">Created at</th>
-                <th class="col-md-2">Owner</th>
-                <th class="col-md-1">Short description</th>
-                <th class="col-md-2">Detailed description</th>
-                <th class="col-md-3">File(s)</th>
-                <th class="col-md-1">Private?</th>
-                <th class="col-md-1">Encrypted?</th>
-                <th class="col-md-1>">Remove from folder?</th>
-                <!-- <th class="col-md-1">Tags</th> -->
-              </tr>
-              {% for report in folder.report_set.all %}
-              <tr>
-                <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
-                <td>{{ report.owner }}</td>
-                <td>{{ report.short_description }}</td>
-                <td>{{ report.detailed_description }}</td>
-                <td>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file1 }}">{{ report.file1 }}</a><br>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file2 }}">{{ report.file2 }}</a><br>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file3 }}">{{ report.file3 }}</a><br>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file4 }}">{{ report.file4 }}</a><br>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file5 }}">{{ report.file5 }}</a><br>
-                </td>
-                <td>{{ report.private }}</td>
-                <td>{{ report.encrypt }}</td>
-                <td><a href="/secureshare/requestremovefromfolder/{{ folder.id }}/{{ report.id }}">Remove</a></td>
-              </tr>
-              {% endfor %}
-            </table>
+          {% if noFolderList %}
+          <h4><b>Reports not in a folder:</b></h4>
+          <ul>
+            {% for report in noFolderList %}
+            <li>
+              <a href="/secureshare/reportpage/{{ report.id }}">{{ report.name }}</a><br>
+            </li>
             {% endfor %}
+          </ul>
+          {% endif %}
 
-            <h5><b><em>Uncategorized</em></b></h5>
-            <table class="table table-hover">
-              <tr>
-                <th class="col-md-1">Created at</th>
-                <th class="col-md-2">Owner</th>
-                <th class="col-md-1">Short description</th>
-                <th class="col-md-2">Detailed description</th>
-                <th class="col-md-4">File(s)</th>
-                <th class="col-md-1">Private?</th>
-                <th class="col-md-1">Encrypted?</th>
-                <!-- <th class="col-md-1">Tags</th> -->
-              </tr>
-              {% for report in noFolderList %}
-              <tr>
-                <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
-                <td>{{ report.owner }}</td>
-                <td>{{ report.short_description }}</td>
-                <td>{{ report.detailed_description }}</td>
-                <td>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file1 }}">{{ report.file1 }}</a><br>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file2 }}">{{ report.file2 }}</a><br>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file3 }}">{{ report.file3 }}</a><br>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file4 }}">{{ report.file4 }}</a><br>
-                  <a href="/secureshare/requestfiledownload/{{ report.id }}/{{ report.file5 }}">{{ report.file5 }}</a><br>
-                </td>
-                <td>{{ report.private }}</td>
-                <td>{{ report.encrypt }}</td>
-              </tr>
-              {% endfor %}
-            </table>
-          </div>
+          <br>
+
+          <h4><b>Folders:</b></h4>
+          {% for folder in folderList %}
+          <h4>{{ folder.name }}</h4>
+          {% for report in folder.report_set.all %}
+          <li>
+            <a href="/secureshare/reportpage/{{ report.id }}">{{ report.name }}</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <a href="/secureshare/requestremovefromfolder/{{ folder.id }}/{{ report.id }}">Remove</a>
+          </li>
+          {% endfor %}
+          {% endfor %}
 
         </div>
 

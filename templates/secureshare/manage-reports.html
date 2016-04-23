@@ -77,19 +77,21 @@
           <p style="color:red"><b>{{ message }}</b></p>
           <table class="table table-hover">
             <tr>
+              <th class="col-md-1">Name</th>
               <th class="col-md-1">Created at</th>
               <th class="col-md-1">Short description</th>
               <th class="col-md-2">Detailed description</th>
-              <th class="col-md-3">File(s)</th>
+              <th class="col-md-2">File(s)</th>
               <th class="col-md-1">Private?</th>
               <th class="col-md-1">Encrypted?</th>
-              <th class="col-md-2">Share with user?</th>
+              <th class="col-md-2">Share?</th>
               <th class="col-md-1">Delete?</th>
               <!-- <th class="col-md-1">Tags</th> -->
             </tr>
             {% for report in reportList %}
             <tr>
-              <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
+              <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.name }}</a></td>
+              <td>{{ report.created_at }}</td>
               <td>{{ report.short_description }}</td>
               <td>{{ report.detailed_description }}</td>
               <td>
@@ -102,9 +104,13 @@
               <td>{{ report.private }}</td>
               <td>{{ report.encrypt }}</td>
               <td>
-                <form id="login_form" method="post" action="/secureshare/requestnewusertoreport/{{ report.id }}" style="width:90%">
+                <form id="add_user" method="post" action="/secureshare/requestnewusertoreport/{{ report.id }}" style="width:90%">
                   {% csrf_token %}
                   <input type="text" name="user" class="form-control" placeholder="Username" required><br>
+                </form>
+                <form id="add_group" method="post" action="/secureshare/requestnewgrouptoreport/{{ report.id }}" style="width:90%">
+                  {% csrf_token %}
+                  <input type="text" name="group" class="form-control" placeholder="Group name" required><br>
                 </form>
               </td>
               <td><a href="/secureshare/requestdeletereport/{{ report.id }}">Delete</a></td>

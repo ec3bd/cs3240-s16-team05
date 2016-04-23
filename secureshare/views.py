@@ -118,6 +118,7 @@ def createreport(request):
 	if request.method == 'POST':
 		report_form = ReportForm(request.POST or None, request.FILES or None)
 		if report_form.is_valid():
+			name = report_form.cleaned_data['name']
 			owner = request.user
 			t = datetime.datetime.now()
 			timeStr = str(t)[:-7]
@@ -144,6 +145,7 @@ def createreport(request):
 			m.update(uni)
 			int_hash = m.hexdigest()
 			report = Report(
+					name = name,
 					owner=owner,
 					created_at=timeStr,
 					short_description=short_description,
@@ -161,6 +163,11 @@ def createreport(request):
 			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 			return render(request, 'secureshare/create-report.html',
 			              {'report_form': report_form, 'message': "The report was successfully submitted.",
+			               'siteManager': siteManager})
+		else:
+			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+			return render(request, 'secureshare/create-report.html',
+			              {'report_form': report_form, 'message': "You need to fill out a name, short description, and long description.",
 			               'siteManager': siteManager})
 	else:
 		report_form = ReportForm()
@@ -208,6 +215,28 @@ def requestnewusertoreport(request, report_pk):
 			return render(request, 'secureshare/manage-reports.html',
 			              {'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
 
+def requestnewgrouptoreport(request, report_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.method == 'POST':
+		reportList = Report.objects.filter(owner=request.user)
+		user = request.user
+		report = Report.objects.filter(id=report_pk)[0]
+		groupToAddName = request.POST.get('group')
+		groupToAddList = Group.objects.filter(name=groupToAddName)
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		if len(groupToAddList) == 0:
+			return render(request, 'secureshare/manage-reports.html',
+			              {'reportList': reportList, 'message': 'Couldn\'t find that group.',
+			               'siteManager': siteManager})
+		groupToAdd = groupToAddList[0]
+		usersInGroup = groupToAdd.user_set.all()
+		for user in usersInGroup:
+			if user not in report.auth_users.all():
+				report.auth_users.add(user)
+		return render(request, 'secureshare/manage-reports.html',
+			              {'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
+
 
 def requestdeletereport(request, report_pk):
 	if not request.user.is_authenticated():
@@ -222,11 +251,14 @@ def requesteditreport(request, report_pk):
 		return render(request, 'secureshare/failed.html')
 	if request.method == 'POST':
 		report = Report.objects.filter(id=report_pk)[0]
+		name = request.POST.get('name')
 		short_description = request.POST.get('shortdescription')
 		detailed_description = request.POST.get('detaileddescription')
 		user = request.user
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		if user.is_active:
+			if name != '':
+				report.name = name
 			if short_description != '':
 				report.short_description = short_description
 			if detailed_description != '':
@@ -262,25 +294,29 @@ def requestfiledownload(request, report_pk, file_pk):
 	report_id = report_pk[0:report_pk.index("/")]
 	file_directory = report_pk[report_pk.index("/"):] + "/"
 	report = Report.objects.filter(id=report_id)[0]
-	# Can download encrypted or unencrypted files from web app, so no check
-	fp = open(file_directory[1:] + file_pk, 'rb')
-	response = HttpResponse(fp.read())
-	fp.close()
-	type, encoding = mimetypes.guess_type(file_pk)
-	if type is None:
-		type = 'application/octet-stream'
-	response['Content-Type'] = type
-	if encoding is not None:
-		response['Content-Encoding'] = encoding
-	if u'WebKit' in request.META['HTTP_USER_AGENT']:
-		filename_header = 'filename=%s' % file_pk.encode('utf-8')
-	elif u'MSIE' in request.META['HTTP_USER_AGENT']:
-		filename_header = ''
+	if not report.encrypt:
+		fp = open('static/' + file_directory[1:] + file_pk, 'rb')
+		response = HttpResponse(fp.read())
+		fp.close()
+		type, encoding = mimetypes.guess_type(file_pk)
+		if type is None:
+			type = 'application/octet-stream'
+		response['Content-Type'] = type
+		if encoding is not None:
+			response['Content-Encoding'] = encoding
+		if u'WebKit' in request.META['HTTP_USER_AGENT']:
+			filename_header = 'filename=%s' % file_pk.encode('utf-8')
+		elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+			filename_header = ''
+		else:
+			filename_header = 'filename*=UTF-8\'\'%s' & urllib.quote(original_filename.encode('utf-8'))
+		filename_header = filename_header[2:]  # fixes byte string output
+		response['Content-Disposition'] = 'attachment; ' + filename_header
+		return response
 	else:
-		filename_header = 'filename*=UTF-8\'\'%s' & urllib.quote(original_filename.encode('utf-8'))
-	filename_header = filename_header[2:]  # fixes byte string output
-	response['Content-Disposition'] = 'attachment; ' + filename_header
-	return response
+		reportList = Report.objects.filter(owner=request.user)
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'siteManager': siteManager, 'message': "You must use the FDA to download a file from an encrypted report."})
 
 
 def viewreports(request):
@@ -401,6 +437,15 @@ def requestremovefromfolder(request, folder_pk, report_pk):
 	report.folders.remove(folder)
 	return HttpResponseRedirect('/secureshare/managefolders')
 
+
+def requestrenamefolder(request, folder_pk):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.method == 'POST':
+		folder = Folder.objects.get(id=folder_pk)
+		folder.name = request.POST.get('folderName')
+		folder.save()
+		return HttpResponseRedirect('/secureshare/managefolders')
 
 # For AES encryption/decryption
 key = "7AqDiyLmzcjmPO7n"

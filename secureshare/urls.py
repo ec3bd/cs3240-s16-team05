@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^fda_reports/$', views.fda_reports, name='fda_reports'),
     url(r'^managereports/$', views.managereports, name='managereports'),
     url(r'^requestnewusertoreport/(?P<report_pk>.*)$', views.requestnewusertoreport, name='requestnewusertoreport'),
+    url(r'^requestnewgrouptoreport/(?P<report_pk>.*)$', views.requestnewgrouptoreport, name='requestnewgrouptoreport'),
 
     url(r'^reportpage/(?P<report_pk>.*)$', views.reportpage, name='reportpage'),
     url(r'^requestdeletereport/(?P<report_pk>.*)$', views.requestdeletereport, name='requestdeletereport'),
@@ -27,11 +28,10 @@ urlpatterns = [
     url(r'^requestaddtofolder/(?P<report_pk>.*)$', views.requestaddtofolder, name='requestaddtofolder'),
     url(r'^requestdeletefolder/(?P<folder_pk>.*)$', views.requestdeletefolder, name='requestdeletefolder'),
     url(r'^requestremovefromfolder/(?P<folder_pk>.*)/(?P<report_pk>.*)$', views.requestremovefromfolder, name='requestremovefromfolder'),
+    url(r'^requestrenamefolder/(?P<folder_pk>.*)$', views.requestrenamefolder, name='requestrenamefolder'),
 
     url(r'^viewreports/$', views.viewreports, name='viewreports'),
-    # url(r'^requestfiledownload/(?P<report_pk>.*)$', views.requestfiledownload, name='requestfiledownload'),
     url(r'^requestfiledownload/(?P<report_pk>.*)/(?P<file_pk>.*)$', views.requestfiledownload, name='requestfiledownload'),
-    # Files should not be able to be accessed via the web application, hence we provide no URL
 
     url(r'^viewmessages/$', views.viewmessages, name='viewmessages'),
     url(r'^sendmessage/$', views.sendmessage, name='sendmessage'),

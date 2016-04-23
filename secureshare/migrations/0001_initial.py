@@ -8,35 +8,35 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0006_require_contenttypes_0002'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('auth', '0006_require_contenttypes_0002'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GroupPage',
+            name='Folder',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
-                ('url', models.URLField(blank=True)),
-                ('group', models.OneToOneField(to='auth.Group')),
+                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
+                ('name', models.CharField(max_length=100, null=True)),
+                ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True)),
             ],
         ),
         migrations.CreateModel(
             name='Message',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
                 ('content', models.TextField()),
                 ('created_at', models.TextField()),
                 ('encrypt', models.BooleanField(default=False)),
                 ('read', models.BooleanField(default=False)),
-                ('receiver', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='receiver')),
-                ('sender', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='sender')),
+                ('receiver', models.ForeignKey(related_name='receiver', to=settings.AUTH_USER_MODEL)),
+                ('sender', models.ForeignKey(related_name='sender', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='PasswordChange',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
                 ('oldPassword', models.CharField(max_length=100)),
                 ('newPassword', models.CharField(max_length=100)),
             ],
@@ -44,7 +44,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Report',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
+                ('name', models.CharField(max_length=100)),
                 ('created_at', models.TextField()),
                 ('short_description', models.CharField(max_length=200)),
                 ('detailed_description', models.TextField()),
@@ -55,27 +56,27 @@ class Migration(migrations.Migration):
                 ('file5', models.FileField(upload_to='files/%Y%m%d', null=True)),
                 ('private', models.BooleanField(default=False)),
                 ('encrypt', models.BooleanField(default=False)),
-                ('int_hash', models.CharField(default='', max_length=100)),
+                ('int_hash', models.CharField(max_length=100, default='')),
                 ('auth_groups', models.ManyToManyField(to='auth.Group')),
                 ('auth_users', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
-                ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='owner')),
+                ('folders', models.ManyToManyField(to='secureshare.Folder')),
+                ('owner', models.ForeignKey(related_name='owner', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='UploadFile',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
                 ('file', models.FileField(upload_to='files/%Y/%m/%d')),
             ],
         ),
         migrations.CreateModel(
             name='UserProfile',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
                 ('password2', models.CharField(max_length=100)),
-                ('random', models.CharField(max_length=100)),
                 ('website', models.URLField(blank=True)),
-                ('picture', models.ImageField(blank=True, upload_to='profile_images')),
+                ('picture', models.ImageField(upload_to='profile_images', blank=True)),
                 ('siteManager', models.BooleanField(default=False)),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],

@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'^requesteditreport/(?P<report_pk>.*)$', views.requesteditreport, name='requesteditreport'),
 
     url(r'^searchreports/$', views.searchreports, name='searchreports'),
+    url(r'^searchreportsadvanced/$', views.searchreportsadvanced, name='searchreportsadvanced'),
+
 
     url(r'^managefolders/$', views.managefolders, name='managefolders'),
     url(r'^requestcreatefolder/$', views.requestcreatefolder, name='requestcreatefolder'),

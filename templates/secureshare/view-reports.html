@@ -74,7 +74,7 @@
           <p>This page allows you to view all reports that have been shared with you. You can access your own reports <a href="/secureshare/managereports/">here</a>.</p>
           <br><br>
 
-        <p><b>General Search - covers all public reports and those shared with you:</b></p>
+        <p><b>General Search - covers all public reports and those shared with you (supports "AND", "OR" terms):</b></p>
           <form action="/secureshare/searchreports/" method="post">
             {% csrf_token %}
             <fieldset class="form-group">

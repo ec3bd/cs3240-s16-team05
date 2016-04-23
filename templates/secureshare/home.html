@@ -74,13 +74,16 @@
           <p>You are authenticated and at the home page. Use the links below or on the left to perform actions.</p>
           <br>
           <div>
-            <p>Here are some updates:</p>
+            <h3>Current updates:</h3>
             <ul>
               <li>You have {{ unreadMessageCount }} unread message(s) in your inbox.</li>
               <li>You currently own {{ reportCount }} report(s).
             </ul>
           </div>
-          <p>Search for other users below:</p>
+
+          <br>
+          
+          <h3>Search for users:</h3>
           <form action="/secureshare/searchusers/" method="post">
             {% csrf_token %}
             <fieldset class="form-group">
@@ -88,7 +91,9 @@
             </fieldset>
           </form>
 
-          <p>Search for reports below:</p>
+          <br>
+
+          <h3>Search for reports:</h3>
           <p><b>General Search - covers all public reports and those shared with you:</b></p>
               <form action="/secureshare/searchreports/" method="post">
                 {% csrf_token %}

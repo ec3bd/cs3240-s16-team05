@@ -337,20 +337,57 @@ def searchreports(request):
 	if request.method == 'POST':
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		query = request.POST.get('query')
-		results1 = Report.objects.filter(
-				Q(owner__username__icontains=query) |
-				Q(created_at__icontains=query) |
-				Q(short_description__icontains=query) |
-				Q(detailed_description__icontains=query) |
-		        Q(name__icontains=query)
-		)
-		results = list(results1)
-		for report in results:
-			if report.private == True:
-				if request.user not in report.auth_users.all() and not siteManager:
-					results.remove(report)
-		return render(request, 'secureshare/search-reports.html',
-		              {'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
+		if "AND" in query:
+			queryList = query.split(" AND ")
+			results1 = Report.objects.all()
+			for item in queryList:
+				results1 = results1.filter(
+					Q(owner__username__icontains=item) |
+					Q(created_at__icontains=item) |
+					Q(short_description__icontains=item) |
+					Q(detailed_description__icontains=item) |
+			    Q(name__icontains=item)
+				)
+			results = list(results1)
+			for report in results:
+				if report.private == True:
+					if request.user not in report.auth_users.all() and not siteManager:
+						results.remove(report)
+			return render(request, 'secureshare/search-reports.html',
+			              {'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
+		elif "OR" in query:
+			queryList = query.split(" OR ")
+			results1 = []
+			for item in queryList:
+				results1.extend(list(Report.objects.filter(
+					Q(owner__username__icontains=item) |
+					Q(created_at__icontains=item) |
+					Q(short_description__icontains=item) |
+					Q(detailed_description__icontains=item) |
+			    Q(name__icontains=item)
+				)))
+			results = results1
+			for report in results:
+				if report.private == True:
+					if request.user not in report.auth_users.all() and not siteManager:
+						results.remove(report)
+			return render(request, 'secureshare/search-reports.html',
+			              {'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
+		else:
+			results1 = Report.objects.filter(
+					Q(owner__username__icontains=query) |
+					Q(created_at__icontains=query) |
+					Q(short_description__icontains=query) |
+					Q(detailed_description__icontains=query) |
+			    Q(name__icontains=query)
+			)
+			results = list(results1)
+			for report in results:
+				if report.private == True:
+					if request.user not in report.auth_users.all() and not siteManager:
+						results.remove(report)
+			return render(request, 'secureshare/search-reports.html',
+			              {'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
 	else:
 		return HttpResponseRedirect('/secureshare/viewreports/')
 
@@ -363,30 +400,24 @@ def searchreportsadvanced(request):
 		owner = request.POST.get('owner')
 		encrypted = request.POST.get('encrypted')
 		description = request.POST.get('description')
-
 		if not name:
 			name = ""
-
 		if not owner:
 			owner = ""
-
 		if not description:
 			description = ""
-
 		if encrypted == "yes":
 			results1 = Report.objects.filter(encrypt=True)
 		elif encrypted == "no":
 			results1 = Report.objects.filter(encrypt=False)
 		else:
 			results1 = Report.objects.all()
-
 		results1 = results1.filter(
 				Q(name__icontains=name) &
 				Q(owner__username__icontains=owner) &
 				(Q(short_description__icontains=description) |
 				 Q(detailed_description__icontains=description))
 		)
-
 		results = list(results1)
 		for report in results:
 			if report.private == True:

@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9b27bcf-32c3-4dd4-822b-965bf9b90019" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/secureshare/search-users.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fda.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fda1.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/secureshare/fda_login.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/secureshare/fda_reports.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/secureshare/fdalogin.html" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/dbsqlite3" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/secureshare/migrations/0002_report_int_hash.py" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/secureshare/migrations/0003_folder.py" afterPath="" />
@@ -17,13 +21,10 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/secureshare/migrations/0012_remove_userprofile_random.py" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/secureshare/migrations/__init__.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/home/settings.py" afterPath="$PROJECT_DIR$/home/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/secureshare/urls.py" afterPath="$PROJECT_DIR$/secureshare/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/secureshare/views.py" afterPath="$PROJECT_DIR$/secureshare/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/group-page.html" afterPath="$PROJECT_DIR$/templates/secureshare/group-page.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/home.html" afterPath="$PROJECT_DIR$/templates/secureshare/home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/report-page.html" afterPath="$PROJECT_DIR$/templates/secureshare/report-page.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/user-profile.html" afterPath="$PROJECT_DIR$/templates/secureshare/user-profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/view-reports.html" afterPath="$PROJECT_DIR$/templates/secureshare/view-reports.html" />
     </list>
     <ignored path="cs3240-s16-team05.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -70,18 +71,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/secureshare/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5901288">
-              <caret line="538" column="66" selection-start-line="538" selection-start-column="66" selection-end-line="538" selection-end-column="66" />
-              <folding>
-                <element signature="e#0#55#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="report-page.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/secureshare/report-page.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -122,16 +111,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="manage-users-and-reports.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/secureshare/manage-users-and-reports.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.083333">
-              <caret line="80" column="30" selection-start-line="80" selection-start-column="30" selection-end-line="80" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="search-reports.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/secureshare/search-reports.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -142,12 +121,26 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/secureshare/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.45546558">
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#55#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/secureshare/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.26923">
-              <caret line="54" column="63" selection-start-line="54" selection-start-column="63" selection-end-line="54" selection-end-column="63" />
-              <folding />
+            <state vertical-scroll-proportion="-11.653846">
+              <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#51#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -192,13 +185,13 @@
         <option value="$PROJECT_DIR$/templates/secureshare/manage-groups.html" />
         <option value="$PROJECT_DIR$/home/settings.py" />
         <option value="$PROJECT_DIR$/secureshare/models.py" />
-        <option value="$PROJECT_DIR$/secureshare/urls.py" />
         <option value="$PROJECT_DIR$/templates/secureshare/search-users.html" />
         <option value="$PROJECT_DIR$/templates/secureshare/home.html" />
         <option value="$PROJECT_DIR$/templates/secureshare/view-reports.html" />
         <option value="$PROJECT_DIR$/templates/secureshare/report-page.html" />
         <option value="$PROJECT_DIR$/templates/secureshare/group-page.html" />
         <option value="$PROJECT_DIR$/templates/secureshare/user-profile.html" />
+        <option value="$PROJECT_DIR$/secureshare/urls.py" />
         <option value="$PROJECT_DIR$/secureshare/views.py" />
       </list>
     </option>
@@ -823,14 +816,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3346856">
-          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/secureshare/failed.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="6.6666665">
@@ -982,29 +967,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/secureshare/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.26923">
-          <caret line="54" column="63" selection-start-line="54" selection-start-column="63" selection-end-line="54" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/secureshare/report-page.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-22.708334">
           <caret line="156" column="17" selection-start-line="156" selection-start-column="17" selection-end-line="156" selection-end-column="17" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/secureshare/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1048,10 +1015,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/secureshare/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.653846">
+          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/secureshare/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3340081">
+          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/secureshare/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5901288">
-          <caret line="538" column="66" selection-start-line="538" selection-start-column="66" selection-end-line="538" selection-end-column="66" />
+        <state vertical-scroll-proportion="0.45546558">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding>
             <element signature="e#0#55#0" expanded="true" />
           </folding>

@@ -8,9 +8,11 @@ urlpatterns = [
     # url(r'^home/$', include('home.urls', namespace="home", app_name="home")),
     url(r'^home/', views.home, name='home'),
     url(r'^login/$', views.userlogin, name='login'),
+    url(r'^fdalogin/$', views.fdalogin, name='fdalogin'),
     url(r'^logout/$', views.userlogout, name='logout'),
 
     url(r'^createreport/$', views.createreport, name='createreport'),
+    url(r'^fda_reports/$', views.fda_reports, name='fda_reports'),
     url(r'^managereports/$', views.managereports, name='managereports'),
     url(r'^requestnewusertoreport/(?P<report_pk>.*)$', views.requestnewusertoreport, name='requestnewusertoreport'),
 
@@ -54,5 +56,8 @@ urlpatterns = [
     url(r'^activateuser/(?P<user_pk>.*)$', views.activateuser, name='activateuser'),
     url(r'^searchusers/$', views.searchusers, name='searchusers'),
 
+    url(r'^fdalogin/$', views.fdalogin, name='fdalogin'),
+    url(r'^fdaviewreports/$', views.fdaviewreports, name='fdaviewreports'),
+    url(r'^fdadisplayreport/$', views.fdadisplayreport, name='fdadisplayreport'),
 
 ]

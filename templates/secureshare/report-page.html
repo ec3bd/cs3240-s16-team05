@@ -123,7 +123,7 @@
           <p>{{ report.int_hash }}</p>
           
           <br><br>
-
+          {% if report.owner == request.user or siteManager %}
           <h2>Edit properties:</h2>
           <h4>This form will overwrite the properties of the report shown above.</h4>
           <form id="report_form" method="post" action="/secureshare/requesteditreport/{{ report.id }}" enctype='multipart/form-data'>
@@ -161,6 +161,7 @@
             <input type="submit" name="submit" class="btn btn-lg btn-primary btn-block" style="width: 200px" value="Edit report" />
             <!-- <p style="color:red"><b>{{ report_form.errors }}</b></p> -->
           </form>
+          {% endif %}
           
         </div>
 

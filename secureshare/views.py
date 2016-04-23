@@ -182,7 +182,7 @@ def reportpage(request, report_pk):
     else:
         report = reportList[0]
         profile = UserProfile.objects.get(user=request.user)
-        if request.user in report.auth_users.all() or report.owner == request.user or profile.siteManager:
+        if request.user in report.auth_users.all() or report.owner == request.user or profile.siteManager or report.private == False:
             return render(request, 'secureshare/report-page.html', {'report': report, 'siteManager': siteManager})
         else:
             return render(request, 'secureshare/report-page.html', {'message': "You are not authorized to see this report.", 'siteManager': siteManager})
@@ -227,15 +227,33 @@ def searchreports(request):
 	if request.method == 'POST':
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		query = request.POST.get('query')
-		results = Report.objects.filter(
+		results1 = Report.objects.filter(
 			Q(owner__username__icontains=query) | 
 			Q(created_at__icontains=query) | 
 			Q(short_description__icontains=query) | 
 			Q(detailed_description__icontains=query)
 		)
+		results = list(results1)
+		for report in results:
+			if report.private == True:
+				if request.user not in report.auth_users.all() and not siteManager:
+					results.remove(report)
 		return render(request, 'secureshare/search-reports.html', {'results': results, 'query': query, 'siteManager': siteManager})
 	else:
 		return HttpResponseRedirect('/secureshare/viewreports/')
+
+def searchusers(request):
+	if not request.user.is_authenticated():
+		return render(request, 'secureshare/failed.html')
+	if request.method == 'POST':
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		query = request.POST.get('query')
+		results = UserProfile.objects.filter(
+			Q(user__username__icontains=query)
+		)
+		return render(request, 'secureshare/search-users.html', {'results': results, 'query': query, 'siteManager': siteManager})
+	else:
+		return HttpResponseRedirect('/secureshare/home/')
 
 def managefolders(request):
     if not request.user.is_authenticated():
@@ -477,8 +495,12 @@ def grouppage(request, group_pk):
 		name = group.name
 		members = group.user_set.all()
 		profile = UserProfile.objects.get(user=request.user)
+		profiles = []
+		for member in members:
+			aProfile = UserProfile.objects.get(user__username=member.username)
+			profiles.append(aProfile)
 		if request.user in group.user_set.all() or profile.siteManager:
-			return render(request, 'secureshare/group-page.html', {'group': group, 'name': name, 'members': members, 'siteManager': siteManager})
+			return render(request, 'secureshare/group-page.html', {'group': group, 'name': name, 'members': members, 'siteManager': siteManager, 'profiles': profiles})
 		else:
 			return render(request, 'secureshare/group-page.html', {'message': "You are not authorized to see this group.", 'siteManager': siteManager})
 
@@ -513,8 +535,9 @@ def userprofile(request, user_pk):
 		return render(request, 'secureshare/user-profile.html', {'message': "That user does not exist", 'siteManager': siteManager})
 	else:
 		modUser = modUserList[0]
-		# CHECK TO SEE IF USER IS ALLOWED TO SEE REPORT HERE
-		return render(request, 'secureshare/user-profile.html', {'profile': modUser})
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		reportCount = len(Report.objects.filter(owner=modUser.user))
+		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager})
 
 def manageusersreports(request):
 	if not UserProfile.objects.get(user_id=request.user.id).siteManager:
@@ -530,15 +553,19 @@ def requestedituser(request, user_pk):
 		siteM = request.POST.get('siteM')
 		modEmail = request.POST.get('email')
 		siteMBool = False
+		message = ''
 		if siteM == "True":
-			siteMBool = True
-		user = request.user
+			siteMList = UserProfile.objects.filter(siteManager=True)
+			if siteMList.__len__() < 3:
+				siteMBool = True
+			else:
+				message = '3 Site Managers already exist. To create another, remove an existing site manager'
 		modUser.siteManager = siteMBool
 		modUser.user.email = modEmail
 		modUser.user.save()
 		modUser.save()
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
-		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager})
+		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager, 'message': message})
 	else:
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/manage-users-and-reports.html.html', {'siteManager': siteManager})

@@ -86,10 +86,10 @@
               <th class="col-md-6">Username</th>
               <th class="col-md-6">Email</th>
             </tr>
-            {% for member in members %}
+            {% for profile in profiles %}
             <tr>
-              <td>{{ member.username }}</td> 
-              <td>{{ member.email }}</a></td>
+              <td><a href="/secureshare/userprofile/{{ profile.user_id}}">{{ profile.user.username }}</a></td>
+              <td>{{ profile.user.email }}</a></td>
             </tr>
             {% endfor %}
           </table>

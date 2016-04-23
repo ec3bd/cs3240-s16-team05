@@ -69,11 +69,10 @@
       	</div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Welcome back, {{ request.user }}!</h1>
+          <h1 class="page-header">Welcome back, <a href="/secureshare/userprofile/{{ request.user.id }}">{{request.user}}</a>!</h1>
 
           <p>You are authenticated and at the home page. Use the links below or on the left to perform actions.</p>
           <br>
-
           <div>
             <p>Here are some updates:</p>
             <ul>
@@ -81,6 +80,22 @@
               <li>You currently own {{ reportCount }} report(s).
             </ul>
           </div>
+          <p>Search for other users below:</p>
+          <form action="/secureshare/searchusers/" method="post">
+            {% csrf_token %}
+            <fieldset class="form-group">
+              <input type="text" class="form-control" name="query" id="query" placeholder="Search Users">
+            </fieldset>
+          </form>
+
+          <p>Search for reports below:</p>
+          <form action="/secureshare/searchreports/" method="post">
+            {% csrf_token %}
+            <fieldset class="form-group">
+              <input type="text" class="form-control" name="query" id="query" placeholder="Search terms">
+            </fieldset>
+          </form>
+
           <br><br>
 
           <div class="row placeholders">

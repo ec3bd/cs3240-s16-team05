@@ -69,42 +69,61 @@
       	</div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Welcome back, {{ request.user }}!</h1>
+          <h1 class="page-header">Welcome back, <a href="/secureshare/userprofile/{{ request.user.id }}">{{request.user}}</a>!</h1>
 
           <p>You are authenticated and at the home page. Use the links below or on the left to perform actions.</p>
           <br>
-
           <div>
-            <p>Here are some updates:</p>
+            <h3>Current updates:</h3>
             <ul>
               <li>You have {{ unreadMessageCount }} unread message(s) in your inbox.</li>
               <li>You currently own {{ reportCount }} report(s).
             </ul>
           </div>
-          <br><br>
 
-          <div class="row placeholders">
-            <div class="col-sm-4 placeholder">
-              <h4>Reports</h4><br>
-              <span class="text-muted"><a href="/secureshare/createreport">Create a report</a></span><br>
-              <span class="text-muted"><a href="/secureshare/managereports">Manage my reports</a></span><br>
-              <span class="text-muted"><a href="/secureshare/managefolders">Manage my folders</a><br>
-              <span class="text-muted"><a href="/secureshare/viewreports">View all reports</a></span>
-            </div>
-            <div class="col-sm-4 placeholder">
-              <h4>Users</h4><br>
-              <span class="text-muted"><a href="/secureshare/viewmessages">View messages</a></span><br>
-              <span class="text-muted"><a href="/secureshare/managegroups">Manage my groups</a></span><br>
-              <span class="text-muted"><a href="/secureshare/creategroup">Create a new group</a></span>             
-            </div>
-            <div class="col-sm-4 placeholder">
-              <h4>Management</h4><br>
-              <span class="text-muted"><a href="/secureshare/manageaccount"><b>Manage my account</b></a></span><br>
-              {% if siteManager %}
-              <span class="text-muted"><a href="/secureshare/manageusersreports"><b>Manage users and reports</a></span>
-              {% endif %}
-            </div>
-          </div>
+          <br>
+          
+          <h3>Search for users:</h3>
+          <form action="/secureshare/searchusers/" method="post">
+            {% csrf_token %}
+            <fieldset class="form-group">
+              <input type="text" class="form-control" name="query" id="query" placeholder="Search Users">
+            </fieldset>
+          </form>
+
+          <br>
+
+          <h3>Search for reports:</h3>
+          <p><b>General Search - covers all public reports and those shared with you:</b></p>
+              <form action="/secureshare/searchreports/" method="post">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                  <input type="text" class="form-control" name="query" id="query" placeholder="Search terms">
+                </fieldset>
+                <button class="btn btn-primary btn-block" type="submit" style="width: 20%">Search</button>
+              </form>
+            <br>
+            <p><b>Advanced Search - use specific critera:</b></p>
+              <form action="/secureshare/searchreportsadvanced/" method="post">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                  <input type="text" class="form-control" name="name" id="name" placeholder="Search by report name">
+                </fieldset>
+                <fieldset class="form-group">
+                  <input type="text" class="form-control" name="owner" id="owner" placeholder="Search by owner">
+                </fieldset>
+                <fieldset class="form-group">
+                  <input type="text" class="form-control" name="description" id="description" placeholder="Search by short and long description">
+                </fieldset>
+                <fieldset class="form-group">
+                  <label class="radio-inline"><input type="radio" name="encrypted" value="yes">Encrypted</label>
+                  <label class="radio-inline"><input type="radio" name="encrypted" value="no">Not Encrypted</label>
+                  <label class="radio-inline"><input type="radio" name="encrypted" value="both">Either</label>
+                </fieldset>
+                <button class="btn btn-primary btn-block" type="submit" style="width: 20%">Advanced Search</button>
+              </form> <br>
+
+          <br><br>
 
     </div>
     <script src="{% static "js/bootstrap.min.js" %}"></script>

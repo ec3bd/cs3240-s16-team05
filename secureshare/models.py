@@ -36,6 +36,7 @@ class Folder(models.Model):
   # THIS CANNOT BE FOREIGNKEY, MUST BE MANYTOMANY
   # reports = models.ForeignKey(Report, null=True)
 class Report(models.Model):
+  name = models.CharField(max_length=100)
   owner = models.ForeignKey(User, related_name="owner")
   created_at = models.TextField()
   short_description = models.CharField(max_length=200)

@@ -50,6 +50,7 @@
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/createreport">Create a report</a></li>
                 <li><a href="/secureshare/managereports">Manage my reports</a></li>
+                <li><a href="/secureshare/managefolders">Manage my folders</a></li>
                 <li><a href="/secureshare/viewreports">View all reports</a></li>
               </ul>
               <ul class="nav nav-sidebar">
@@ -60,7 +61,9 @@
               </ul>
               <ul class="nav nav-sidebar">
                 <li><a href="/secureshare/manageaccount"><b>Manage my account</b></a></li>
+                {% if siteManager %}
                 <li class="active"><a href="/secureshare/manageusersreports"><b>Manage users and reports</b></a></li>
+                {% endif %}
               </ul>
           </div>
         </div>
@@ -80,19 +83,22 @@
           <h4><b>Email:</b></h4>
           <p>{{ profile.user.email }}</p>
 
+          <h4><b>Reports:</b></h4>
+          <p>{{ profile.user.username }} owns {{ reportCount }} report(s).</p>
+
           <h4><b>Website:</b></h4>
           {% if not profile.website %}
-              The user did not provide a website
+              The user did not provide a website.
           {% endif %}          <p><a href="{{ profile.website }}">{{ profile.website }}</a></p>
 
           <h4><b>Profile Picture:</b></h4>
-          <img src= "{% static profile.picture %}" alt="The user did not supply a profile picture" style="width:304px;height:228px;">
+          <img src= "{% static profile.picture %}" alt="The user did not supply a profile picture." style="width:304px;height:228px;">
 
           <h4><b>Site Manager?</b></h4>
           <p>{{ profile.siteManager }}</p>
           
           <br>
-          <br>
+          {% if siteManager %}
           <h2>Edit User:</h2>
           <a href="/secureshare/deactivateuser/{{ profile.user_id }}"><b>Deactivate this user</b></a> <br>
           <a href="/secureshare/activateuser/{{ profile.user_id }}"><b>Activate this user</b></a>
@@ -112,7 +118,7 @@
             <input type="submit" name="submit" class="btn btn-lg btn-primary btn-block" style="width: 200px" value="Update user" />
             <!-- <p style="color:red"><b>{{ report_form.errors }}</b></p> -->
           </form>
-          
+          {% endif %}
         </div>
 
         {% endif %}

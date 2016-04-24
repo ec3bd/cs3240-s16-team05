@@ -71,14 +71,36 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">View reports</h1>
 
-          <p>This page allows you to view all reports that you are authorized to access, aside from your own. You can access your own reports <a href="/secureshare/managereports/">here</a>.</p>
+          <p>This page allows you to view all reports that have been shared with you. You can access your own reports <a href="/secureshare/managereports/">here</a>.</p>
           <br><br>
 
+        <p><b>General Search - covers all public reports and those shared with you (supports "AND", "OR" terms):</b></p>
           <form action="/secureshare/searchreports/" method="post">
             {% csrf_token %}
             <fieldset class="form-group">
               <input type="text" class="form-control" name="query" id="query" placeholder="Search terms">
             </fieldset>
+            <button class="btn btn-primary btn-block" type="submit" style="width: 20%">Search</button>
+          </form>
+        <br>
+        <p><b>Advanced Search - use specific critera:</b></p>
+          <form action="/secureshare/searchreportsadvanced/" method="post">
+            {% csrf_token %}
+            <fieldset class="form-group">
+              <input type="text" class="form-control" name="name" id="name" placeholder="Search by report name">
+            </fieldset>
+            <fieldset class="form-group">
+              <input type="text" class="form-control" name="owner" id="owner" placeholder="Search by owner">
+            </fieldset>
+            <fieldset class="form-group">
+              <input type="text" class="form-control" name="description" id="description" placeholder="Search by short and long description">
+            </fieldset>
+            <fieldset class="form-group">
+              <label class="radio-inline"><input type="radio" name="encrypted" value="yes">Encrypted</label>
+              <label class="radio-inline"><input type="radio" name="encrypted" value="no">Not Encrypted</label>
+              <label class="radio-inline"><input type="radio" name="encrypted" value="both">Either</label>
+            </fieldset>
+            <button class="btn btn-primary btn-block" type="submit" style="width: 20%">Advanced Search</button>
           </form>
 
           <br><br>
@@ -86,11 +108,12 @@
           <p style="color:red"><b>{{ message }}</b></p>
           <table class="table table-hover" id="reportTable">
             <tr>
+              <th class="col-md-1">Name</th>
               <th class="col-md-1">Created at</th>
               <th class="col-md-2">Owner</th>
               <th class="col-md-1">Short description</th>
               <th class="col-md-2">Detailed description</th>
-              <th class="col-md-4">File(s)</th>
+              <th class="col-md-3">File(s)</th>
               <th class="col-md-1">Private?</th>
               <th class="col-md-1">Encrypted?</th>
               {% if siteManager %}
@@ -100,7 +123,8 @@
             </tr>
             {% for report in authReportList %}
             <tr>
-              <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.created_at }}</a></td>
+              <td><a href="/secureshare/reportpage/{{ report.id }}">{{ report.name }}</a></td>
+              <td>{{ report.created_at }}</td>
               <td>{{ report.owner }}</td>
               <td>{{ report.short_description }}</td>
               <td>{{ report.detailed_description }}</td>

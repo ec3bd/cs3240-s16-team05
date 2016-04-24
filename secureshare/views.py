@@ -601,18 +601,18 @@ def activateuser(request, user_pk):
 #fda
 @csrf_exempt
 def fdalogin(request):
-        if request.method == 'POST':
-                username = request.POST.get('username')
-                password = request.POST.get('password')
-                user = authenticate(username=username, password=password)
-                if user:
-                        if user.is_active:
-                                login(request, user)
-				return HttpResponse('Login successful.')
-                        else:
-                                return HttpResponse('Your account is disabled.')
-                else:
-                        return HttpResponse('Login failed.')
+  if request.method == 'POST':
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    user = authenticate(username=username, password=password)
+    if user:
+      if user.is_active:
+        login(request, user)
+        return HttpResponse('Login successful.')
+      else:
+        return HttpResponse('Your account is disabled.')
+    else:
+      return HttpResponse('Login failed.')
 
 @csrf_exempt
 def fdaviewreports(request):
@@ -632,45 +632,43 @@ def fdaviewreports(request):
 
 @csrf_exempt
 def fdadisplayreport(request):
-	if not request.user.is_authenticated():
-                return HttpResponse("You are not authenticated")
-	if request.user.is_active:
-		if request.method == 'POST':
-			h = ""
-			reportid = request.POST.get('reportid')
-			reportList = Report.objects.filter(owner=request.user)
-			if len(reportList) == 0:
-				return HttpResponse("You don't have any reports to view.")
-			if any(report.id == "t2" for report in reportList) == False:
-				h = "Could not find a matching report with that ID."
-			for report1 in reportList:
-				if report1.id == int(reportid):
-					h = "Report ID: " + str(report1.id) + "\n   Created at: " + str(report1.created_at) + "\n   Owner: " + report1.owner.username + "\n   Short description: " + report1.short_description + "\n   Detailed description: " + report1.detailed_description + "\n   Files: \n"
-					if not report1.file1 and not report1.file2 and not report1.file3 and not report1.file4 and not report1.file5:
-						h += "      This report doesn't have any files"
-					else:
-						if report1.file1:
-							file1 = str(report1.file1)
-							url = "http://localhost:8000/secureshare/requestfiledownload/1/files/20160420/test.txt"
-							r = requests.get(url)
- 							with open("download.txt", "wb") as code:
-								code.write(r.content)
-							h +=  "      "+str(report1.file1)
-						if report1.file2:
-#							file2 = str(report1.file2)
-							h += "      "+str(report1.file2)  
-						if report1.file3:
-#							file3 = str(report1.file3)
-							h += "      "+str(report1.file3)
-						if report1.file4:
-#							file4 = str(report1.file4)
-							h += "      "+str(report1.file4)
-						if report1.file5:
-#							file5 = str(report1.file5)
-							h += "      "+str(report1.file5)
-					h += "\n   Private? " + str(report1.private) + "\n   Encrypted? " + str(report1.encrypt)
-					break
-			return HttpResponse(h)
+  if not request.user.is_authenticated():
+    return HttpResponse("You are not authenticated")
+  if request.user.is_active:
+    if request.method == 'POST':
+      h = ""
+      reportid = request.POST.get('reportid')
+      reportList = Report.objects.filter(owner=request.user)
+      if len(reportList) == 0:
+        return HttpResponse("You don't have any reports to view.")
+      if any(report.id == "t2" for report in reportList) == False:
+        h = "Could not find a matching report with that ID."
+      for report1 in reportList:
+        if report1.id == int(reportid):
+          h = "Report ID: " + str(report1.id) + "\n   Created at: " + str(report1.created_at) + "\n   Owner: " + report1.owner.username + "\n   Short description: " + report1.short_description + "\n   Detailed description: " + report1.detailed_description + "\n   Files: \n"
+          if not report1.file1 and not report1.file2 and not report1.file3 and not report1.file4 and not report1.file5:
+            h += "      This report doesn't have any files"
+          else:
+            if report1.file1:
+              file1 = str(report1.file1)
+              h +=  "      "+str(report1.file1)
+            if report1.file2:
+              h += "      "+str(report1.file2)  
+            if report1.file3:
+              #							file3 = str(report1.file3)
+              h += "      "+str(report1.file3)
+            if report1.file4:
+              #							file4 = str(report1.file4)
+              h += "      "+str(report1.file4)
+            if report1.file5:
+              #							file5 = str(report1.file5)
+              h += "      "+str(report1.file5)
+            h += "\n   Private? " + str(report1.private) + "\n   Encrypted? " + str(report1.encrypt)
+            break
+        return HttpResponse(h)
+    return HttpResponse(h)
+
+  #return render(request, 'secureshare/manage-reports.html')
 
 def grouppage(request, groupname):
     context_dict = {}

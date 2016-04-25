@@ -50,15 +50,15 @@ with requests.Session() as s:
         temp.append(line.strip())
 
     url_front = "http://localhost:8000/secureshare/requestfiledownload/" + str(reportid) + "/"
-    download = input("\nWould you like to download the files of this report? (1 = yes, 2 = no) ")
-    if download.strip() == "1":
+    download = input("\nWould you like to download the files of this report? (y or n) ")
+    if download.strip() == "y":
       for url in temp:
         r = requests.get(url_front + url)
         #if not r.ok:
         #  print("An error occured. Try again later.")
         with open(url.split("/")[-1], "wb") as code:
           code.write(r.content)
-      print("\n   Downloaded: ")
+      print("\nDownloaded: ")
       print("   " + '\n'.join(x.split("/")[-1] for x in temp))
 
 

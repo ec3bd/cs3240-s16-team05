@@ -1,5 +1,6 @@
 import requests
 import os
+import urllib
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'home.settings')
 
 import django
@@ -13,12 +14,12 @@ django.setup()
 #    r = requests.post(url, data=values)
 #    print(r.content)
 
-#username = input("Enter username: ")
-#password = input("Enter password: ")
+username = input("Enter username: ")
+password = input("Enter password: ")
 
 payload = {
-    'username': "test1",
-    'password': "password"
+    'username': username,
+    'password': password
 }
 
 # Use 'with' to ensure the session context is closed after use.
@@ -49,10 +50,12 @@ with requests.Session() as s:
         temp.append(line.strip())
 
     print( str(temp))
-    url_front = "localhost:8000/secureshare/requestfiledownload/" + str(reportid) + "/"
+    url_front = "http://localhost:8000/secureshare/requestfiledownload/" + str(reportid) + "/"
     for url in temp:
       r = requests.get(url_front + url)
-      with open(url, "wb") as code:
+      #if not r.ok:
+      #  print("An error occured. Try again later.")
+      with open(url.split("/")[-1], "wb") as code:
         code.write(r.content)
     #download = input("\nWould you like to download the files of this report? (1 = yes, 2 = no) ")
     #if download == 1:

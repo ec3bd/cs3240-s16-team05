@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9b27bcf-32c3-4dd4-822b-965bf9b90019" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/secureshare/views.py" afterPath="$PROJECT_DIR$/secureshare/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/manage-account.html" afterPath="$PROJECT_DIR$/templates/secureshare/manage-account.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/secureshare/user-profile.html" afterPath="$PROJECT_DIR$/templates/secureshare/user-profile.html" />
     </list>
     <ignored path="cs3240-s16-team05.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,7 +44,7 @@
         <entry file="file://$PROJECT_DIR$/templates/secureshare/search-reports.html">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-33.75">
-              <caret line="120" column="27" selection-start-line="120" selection-start-column="27" selection-end-line="120" selection-end-column="27" />
+              <caret line="124" column="27" selection-start-line="124" selection-start-column="27" selection-end-line="124" selection-end-column="27" />
               <folding>
                 <element signature="n#style#0;n#button#0;n#form#0;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#button#0;n#form#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -58,7 +57,7 @@
         <entry file="file://$PROJECT_DIR$/templates/secureshare/report-page.html">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-8.083333">
-              <caret line="156" column="17" selection-start-line="156" selection-start-column="17" selection-end-line="156" selection-end-column="17" />
+              <caret line="159" column="17" selection-start-line="159" selection-start-column="17" selection-end-line="159" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -107,8 +106,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/secureshare/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.020026702">
-              <caret line="798" column="111" selection-start-line="798" selection-start-column="111" selection-end-line="798" selection-end-column="111" />
+            <state vertical-scroll-proportion="0.7797063">
+              <caret line="927" column="50" selection-start-line="927" selection-start-column="50" selection-end-line="927" selection-end-column="50" />
               <folding>
                 <element signature="e#0#55#0" expanded="true" />
               </folding>
@@ -119,8 +118,8 @@
       <file leaf-file-name="view-reports.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/secureshare/view-reports.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-27.5">
-              <caret line="95" column="19" selection-start-line="95" selection-start-column="19" selection-end-line="95" selection-end-column="19" />
+            <state vertical-scroll-proportion="-30.0">
+              <caret line="99" column="19" selection-start-line="99" selection-start-column="19" selection-end-line="99" selection-end-column="19" />
               <folding>
                 <element signature="n#style#0;n#button#0;n#form#0;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#button#0;n#form#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -999,8 +998,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/secureshare/view-reports.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-27.5">
-          <caret line="95" column="19" selection-start-line="95" selection-start-column="19" selection-end-line="95" selection-end-column="19" />
+        <state vertical-scroll-proportion="-30.0">
+          <caret line="99" column="19" selection-start-line="99" selection-start-column="19" selection-end-line="99" selection-end-column="19" />
           <folding>
             <element signature="n#style#0;n#button#0;n#form#0;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#0;n#form#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -1020,7 +1019,7 @@
     <entry file="file://$PROJECT_DIR$/templates/secureshare/search-reports.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-33.75">
-          <caret line="120" column="27" selection-start-line="120" selection-start-column="27" selection-end-line="120" selection-end-column="27" />
+          <caret line="124" column="27" selection-start-line="124" selection-start-column="27" selection-end-line="124" selection-end-column="27" />
           <folding>
             <element signature="n#style#0;n#button#0;n#form#0;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#0;n#form#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -1031,7 +1030,7 @@
     <entry file="file://$PROJECT_DIR$/templates/secureshare/report-page.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.083333">
-          <caret line="156" column="17" selection-start-line="156" selection-start-column="17" selection-end-line="156" selection-end-column="17" />
+          <caret line="159" column="17" selection-start-line="159" selection-start-column="17" selection-end-line="159" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -1080,8 +1079,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/secureshare/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.020026702">
-          <caret line="798" column="111" selection-start-line="798" selection-start-column="111" selection-end-line="798" selection-end-column="111" />
+        <state vertical-scroll-proportion="0.7797063">
+          <caret line="927" column="50" selection-start-line="927" selection-start-column="50" selection-end-line="927" selection-end-column="50" />
           <folding>
             <element signature="e#0#55#0" expanded="true" />
           </folding>

@@ -921,10 +921,12 @@ def fdaviewreports(request):
 		if len(reportList) == 0:
 			return HttpResponse("You don't have any reports to view.")
 		else:
+			myResponse = ""
 			for report in reportList:
-				return HttpResponse("These are the reports that are available to you: \nReport ID: " + str(
-					report.id) + "\n   Short description: " + report.short_description + "\n   Encrypted = " + str(
-					report.encrypt) + "\n")
+				myResponse += ("These are the reports that are available to you: \nReport ID: " + str(
+					report.id) + "\n   Name: " + report.name + "\n   Short description: " + report.short_description + "\n   Encrypted = " + str(
+					report.encrypt) + "\n" + "\n")
+			return HttpResponse(myResponse)
 
 
 @csrf_exempt

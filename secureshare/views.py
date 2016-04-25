@@ -773,17 +773,30 @@ def manageaccount(request):
 		return render(request, 'secureshare/failed.html')
 	if request.method == 'POST':
 		password_change_form = PasswordChangeForm(data=request.POST)
+		newEmail = request.POST.get('newEmail')
 		if password_change_form.is_valid():
 			user = request.user
-		oldpassword = request.POST.get('oldPassword')
-		newpassword = request.POST.get('newPassword')
-		if user.check_password(oldpassword):
-			user.set_password(newpassword)
+			oldpassword = request.POST.get('oldPassword')
+			newpassword = request.POST.get('newPassword')
+			if user.check_password(oldpassword):
+				user.set_password(newpassword)
+				user.save()
+				update_session_auth_hash(request, user)
+				siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+				return render(request, 'secureshare/home.html', {'siteManager': siteManager})
+			else:
+				return render(request, 'secureshare/failed.html')
+		elif newEmail:
+			user = request.user
+			newEmail = request.POST.get('newEmail')
+			user.email = newEmail
 			user.save()
-			update_session_auth_hash(request, user)
-			return render(request, 'secureshare/home.html')
+			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+			return render(request, 'secureshare/home.html', {'siteManager':siteManager})
 		else:
-			return render(request, 'secureshare/failed.html')
+			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+			return render(request, 'secureshare/manage-account.html',
+	              {'password_change_form': password_change_form, 'siteManager': siteManager, 'message': 'Invalid input received'})
 	else:
 		password_change_form = PasswordChangeForm(data=request.POST)
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
@@ -802,8 +815,11 @@ def userprofile(request, user_pk):
 	else:
 		modUser = modUserList[0]
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		publicReportList = Report.objects.filter(owner=modUser.user)
+		if not siteManager:
+			publicReportList = publicReportList.filter(private=False)
 		reportCount = len(Report.objects.filter(owner=modUser.user))
-		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager, 'reportCount': reportCount})
+		return render(request, 'secureshare/user-profile.html', {'profile': modUser, 'siteManager': siteManager, 'reportCount': reportCount, 'publicReportList':publicReportList})
 
 
 def manageusersreports(request):
@@ -834,9 +850,13 @@ def requestedituser(request, user_pk):
 		modUser.user.email = modEmail
 		modUser.user.save()
 		modUser.save()
+		reportCount = len(Report.objects.filter(owner=modUser.user))
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		publicReportList = Report.objects.filter(owner=modUser.user)
+		if not siteManager:
+			publicReportList = publicReportList.filter(private=False)
 		return render(request, 'secureshare/user-profile.html',
-		              {'profile': modUser, 'siteManager': siteManager, 'message': message})
+		              {'profile': modUser, 'siteManager': siteManager, 'message': message, 'reportCount':reportCount, 'publicReportList':publicReportList})
 	else:
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/manage-users-and-reports.html.html', {'siteManager': siteManager})

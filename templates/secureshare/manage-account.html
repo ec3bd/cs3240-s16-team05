@@ -70,9 +70,20 @@
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Manage my account ({{ request.user }})</h1>
-
+          <p style="color:red"><b>{{ message }}</b></p>
           <p>This page allows you to manage your account.</p>
           <br><br>
+
+          <h4>Reset your email:</h4>
+            <form id="email_change_form" method="post" action="/secureshare/manageaccount/">
+              {% csrf_token %}
+              <div>
+                <fieldset class="form-group">
+                  <input type="text" class="form-control" name="newEmail" id="newEmail" placeholder="New Email here", style="width:20%">
+                </fieldset>
+              </div>
+              <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 160px">Update Email</button>
+            </form> <br>
 
           <h4>Reset your password:</h4>
           <div class="passwordChange" style="margin-left: 20px">

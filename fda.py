@@ -7,7 +7,7 @@ django.setup()
 from secureshare.models import Report
 from django.contrib.auth import authenticate, login
 
-
+import getpass
 import urllib.request
 #import urllib2
 
@@ -15,7 +15,8 @@ if __name__ == "__main__":
     username = ''
     password = ''
     username = input('Enter a username to login: ')
-    password = input('Enter a password to login: ')
+    # password = input('Enter a password to login: ')
+    password = getpass.getpass('Enter a password to login: ')
     user = authenticate(username=username, password=password)
     if user:
         if user.is_active:

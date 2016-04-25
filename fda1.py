@@ -3,6 +3,8 @@ import os
 import urllib
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'home.settings')
 
+import getpass
+
 import django
 django.setup()
 
@@ -15,7 +17,8 @@ django.setup()
 #    print(r.content)
 
 username = input("Enter username: ")
-password = input("Enter password: ")
+# password = input("Enter password: ")
+password = getpass.getpass('Enter a password to login: ')
 
 payload = {
     'username': username,
@@ -56,6 +59,7 @@ with requests.Session() as s:
         r = requests.get(url_front + url)
         #if not r.ok:
         #  print("An error occured. Try again later.")
+        #  exit(0)
         with open(url.split("/")[-1], "wb") as code:
           code.write(r.content)
       print("\nDownloaded: ")

@@ -49,21 +49,17 @@ with requests.Session() as s:
       if found:
         temp.append(line.strip())
 
-    print( str(temp))
     url_front = "http://localhost:8000/secureshare/requestfiledownload/" + str(reportid) + "/"
-    for url in temp:
-      r = requests.get(url_front + url)
-      #if not r.ok:
-      #  print("An error occured. Try again later.")
-      with open(url.split("/")[-1], "wb") as code:
-        code.write(r.content)
-    #download = input("\nWould you like to download the files of this report? (1 = yes, 2 = no) ")
-    #if download == 1:
-        #p3 = s.post('http://127.0.0.1:8000/secureshare/fdadownloadreport/', data=payload)
-        #print(p3.text)
+    download = input("\nWould you like to download the files of this report? (1 = yes, 2 = no) ")
+    if download.strip() == "1":
+      for url in temp:
+        r = requests.get(url_front + url)
+        #if not r.ok:
+        #  print("An error occured. Try again later.")
+        with open(url.split("/")[-1], "wb") as code:
+          code.write(r.content)
+      print("\n   Downloaded: ")
+      print("   " + '\n'.join(x.split("/")[-1] for x in temp))
 
-
-    #p3 = s.post('http://127.0.0.1:8000/secureshare/managereports/', data=payload)
-    #print(p3.text)
 
 

@@ -3,6 +3,8 @@ import os
 import urllib
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'home.settings')
 
+import getpass
+
 import django
 django.setup()
 
@@ -15,7 +17,8 @@ django.setup()
 #    print(r.content)
 
 username = input("Enter username: ")
-password = input("Enter password: ")
+# password = input("Enter password: ")
+password = getpass.getpass('Enter a password to login: ')
 
 payload = {
     'username': username,

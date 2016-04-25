@@ -26,4 +26,4 @@ class ReportForm(forms.ModelForm):
   file5 = forms.FileField(required=False)
   class Meta:
     model = Report
-    fields = {'name', 'short_description', 'detailed_description', 'file1', 'file2', 'file3', 'file4', 'file5', 'private', 'encrypt'}
+    fields = {'name', 'short_description', 'detailed_description', 'file1', 'file2', 'file3', 'file4', 'file5', 'private', 'encrypt', 'tags'}

@@ -110,6 +110,11 @@
               {{ report_form.encrypt }} Encrypted
             </div>
             <br>
+            <div>
+              <p><b>Add tags below (separate by commas):</b></p>
+              {{ report_form.tags }}
+            </div>
+            <br>
             <input type="submit" name="submit" class="btn btn-lg btn-primary btn-block" style="width: 200px" value="Submit report" />
             <!-- <p style="color:red"><b>{{ report_form.errors }}</b></p> -->
           </form>

@@ -137,6 +137,7 @@ def createreport(request):
 				file5 = request.FILES['file5']
 			private = report_form.cleaned_data['private']
 			encrypt = report_form.cleaned_data['encrypt']
+			tags = report_form.cleaned_data['tags']
 			# Hash check
 			m = hashlib.md5()
 			toHash = str(owner) + str(timeStr) + str(short_description) + str(detailed_description) + str(file1) + str(
@@ -158,6 +159,7 @@ def createreport(request):
 					private=private,
 					encrypt=encrypt,
 					int_hash=int_hash,
+					tags=tags,
 			)
 			report.save()
 			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
@@ -167,7 +169,7 @@ def createreport(request):
 		else:
 			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 			return render(request, 'secureshare/create-report.html',
-			              {'report_form': report_form, 'message': "You need to fill out a name, short description, and long description.",
+			              {'report_form': report_form, 'message': "You need to fill out a name, short description, long description, and tags.",
 			               'siteManager': siteManager})
 	else:
 		report_form = ReportForm()
@@ -379,7 +381,8 @@ def searchreports(request):
 					Q(created_at__icontains=query) |
 					Q(short_description__icontains=query) |
 					Q(detailed_description__icontains=query) |
-			    Q(name__icontains=query)
+			    Q(name__icontains=query) |
+			    Q(tags__icontains=query)
 			)
 			results = list(results1)
 			for report in results:
@@ -399,6 +402,7 @@ def searchreportsadvanced(request):
 		name = request.POST.get('name')
 		owner = request.POST.get('owner')
 		encrypted = request.POST.get('encrypted')
+		tags = request.POST.get('tags')
 		description = request.POST.get('description')
 		if not name:
 			name = ""
@@ -406,6 +410,8 @@ def searchreportsadvanced(request):
 			owner = ""
 		if not description:
 			description = ""
+		if not tags:
+			tags = ""
 		if encrypted == "yes":
 			results1 = Report.objects.filter(encrypt=True)
 		elif encrypted == "no":
@@ -416,8 +422,12 @@ def searchreportsadvanced(request):
 				Q(name__icontains=name) &
 				Q(owner__username__icontains=owner) &
 				(Q(short_description__icontains=description) |
-				 Q(detailed_description__icontains=description))
+				 Q(detailed_description__icontains=description)) 
 		)
+		if tags == "":
+			results1 = results1.filter(
+				Q(tags__icontains=tags)
+			)
 		results = list(results1)
 		for report in results:
 			if report.private == True:

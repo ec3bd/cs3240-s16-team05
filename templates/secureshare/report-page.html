@@ -130,6 +130,9 @@
 
           <h4><b>Hash (md5):</b></h4>
           <p>{{ report.int_hash }}</p>
+
+          <h4><b>Tags:</b></h4>
+          <p>{{ report.tags }}</p>
           
           <br><br>
           {% if report.owner == request.user or siteManager %}

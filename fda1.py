@@ -56,6 +56,7 @@ with requests.Session() as s:
         r = requests.get(url_front + url)
         #if not r.ok:
         #  print("An error occured. Try again later.")
+        #  exit(0)
         with open(url.split("/")[-1], "wb") as code:
           code.write(r.content)
       print("\nDownloaded: ")

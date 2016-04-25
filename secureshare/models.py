@@ -33,6 +33,8 @@ class Message(models.Model):
 class Folder(models.Model):
   owner = models.ForeignKey(User, null=True)
   name = models.CharField(max_length=100, null=True)
+  def __unicode__(self):
+    return self.name
   # THIS CANNOT BE FOREIGNKEY, MUST BE MANYTOMANY
   # reports = models.ForeignKey(Report, null=True)
 class Report(models.Model):
@@ -41,6 +43,7 @@ class Report(models.Model):
   created_at = models.TextField()
   short_description = models.CharField(max_length=200)
   detailed_description = models.TextField()
+  tags = models.CharField(max_length=300, null=True)
   upload_path = 'files/' + '%Y%m%d'
   file1 = models.FileField(upload_to=upload_path, null=True)
   file2 = models.FileField(upload_to=upload_path, null=True)

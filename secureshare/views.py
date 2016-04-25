@@ -899,45 +899,6 @@ def fdaviewreports(request):
 
 @csrf_exempt
 def fdadisplayreport(request):
-<<<<<<< HEAD
-  if not request.user.is_authenticated():
-    return HttpResponse("You are not authenticated")
-  if request.user.is_active:
-    if request.method == 'POST':
-      h = ""
-      reportid = request.POST.get('reportid')
-      reportList = Report.objects.filter(owner=request.user)
-      if len(reportList) == 0:
-        return HttpResponse("You don't have any reports to view.")
-      if any(report.id == "t2" for report in reportList) == False:
-        h = "Could not find a matching report with that ID."
-      for report1 in reportList:
-        if report1.id == int(reportid):
-          h = "Report ID: " + str(report1.id) + "\n   Created at: " + str(report1.created_at) + "\n   Owner: " + report1.owner.username + "\n   Short description: " + report1.short_description + "\n   Detailed description: " + report1.detailed_description + "\n   Files: \n"
-          if not report1.file1 and not report1.file2 and not report1.file3 and not report1.file4 and not report1.file5:
-            h += "      This report doesn't have any files"
-          else:
-            if report1.file1:
-              file1 = str(report1.file1)
-              h +=  "      "+str(report1.file1)
-            if report1.file2:
-              h += "      "+str(report1.file2)  
-            if report1.file3:
-              #							file3 = str(report1.file3)
-              h += "      "+str(report1.file3)
-            if report1.file4:
-              #							file4 = str(report1.file4)
-              h += "      "+str(report1.file4)
-            if report1.file5:
-              #							file5 = str(report1.file5)
-              h += "      "+str(report1.file5)
-            h += "\n   Private? " + str(report1.private) + "\n   Encrypted? " + str(report1.encrypt)
-            break
-        return HttpResponse(h)
-    return HttpResponse(h)
-
-  #return render(request, 'secureshare/manage-reports.html')
-=======
 	if not request.user.is_authenticated():
 		return HttpResponse("You are not authenticated")
 	if request.user.is_active:
@@ -978,7 +939,6 @@ def fdadisplayreport(request):
 					h += "\n   Private? " + str(report1.private) + "\n   Encrypted? " + str(report1.encrypt)
 					break
 			return HttpResponse(h)
->>>>>>> 11b2234304a1a25eedd1c50c943f0fad0a1e9de1
 
 
 # def grouppage(request, groupname):

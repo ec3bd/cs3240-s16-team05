@@ -937,7 +937,6 @@ def fdadisplayreport(request):
 
   #return render(request, 'secureshare/manage-reports.html')
 
-
 # def grouppage(request, groupname):
 # 	context_dict = {}
 # 	try:

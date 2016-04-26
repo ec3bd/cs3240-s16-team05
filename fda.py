@@ -8,6 +8,9 @@ from splinter import Browser
 from time import sleep
 import webbrowser
 
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import AES
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'home.settings')
 django.setup()
 

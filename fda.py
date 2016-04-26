@@ -4,8 +4,6 @@ import urllib
 import urllib.request
 import getpass
 import django
-from splinter import Browser
-from time import sleep
 import webbrowser
 
 from Crypto.PublicKey import RSA
@@ -38,7 +36,37 @@ with requests.Session() as s:
 
     p2 = s.post('http://127.0.0.1:8000/secureshare/fdadisplayreport/', data=payload)
     parse = p2.text
-    print(p2.text)
+    parse2 = p2.text
+    myList = parse2.split('\n')
+    file1 = ""
+    file2 = ""
+    file3 = ""
+    file4 = ""
+    file5 = ""
+    n = len(myList)
+    n = n-1
+    if(n >= 9):
+        file1 = str(myList[9])
+        file1 = file1[21:]
+    if(n >= 10):
+        file2 = str(myList[10])
+        file2 = file2[21:]
+    if(n >= 11):
+        file3 = str(myList[11])
+        file3 = file3[21:]
+    if(n >= 12):
+        file4 = str(myList[12])
+        file4 = file4[21:]
+    if(n >= 13):
+        file5 = str(myList[13])
+        file5 = file5[21:]
+    toPrint = ""
+    i = 0
+    while i < 8:
+        toPrint += (str(myList[i]) + '\n')
+        i += 1
+    toPrint += "   Files: \n" + "      " + (file1 + '\n') + "      " + (file2 + '\n') + "      " + (file3 + '\n') + "      " + (file4 + '\n') + "      " + (file5 + '\n')
+    print(toPrint)
 
     download = input("\nWould you like to download the files of this report? (y/n) ")
 

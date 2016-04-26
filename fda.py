@@ -134,16 +134,22 @@ with requests.Session() as s:
             file5Exist = True
 
           directory = "/home/student/Downloads/"
-          if os.path.isfile(directory + array[9].strip()[15:]):
-            file1Exist = True
-          if os.path.isfile(directory + array[10].strip()[15:]):
-            file2Exist = True
-          if os.path.isfile(directory + array[11].strip()[15:]):
-            file3Exist = True
-          if os.path.isfile(directory + array[12].strip()[15:]):
-            file4Exist = True
-          if os.path.isfile(directory + array[13].strip()[15:]):
-            file5Exist = True
+
+          if file1:
+            if os.path.isfile(directory + array[9].strip()[15:]):
+              file1Exist = True
+          if file2:
+            if os.path.isfile(directory + array[10].strip()[15:]):
+              file2Exist = True
+          if file3:
+            if os.path.isfile(directory + array[11].strip()[15:]):
+              file3Exist = True
+          if file4:
+            if os.path.isfile(directory + array[12].strip()[15:]):
+              file4Exist = True
+          if file5:
+            if os.path.isfile(directory + array[13].strip()[15:]):
+              file5Exist = True
 
           if file1Exist and file2Exist and file3Exist and file4Exist and file5Exist:
             break
@@ -156,8 +162,25 @@ with requests.Session() as s:
         # filename_input = ""
 
         if file1:
-          filename_input += array[9].strip()[15:]
-          decrypt_file(filename_input, key)
+          filename_input1 = filename_input + array[9].strip()[15:]
+          decrypt_file(filename_input1, key)
+
+        if file2:
+          filename_input2 = filename_input + array[10].strip()[15:]
+          decrypt_file(filename_input2, key)
+
+        if file3:
+          filename_input3 = filename_input + array[11].strip()[15:]
+          decrypt_file(filename_input3, key)
+
+        if file4:
+          filename_input4 = filename_input + array[12].strip()[15:]
+          decrypt_file(filename_input4, key)
+
+        if file5:
+          filename_input5 = filename_input + array[13].strip()[15:]
+          decrypt_file(filename_input5, key)
+
 
       exit()
     else:

@@ -973,15 +973,20 @@ def fdadisplayreport(request):
 					h += "      This report doesn't have any files."
 				else:
 					if report.file1:
-						h +=  "      "+str(report.file1) + "\n"
+						h +=  "      "+str(report.file1)
+					h += "\n"
 					if report.file2:
-						h += "      "+str(report.file2) + "\n"
+						h += "      "+str(report.file2)
+					h += "\n"
 					if report.file3:
-						h += "      "+str(report.file3) + "\n"
+						h += "      "+str(report.file3)
+					h += "\n"
 					if report.file4:
-						h += "      "+str(report.file4) + "\n"
+						h += "      "+str(report.file4)
+					h += "\n"
 					if report.file5:
-						h += "      "+str(report.file5) + "\n"
+						h += "      "+str(report.file5)
+					h += "\n"
 			else:
 				h = "You don't have access to this report or it does not exist."
 				return HttpResponse(h)

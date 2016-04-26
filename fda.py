@@ -24,6 +24,23 @@ payload = {
 host = "http://127.0.0.1:8000"
 # host = ""
 
+key = 'i_love_srikanth!'
+
+def decrypt_file(filename_input, symmetric_key):
+    iv = b"1234567890123456" # Just some initialization vector
+    AESkey = AES.new(symmetric_key, AES.MODE_CFB, iv)
+    output_filename = "DEC_" + filename_input[:-4]
+    with open(filename_input, 'rb') as f:
+        raw_file = f.read()
+        # print("reading file: " + str(raw_file) + " " + str(type(raw_file)))
+        data_dec = AESkey.decrypt(raw_file)
+        # print("data_dec: " + str(data_dec) + " " + str(type(data_dec)))
+        # string = data_dec.decode("utf-8")
+    with open(output_filename, 'wb') as o:
+        #o.write(string)
+        o.write(data_dec)
+    return True
+
 # Use 'with' to ensure the session context is closed after use.
 with requests.Session() as s:
     p = s.post(host + '/secureshare/fdalogin/', data=payload)
@@ -98,28 +115,17 @@ with requests.Session() as s:
       encryptCheck = str(myList[7])
       if "True" in encryptCheck:
 
-        filename_input = "C:/Users/Srikanth/Desktop/"
+        filename_input = "/home/student/Downloads/"
 
         if file1:
           filename_input += array[9].strip()[15:]
 
-          symmetric_key = RSA.generate(2048)
-
-          iv = b"1234567890123456" # Just some initialization vector
-          AESkey = AES.new(symmetric_key, AES.MODE_CFB, iv)
-          output_filename = "DEC_" + filename_input[:-4]
-          with open(filename_input, 'rb') as f:
-              raw_file = f.read()
-              # print("reading file: " + str(raw_file) + " " + str(type(raw_file)))
-              data_dec = AESkey.decrypt(raw_file)
-              # print("data_dec: " + str(data_dec) + " " + str(type(data_dec)))
-              # string = data_dec.decode("utf-8")
-          with open(output_filename, 'wb') as o:
-              #o.write(string)
-              o.write(data_dec)
+          decrypt_file(filename_input, key)
 
 
-        print("need to decrypt")
+
+
+        print("Decrypted.")
 
       exit()
     else:

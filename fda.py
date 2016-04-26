@@ -5,6 +5,7 @@ import urllib.request
 import getpass
 import django
 import webbrowser
+from time import sleep
 
 # encryption/decryption, connect with heroku
 
@@ -29,7 +30,8 @@ key = 'i_love_srikanth!'
 def decrypt_file(filename_input, symmetric_key):
     iv = b"1234567890123456" # Just some initialization vector
     AESkey = AES.new(symmetric_key, AES.MODE_CFB, iv)
-    output_filename = "DEC_" + filename_input[:-4]
+    # output_filename = "DEC_" + filename_input[:-4]
+    output_filename = filename_input[:-4]
     with open(filename_input, 'rb') as f:
         raw_file = f.read()
         # print("reading file: " + str(raw_file) + " " + str(type(raw_file)))
@@ -39,6 +41,7 @@ def decrypt_file(filename_input, symmetric_key):
     with open(output_filename, 'wb') as o:
         #o.write(string)
         o.write(data_dec)
+        print('Decrypted file written to: ' + output_filename)
     return True
 
 # Use 'with' to ensure the session context is closed after use.
@@ -111,21 +114,24 @@ with requests.Session() as s:
         downloadurl = "/secureshare/requestfiledownload/" + str(reportid) + "/" + str(array[13].strip())
         webbrowser.open(host + downloadurl)
 
+      print("Confirming file downloads...")
+      while True:
+          file1Exist = False
+
+          if file1:
+              if
+      sleep(5)
+
       # print(str(myList[8]))
       encryptCheck = str(myList[7])
       if "True" in encryptCheck:
 
         filename_input = "/home/student/Downloads/"
+        # filename_input = ""
 
         if file1:
           filename_input += array[9].strip()[15:]
-
           decrypt_file(filename_input, key)
-
-
-
-
-        print("Decrypted.")
 
       exit()
     else:

@@ -295,31 +295,27 @@ def requestfiledownload(request, report_pk, file_pk):
 	# Add check to see if report exists (for invalid URL)
 	report_id = report_pk[0:report_pk.index("/")]
 	file_directory = report_pk[report_pk.index("/"):] + "/"
-	report = Report.objects.filter(id=report_id)[0]
-	if not report.encrypt:
-		fp = open('static/' + file_directory[1:] + file_pk, 'rb')
-		response = HttpResponse(fp.read())
-		fp.close()
-		type, encoding = mimetypes.guess_type(file_pk)
-		if type is None:
-			type = 'application/octet-stream'
-		response['Content-Type'] = type
-		if encoding is not None:
-			response['Content-Encoding'] = encoding
-		if u'WebKit' in request.META['HTTP_USER_AGENT']:
-			filename_header = 'filename=%s' % file_pk.encode('utf-8')
-		elif u'MSIE' in request.META['HTTP_USER_AGENT']:
-			filename_header = ''
-		else:
-			filename_header = 'filename*=UTF-8\'\'%s' & urllib.quote(original_filename.encode('utf-8'))
-		filename_header = filename_header[2:]  # fixes byte string output
-		response['Content-Disposition'] = 'attachment; ' + filename_header
-		return response
-	else:
-		reportList = Report.objects.filter(owner=request.user)
-		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
-		return render(request, 'secureshare/manage-reports.html', {'reportList': reportList, 'siteManager': siteManager, 'message': "You must use the FDA to download a file from an encrypted report."})
+	report = Report.objects.get(id=report_id)
 
+	fp = open('static/' + file_directory[1:] + file_pk, 'rb')
+	response = HttpResponse(fp.read())
+	fp.close()
+	type, encoding = mimetypes.guess_type(file_pk)
+	if type is None:
+		type = 'application/octet-stream'
+	response['Content-Type'] = type
+	if encoding is not None:
+		response['Content-Encoding'] = encoding
+	if u'WebKit' in request.META['HTTP_USER_AGENT']:
+		filename_header = 'filename=%s' % file_pk.encode('utf-8')
+	elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+		filename_header = ''
+	else:
+		filename_header = 'filename*=UTF-8\'\'%s' & urllib.quote(original_filename.encode('utf-8'))
+	filename_header = filename_header[2:]  # fixes byte string output
+	response['Content-Disposition'] = 'attachment; ' + filename_header
+	
+	return response
 
 def viewreports(request):
 	if not request.user.is_authenticated():

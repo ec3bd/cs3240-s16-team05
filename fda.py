@@ -6,6 +6,8 @@ import getpass
 import django
 import webbrowser
 
+# encryption/decryption, connect with heroku
+
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES
 
@@ -75,58 +77,51 @@ with requests.Session() as s:
       # downloadurl += reportid + "/files/"
       downloadurl += reportid + "/"
       array = parse.split('\n')
-      downloadurl += str(array[9].strip())
-      downloadurl = host + downloadurl
-      print(downloadurl)
 
-      webbrowser.open(downloadurl)
+      if file1:
+        downloadurl = "/secureshare/requestfiledownload/" + str(reportid) + "/" + str(array[9].strip())
+        webbrowser.open(host + downloadurl)
+      if file2:
+        downloadurl = "/secureshare/requestfiledownload/" + str(reportid) + "/" + str(array[10].strip())
+        webbrowser.open(host + downloadurl)
+      if file3:
+        downloadurl = "/secureshare/requestfiledownload/" + str(reportid) + "/" + str(array[11].strip())
+        webbrowser.open(host + downloadurl)
+      if file4:
+        downloadurl = "/secureshare/requestfiledownload/" + str(reportid) + "/" + str(array[12].strip())
+        webbrowser.open(host + downloadurl)
+      if file5:
+        downloadurl = "/secureshare/requestfiledownload/" + str(reportid) + "/" + str(array[13].strip())
+        webbrowser.open(host + downloadurl)
 
-      # urllib.request.urlopen(downloadurl).read()
+      # print(str(myList[8]))
+      encryptCheck = str(myList[7])
+      if "True" in encryptCheck:
 
-      # with Browser() as browser:
-      #   browser.visit(host + downloadurl)
-      #   sleep(100)
+        filename_input = "C:/Users/Srikanth/Desktop/"
+
+        if file1:
+          filename_input += array[9].strip()[15:]
+
+          symmetric_key = RSA.generate(2048)
+
+          iv = b"1234567890123456" # Just some initialization vector
+          AESkey = AES.new(symmetric_key, AES.MODE_CFB, iv)
+          output_filename = "DEC_" + filename_input[:-4]
+          with open(filename_input, 'rb') as f:
+              raw_file = f.read()
+              # print("reading file: " + str(raw_file) + " " + str(type(raw_file)))
+              data_dec = AESkey.decrypt(raw_file)
+              # print("data_dec: " + str(data_dec) + " " + str(type(data_dec)))
+              # string = data_dec.decode("utf-8")
+          with open(output_filename, 'wb') as o:
+              #o.write(string)
+              o.write(data_dec)
+
+
+        print("need to decrypt")
 
       exit()
     else:
       print("The FDA will now exit.")
       exit()
-
-
-
-
-
-
-
-
-
-
-
-
-    parse = parse.split('\n')
-    temp = []
-    found = False
-    for line in parse:
-      if not found and line.strip() == "Files:":
-        found = True
-        continue
-      if line.strip() in ["Private? False", "Private? True"]:
-        break
-      if found:
-        temp.append(line.strip())
-
-    url_front = "http://localhost:8000/secureshare/requestfiledownload/" + str(reportid) + "/"
-    
-    if download.strip() == "y":
-      for url in temp:
-        r = requests.get(url_front + url)
-        #if not r.ok:
-        #  print("An error occured. Try again later.")
-        #  exit(0)
-        with open(url.split("/")[-1], "wb") as code:
-          code.write(r.content)
-      print("\nDownloaded: ")
-      print("   " + '\n'.join(x.split("/")[-1] for x in temp))
-
-
-

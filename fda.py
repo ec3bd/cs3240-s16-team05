@@ -134,15 +134,15 @@ with requests.Session() as s:
             file5Exist = True
 
           directory = "/home/student/Downloads/"
-          if os.path.isfile(directory + array[9].strip()[15:])
+          if os.path.isfile(directory + array[9].strip()[15:]):
             file1Exist = True
-          if os.path.isfile(directory + array[10].strip()[15:])
+          if os.path.isfile(directory + array[10].strip()[15:]):
             file2Exist = True
-          if os.path.isfile(directory + array[11].strip()[15:])
+          if os.path.isfile(directory + array[11].strip()[15:]):
             file3Exist = True
-          if os.path.isfile(directory + array[12].strip()[15:])
+          if os.path.isfile(directory + array[12].strip()[15:]):
             file4Exist = True
-          if os.path.isfile(directory + array[13].strip()[15:])
+          if os.path.isfile(directory + array[13].strip()[15:]):
             file5Exist = True
 
           if file1Exist and file2Exist and file3Exist and file4Exist and file5Exist:

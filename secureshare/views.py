@@ -20,23 +20,23 @@ import requests
 
 # import urllib
 
-def fdalogin(request):
-	if request.method == 'POST':
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-		user = authenticate(username=username, password=password)
-		if user:
-			if user.is_active:
-				login(request, user)
-				return HttpResponse("Success")
-			else:
-				return HttpResponse("Failed")
-		else:
-			return render(request, "Failed")
-	else:
-		if (request.user.is_authenticated()):
-			return HttpResponse('Success')
-		return render(request, 'secureshare/fdalogin.html')
+# def fdalogin(request):
+# 	if request.method == 'POST':
+# 		username = request.POST.get('username')
+# 		password = request.POST.get('password')
+# 		user = authenticate(username=username, password=password)
+# 		if user:
+# 			if user.is_active:
+# 				login(request, user)
+# 				return HttpResponse("Success")
+# 			else:
+# 				return HttpResponse("Failed")
+# 		else:
+# 			return render(request, "Failed")
+# 	else:
+# 		if (request.user.is_authenticated()):
+# 			return HttpResponse('Success')
+# 		return render(request, 'secureshare/fdalogin.html')
 
 
 def userlogin(request):
@@ -93,7 +93,7 @@ def register(request):
 		user_form = UserForm()
 		profile_form = UserProfileForm()
 	return render(request, 'secureshare/register.html',
-	              {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+								{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 
 @login_required
@@ -109,7 +109,7 @@ def home(request):
 	reportCount = len(Report.objects.filter(owner=request.user))
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/home.html',
-	              {'unreadMessageCount': unreadMessageCount, 'reportCount': reportCount, 'siteManager': siteManager})
+								{'unreadMessageCount': unreadMessageCount, 'reportCount': reportCount, 'siteManager': siteManager})
 
 
 def createreport(request):
@@ -164,18 +164,18 @@ def createreport(request):
 			report.save()
 			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 			return render(request, 'secureshare/create-report.html',
-			              {'report_form': report_form, 'message': "The report was successfully submitted.",
-			               'siteManager': siteManager})
+										{'report_form': report_form, 'message': "The report was successfully submitted.",
+										 'siteManager': siteManager})
 		else:
 			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 			return render(request, 'secureshare/create-report.html',
-			              {'report_form': report_form, 'message': "You need to fill out a name, short description, long description, and tags.",
-			               'siteManager': siteManager})
+										{'report_form': report_form, 'message': "You need to fill out a name, short description, long description, and tags.",
+										 'siteManager': siteManager})
 	else:
 		report_form = ReportForm()
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/create-report.html',
-		              {'report_form': report_form, 'siteManager': siteManager})
+									{'report_form': report_form, 'siteManager': siteManager})
 
 
 @csrf_exempt
@@ -205,17 +205,17 @@ def requestnewusertoreport(request, report_pk):
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		if len(userToAddList) == 0:
 			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': 'Couldn\'t find that user.',
-			               'siteManager': siteManager})
+										{'reportList': reportList, 'message': 'Couldn\'t find that user.',
+										 'siteManager': siteManager})
 		userToAdd = userToAddList[0]
 		if userToAdd in report.auth_users.all():
 			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': "That user is already shared.",
-			               'siteManager': siteManager})
+										{'reportList': reportList, 'message': "That user is already shared.",
+										 'siteManager': siteManager})
 		else:
 			report.auth_users.add(userToAdd)
 			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
+										{'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
 
 def requestnewgrouptoreport(request, report_pk):
 	if not request.user.is_authenticated():
@@ -229,15 +229,15 @@ def requestnewgrouptoreport(request, report_pk):
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		if len(groupToAddList) == 0:
 			return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': 'Couldn\'t find that group.',
-			               'siteManager': siteManager})
+										{'reportList': reportList, 'message': 'Couldn\'t find that group.',
+										 'siteManager': siteManager})
 		groupToAdd = groupToAddList[0]
 		usersInGroup = groupToAdd.user_set.all()
 		for user in usersInGroup:
 			if user not in report.auth_users.all():
 				report.auth_users.add(user)
 		return render(request, 'secureshare/manage-reports.html',
-			              {'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
+										{'reportList': reportList, 'message': "Shared successfully.", 'siteManager': siteManager})
 
 
 def requestdeletereport(request, report_pk):
@@ -278,7 +278,7 @@ def reportpage(request, report_pk):
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	if len(reportList) == 0:
 		return render(request, 'secureshare/report-page.html',
-		              {'message': "That report does not exist", 'siteManager': siteManager})
+									{'message': "That report does not exist", 'siteManager': siteManager})
 	else:
 		report = reportList[0]
 		profile = UserProfile.objects.get(user=request.user)
@@ -286,7 +286,7 @@ def reportpage(request, report_pk):
 			return render(request, 'secureshare/report-page.html', {'report': report, 'siteManager': siteManager})
 		else:
 			return render(request, 'secureshare/report-page.html',
-			              {'message': "You are not authorized to see this report.", 'siteManager': siteManager})
+										{'message': "You are not authorized to see this report.", 'siteManager': siteManager})
 
 @csrf_exempt
 def requestfiledownload(request, report_pk, file_pk):
@@ -330,7 +330,7 @@ def viewreports(request):
 		authReportList = Report.objects.all()
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/view-reports.html',
-	              {'authReportList': authReportList, 'siteManager': siteManager})
+								{'authReportList': authReportList, 'siteManager': siteManager})
 
 
 def searchreports(request):
@@ -348,7 +348,7 @@ def searchreports(request):
 					Q(created_at__icontains=item) |
 					Q(short_description__icontains=item) |
 					Q(detailed_description__icontains=item) |
-			    Q(name__icontains=item)
+					Q(name__icontains=item)
 				)
 			results = list(results1)
 			for report in results:
@@ -356,7 +356,7 @@ def searchreports(request):
 					if request.user not in report.auth_users.all() and not siteManager:
 						results.remove(report)
 			return render(request, 'secureshare/search-reports.html',
-			              {'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
+										{'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
 		elif "OR" in query:
 			queryList = query.split(" OR ")
 			results1 = []
@@ -366,7 +366,7 @@ def searchreports(request):
 					Q(created_at__icontains=item) |
 					Q(short_description__icontains=item) |
 					Q(detailed_description__icontains=item) |
-			    Q(name__icontains=item)
+					Q(name__icontains=item)
 				)))
 			results = results1
 			for report in results:
@@ -374,15 +374,15 @@ def searchreports(request):
 					if request.user not in report.auth_users.all() and not siteManager:
 						results.remove(report)
 			return render(request, 'secureshare/search-reports.html',
-			              {'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
+										{'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
 		else:
 			results1 = Report.objects.filter(
 					Q(owner__username__icontains=query) |
 					Q(created_at__icontains=query) |
 					Q(short_description__icontains=query) |
 					Q(detailed_description__icontains=query) |
-			    Q(name__icontains=query) |
-			    Q(tags__icontains=query)
+					Q(name__icontains=query) |
+					Q(tags__icontains=query)
 			)
 			results = list(results1)
 			for report in results:
@@ -390,7 +390,7 @@ def searchreports(request):
 					if request.user not in report.auth_users.all() and not siteManager:
 						results.remove(report)
 			return render(request, 'secureshare/search-reports.html',
-			              {'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
+										{'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
 	else:
 		return HttpResponseRedirect('/secureshare/viewreports/')
 
@@ -434,7 +434,7 @@ def searchreportsadvanced(request):
 				if request.user not in report.auth_users.all() and not siteManager:
 					results.remove(report)
 		return render(request, 'secureshare/search-reports.html',
-		              {'results': results, 'query': "You used an advanced search.", 'siteManager': siteManager})
+									{'results': results, 'query': "You used an advanced search.", 'siteManager': siteManager})
 	else:
 		return HttpResponseRedirect('/secureshare/viewreports/')
 
@@ -449,7 +449,7 @@ def searchusers(request):
 				Q(user__username__icontains=query)
 		)
 		return render(request, 'secureshare/search-users.html',
-		              {'results': results, 'query': query, 'siteManager': siteManager})
+									{'results': results, 'query': query, 'siteManager': siteManager})
 	else:
 		return HttpResponseRedirect('/secureshare/home/')
 
@@ -462,8 +462,8 @@ def managefolders(request):
 	noFolderList = Report.objects.filter(owner=request.user, folders=None)
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/manage-folders.html',
-	              {'folderList': folderList, 'reportList': reportList, 'noFolderList': noFolderList,
-	               'siteManager': siteManager})
+								{'folderList': folderList, 'reportList': reportList, 'noFolderList': noFolderList,
+								 'siteManager': siteManager})
 
 
 def requestcreatefolder(request):
@@ -482,8 +482,8 @@ def requestcreatefolder(request):
 				return HttpResponseRedirect('/secureshare/managefolders')
 			else:
 				return render(request, 'secureshare/manage-folders.html',
-				              {'folderList': folderList, 'reportList': reportList,
-				               'message': "That folder already exists."})
+											{'folderList': folderList, 'reportList': reportList,
+											 'message': "That folder already exists."})
 		else:
 			return render(request, 'secureshare/failed.html')
 	else:
@@ -579,7 +579,7 @@ def viewmessages(request):
 	messageOut = Message.objects.filter(sender=request.user)
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/view-messages.html',
-	              {'messageIn': messageIn, 'messageOut': messageOut, 'siteManager': siteManager})
+								{'messageIn': messageIn, 'messageOut': messageOut, 'siteManager': siteManager})
 
 
 def sendmessage(request):
@@ -604,8 +604,8 @@ def sendmessage(request):
 						messageOut.append(message)
 						siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 				return render(request, 'secureshare/view-messages.html',
-				              {'messageIn': messageIn, 'messageOut': messageOut, 'message': "That user doesn't exist.",
-				               'siteManager': siteManager})
+											{'messageIn': messageIn, 'messageOut': messageOut, 'message': "That user doesn't exist.",
+											 'siteManager': siteManager})
 			# Save to database
 			recepientUser = User.objects.filter(username=recepient)[0]
 			t = datetime.datetime.now()
@@ -614,11 +614,11 @@ def sendmessage(request):
 				aesObj = AESCipher(key)
 				encryptedMsg = aesObj.encrypt(message)
 				msg = Message(sender=user, receiver=recepientUser, content=encryptedMsg, created_at=timeStr,
-				              encrypt=True, read=False)
+											encrypt=True, read=False)
 			else:
 				databaseMessage = message
 				msg = Message(sender=user, receiver=recepientUser, content=databaseMessage, created_at=timeStr,
-				              encrypt=False, read=False)
+											encrypt=False, read=False)
 			msg.save()
 			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 			return HttpResponseRedirect('/secureshare/viewmessages/')
@@ -674,7 +674,7 @@ def managegroups(request):
 	if profile.siteManager:
 		groupList2 = Group.objects.all()
 		return render(request, 'secureshare/manage-groups.html',
-		              {'groupList': groupList, 'groupList2': groupList2, 'siteManager': siteManager})
+									{'groupList': groupList, 'groupList2': groupList2, 'siteManager': siteManager})
 	return render(request, 'secureshare/manage-groups.html', {'groupList': groupList, 'siteManager': siteManager})
 
 
@@ -689,12 +689,12 @@ def requestnewusertogroup(request, group_pk):
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		if len(userToAddList) == 0:
 			return render(request, 'secureshare/manage-groups.html',
-			              {'groupList': groupList, 'message': 'Couldn\'t find that user.', 'siteManager': siteManager})
+										{'groupList': groupList, 'message': 'Couldn\'t find that user.', 'siteManager': siteManager})
 		userToAdd = userToAddList[0]
 		if userToAdd.groups.filter(id=group_pk).exists():
 			return render(request, 'secureshare/manage-groups.html',
-			              {'groupList': groupList, 'message': "That user is already a member.",
-			               'siteManager': siteManager})
+										{'groupList': groupList, 'message': "That user is already a member.",
+										 'siteManager': siteManager})
 		else:
 			group = Group.objects.filter(id=group_pk)[0]
 			group.user_set.add(userToAdd)
@@ -733,11 +733,11 @@ def requestgroup(request):
 				user.groups.add(group)
 				siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 				return render(request, 'secureshare/create-group.html',
-				              {'message': "You have been added.", 'siteManager': siteManager})
+											{'message': "You have been added.", 'siteManager': siteManager})
 			else:
 				siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 				return render(request, 'secureshare/create-group.html',
-				              {'message': "That group already exists.", 'siteManager': siteManager})
+											{'message': "That group already exists.", 'siteManager': siteManager})
 		else:
 			return render(request, 'secureshare/failed.html')
 	else:
@@ -751,7 +751,7 @@ def grouppage(request, group_pk):
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	if len(groupList) == 0:
 		return render(request, 'secureshare/group-page.html',
-		              {'message': "That group does not exist.", 'siteManager': siteManager})
+									{'message': "That group does not exist.", 'siteManager': siteManager})
 	else:
 		group = groupList[0]
 		name = group.name
@@ -763,11 +763,11 @@ def grouppage(request, group_pk):
 			profiles.append(aProfile)
 		if request.user in group.user_set.all() or profile.siteManager:
 			return render(request, 'secureshare/group-page.html',
-			              {'group': group, 'name': name, 'members': members, 'siteManager': siteManager,
-			               'profiles': profiles})
+										{'group': group, 'name': name, 'members': members, 'siteManager': siteManager,
+										 'profiles': profiles})
 		else:
 			return render(request, 'secureshare/group-page.html',
-			              {'message': "You are not authorized to see this group.", 'siteManager': siteManager})
+										{'message': "You are not authorized to see this group.", 'siteManager': siteManager})
 
 
 def removeuserfromgroup(request, group_pk, user_pk):
@@ -806,12 +806,12 @@ def manageaccount(request):
 		else:
 			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 			return render(request, 'secureshare/manage-account.html',
-	              {'password_change_form': password_change_form, 'siteManager': siteManager, 'message': 'Invalid input received'})
+								{'password_change_form': password_change_form, 'siteManager': siteManager, 'message': 'Invalid input received'})
 	else:
 		password_change_form = PasswordChangeForm(data=request.POST)
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/manage-account.html',
-	              {'password_change_form': password_change_form, 'siteManager': siteManager})
+								{'password_change_form': password_change_form, 'siteManager': siteManager})
 
 
 def userprofile(request, user_pk):
@@ -821,7 +821,7 @@ def userprofile(request, user_pk):
 	if len(modUserList) == 0:
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/user-profile.html',
-		              {'message': "That user does not exist", 'siteManager': siteManager})
+									{'message': "That user does not exist", 'siteManager': siteManager})
 	else:
 		modUser = modUserList[0]
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
@@ -838,7 +838,7 @@ def manageusersreports(request):
 	allUserList = UserProfile.objects.all()
 	siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 	return render(request, 'secureshare/manage-users-and-reports.html',
-	              {'allUserList': allUserList, 'siteManager': siteManager})
+								{'allUserList': allUserList, 'siteManager': siteManager})
 
 
 def requestedituser(request, user_pk):
@@ -866,7 +866,7 @@ def requestedituser(request, user_pk):
 		if not siteManager:
 			publicReportList = publicReportList.filter(private=False)
 		return render(request, 'secureshare/user-profile.html',
-		              {'profile': modUser, 'siteManager': siteManager, 'message': message, 'reportCount':reportCount, 'publicReportList':publicReportList})
+									{'profile': modUser, 'siteManager': siteManager, 'message': message, 'reportCount':reportCount, 'publicReportList':publicReportList})
 	else:
 		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
 		return render(request, 'secureshare/manage-users-and-reports.html.html', {'siteManager': siteManager})
@@ -917,57 +917,81 @@ def fdaviewreports(request):
 	if not request.user.is_authenticated():
 		return HttpResponse('You are not authenticated')
 	if request.user.is_active:
-		reportList = Report.objects.filter(owner=request.user)
+		# reportList = Report.objects.filter(owner=request.user)
+		siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+		results1 = Report.objects.all()
+		reportList = list(results1)
+		for report in reportList:
+			if report.private == True:
+				if request.user not in report.auth_users.all() and not siteManager:
+					reportList.remove(report)
 		if len(reportList) == 0:
 			return HttpResponse("You don't have any reports to view.")
 		else:
 			myResponse = ""
+			myResponse += ("These are the reports that are available to you:")
 			for report in reportList:
-				myResponse += ("These are the reports that are available to you: \nReport ID: " + str(
-					report.id) + "\n   Name: " + report.name + "\n   Short description: " + report.short_description + "\n   Encrypted = " + str(
+					myResponse += ("\nReport ID: " + str(report.id) + "\n   Name: " + report.name + "\n   Owner: " + str(report.owner) + "\n   Short description: " + report.short_description + "\n   Encrypted = " + str(
 					report.encrypt) + "\n" + "\n")
 			return HttpResponse(myResponse)
 
 
 @csrf_exempt
 def fdadisplayreport(request):
-  if not request.user.is_authenticated():
-    return HttpResponse("You are not authenticated")
-  if request.user.is_active:
-    if request.method == 'POST':
-      h = ""
-      reportid = request.POST.get('reportid')
-      reportList = Report.objects.filter(owner=request.user)
-      if len(reportList) == 0:
-        return HttpResponse("You don't have any reports to view.")
-      if any(report.id == "t2" for report in reportList) == False:
-        h = "Could not find a matching report with that ID."
-      for report1 in reportList:
-        if report1.id == int(reportid):
-          h = "Report ID: " + str(report1.id) + "\n   Created at: " + str(report1.created_at) + "\n   Owner: " + report1.owner.username + "\n   Short description: " + report1.short_description + "\n   Detailed description: " + report1.detailed_description + "\n   Files: \n"
-          if not report1.file1 and not report1.file2 and not report1.file3 and not report1.file4 and not report1.file5:
-            h += "      This report doesn't have any files"
-          else:
-            if report1.file1:
-              file1 = str(report1.file1)
-              h +=  "      "+str(report1.file1)
-            if report1.file2:
-              h += "      "+str(report1.file2)  
-            if report1.file3:
-              #							file3 = str(report1.file3)
-              h += "      "+str(report1.file3)
-            if report1.file4:
-              #							file4 = str(report1.file4)
-              h += "      "+str(report1.file4)
-            if report1.file5:
-              #							file5 = str(report1.file5)
-              h += "      "+str(report1.file5)
-            h += "\n   Private? " + str(report1.private) + "\n   Encrypted? " + str(report1.encrypt)
-            break
-        return HttpResponse(h)
-    return HttpResponse(h)
+	if not request.user.is_authenticated():
+		return HttpResponse("You are not authenticated")
+	if request.user.is_active:
+		if request.method == 'POST':
+			h = ""
+			reportid = request.POST.get('reportid')
+			siteManager = UserProfile.objects.get(user_id=request.user.id).siteManager
+			results1 = Report.objects.all()
+			reportList = list(results1)
+			for report in reportList:
+				if report.private == True:
+					if request.user not in report.auth_users.all() and not siteManager:
+						reportList.remove(report)
+			if len(reportList) == 0:
+				return HttpResponse("You don't have any reports to view.")
 
-  #return render(request, 'secureshare/manage-reports.html')
+			match = False
+			report = None
+			for item in reportList:
+				if int(reportid) == int(item.id):
+					match = True
+					report = item
+					break
+
+			if match:
+				h += "   Name: " + str(report.name) + "\n"
+				h += "   Created at: " + str(report.created_at) + "\n"
+				h += "   Owner: " + str(report.owner) + "\n"
+				h += "   Short description: " + str(report.short_description) + "\n"
+				h += "   Detailed description: " + str(report.detailed_description) + "\n"
+				h += "   Tags: " + str(report.tags) + "\n"
+				h += "   Private? " + str(report.private) + "\n"
+				h += "   Encrypted? " + str(report.encrypt) + "\n"
+				h += "   Files?\n"
+
+				if not report.file1 and not report.file2 and not report.file3 and not report.file4 and not report.file5:
+					h += "      This report doesn't have any files."
+				else:
+					if report.file1:
+						h +=  "      "+str(report.file1)[15:] + "\n"
+					if report.file2:
+						h += "      "+str(report.file2)[15:] + "\n"
+					if report.file3:
+						h += "      "+str(report.file3)[15:] + "\n"
+					if report.file4:
+						h += "      "+str(report.file4)[15:] + "\n"
+					if report.file5:
+						h += "      "+str(report.file5)[15:] + "\n"
+			else:
+				h = "You don't have access to this report or it does not exist."
+				return HttpResponse(h)
+		return HttpResponse(h)
+
+	#return render(request, 'secureshare/manage-reports.html')
 
 # def grouppage(request, groupname):
 # 	context_dict = {}

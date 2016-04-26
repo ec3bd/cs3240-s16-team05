@@ -117,10 +117,36 @@ with requests.Session() as s:
       print("Confirming file downloads...")
       while True:
           file1Exist = False
+          file2Exist = False
+          file3Exist = False
+          file4Exist = False
+          file5Exist = False
 
-          if file1:
-              if
-      sleep(5)
+          if not file1:
+            file1Exist = True
+          if not file2:
+            file2Exist = True
+          if not file3:
+            file3Exist = True
+          if not file4:
+            file4Exist = True
+          if not file5:
+            file5Exist = True
+
+          directory = "/home/student/Downloads/"
+          if os.path.isfile(directory + array[9].strip()[15:])
+            file1Exist = True
+          if os.path.isfile(directory + array[10].strip()[15:])
+            file2Exist = True
+          if os.path.isfile(directory + array[11].strip()[15:])
+            file3Exist = True
+          if os.path.isfile(directory + array[12].strip()[15:])
+            file4Exist = True
+          if os.path.isfile(directory + array[13].strip()[15:])
+            file5Exist = True
+
+          if file1Exist and file2Exist and file3Exist and file4Exist and file5Exist:
+            break
 
       # print(str(myList[8]))
       encryptCheck = str(myList[7])

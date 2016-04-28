@@ -948,7 +948,6 @@ def fdadisplayreport(request):
 				h += "   Files?\n"
 
 				if not report.file1 and not report.file2 and not report.file3 and not report.file4 and not report.file5:
-					# h += "      This report doesn't have any files."
 					h += "      "
 				else:
 					if report.file1:
@@ -970,17 +969,3 @@ def fdadisplayreport(request):
 				h = "You don't have access to this report or it does not exist."
 				return HttpResponse(h)
 		return HttpResponse(h)
-
-	#return render(request, 'secureshare/manage-reports.html')
-
-# def grouppage(request, groupname):
-# 	context_dict = {}
-# 	try:
-# 		group = Group.objects.get(name=groupname)
-# 		users = group.user_set.all()
-# 		context_dict['group_name'] = group.name
-# 		context_dict['group'] = group
-# 	except Group.DoesNotExist:
-# 		pass
-#
-# 	return render(request, 'secureshare/grouppage.html', context_dict)

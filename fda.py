@@ -19,8 +19,8 @@ payload = {
     'password': password
 }
 
-host = "http://127.0.0.1:8000"
-# host = "https://radiant-peak-61887.herokuapp.com/"
+# host = "http://127.0.0.1:8000"
+host = "https://radiant-peak-61887.herokuapp.com/"
 
 key = 'i_love_srikanth!'
 
@@ -51,7 +51,6 @@ with requests.Session() as s:
     reportid = input("Enter the ID of the report you wish to display: ")
     payload['reportid'] = reportid
 
-    # p2 = s.post('http://127.0.0.1:8000/secureshare/fdadisplayreport/', data=payload)
     p2 = s.post(host + '/secureshare/fdadisplayreport/', data=payload)
     parse = p2.text
     parse2 = p2.text
@@ -90,7 +89,6 @@ with requests.Session() as s:
 
     if download.strip() == "y":
       downloadurl = "/secureshare/requestfiledownload/"
-      # downloadurl += reportid + "/files/"
       downloadurl += reportid + "/"
       array = parse.split('\n')
 

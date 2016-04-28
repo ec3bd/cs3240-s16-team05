@@ -420,7 +420,7 @@ def searchreportsadvanced(request):
 				(Q(short_description__icontains=description) |
 				 Q(detailed_description__icontains=description)) 
 		)
-		if tags == "":
+		if tags != "":
 			results1 = results1.filter(
 				Q(tags__icontains=tags)
 			)

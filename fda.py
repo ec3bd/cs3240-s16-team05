@@ -87,6 +87,7 @@ with requests.Session() as s:
     print(toPrint)
 
     download = input("\nWould you like to download the files of this report? (y/n) ")
+    #HASH CHECK
 
     if download.strip() == "y":
       downloadurl = "/secureshare/requestfiledownload/"

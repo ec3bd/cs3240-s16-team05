@@ -19,8 +19,8 @@ payload = {
     'password': password
 }
 
-# host = "http://127.0.0.1:8000"
-host = "https://radiant-peak-61887.herokuapp.com/"
+host = "http://127.0.0.1:8000"
+# host = "https://radiant-peak-61887.herokuapp.com/"
 
 key = 'i_love_srikanth!'
 
@@ -87,7 +87,6 @@ with requests.Session() as s:
     print(toPrint)
 
     download = input("\nWould you like to download the files of this report? (y/n) ")
-    #HASH CHECK
 
     if download.strip() == "y":
       downloadurl = "/secureshare/requestfiledownload/"
@@ -150,6 +149,7 @@ with requests.Session() as s:
               file5Exist = True
 
           if file1Exist and file2Exist and file3Exist and file4Exist and file5Exist:
+            print("Done.")
             break
 
       encryptCheck = str(myList[7])

@@ -14,29 +14,7 @@ import binascii
 import mimetypes
 import hashlib
 from django.views.decorators.csrf import csrf_exempt
-# import urllib.request
 import requests
-
-
-# import urllib
-
-# def fdalogin(request):
-# 	if request.method == 'POST':
-# 		username = request.POST.get('username')
-# 		password = request.POST.get('password')
-# 		user = authenticate(username=username, password=password)
-# 		if user:
-# 			if user.is_active:
-# 				login(request, user)
-# 				return HttpResponse("Success")
-# 			else:
-# 				return HttpResponse("Failed")
-# 		else:
-# 			return render(request, "Failed")
-# 	else:
-# 		if (request.user.is_authenticated()):
-# 			return HttpResponse('Success')
-# 		return render(request, 'secureshare/fdalogin.html')
 
 
 def userlogin(request):
@@ -141,7 +119,7 @@ def createreport(request):
 			# Hash check
 			m = hashlib.md5()
 			toHash = str(owner) + str(timeStr) + str(short_description) + str(detailed_description) + str(file1) + str(
-					file2) + str(file3) + str(file4) + str(file5) + str(private) + str(encrypt)
+			 		file2) + str(file3) + str(file4) + str(file5) + str(private) + str(encrypt)
 			uni = b'toHash'
 			m.update(uni)
 			int_hash = m.hexdigest()

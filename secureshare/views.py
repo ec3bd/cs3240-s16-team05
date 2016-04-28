@@ -349,7 +349,7 @@ def searchreports(request):
 			results = list(results1)
 			for report in results:
 				if report.private == True:
-					if request.user not in report.auth_users.all() and not siteManager:
+					if request.user not in report.auth_users.all() or not siteManager:
 						results.remove(report)
 			return render(request, 'secureshare/search-reports.html',
 										{'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
@@ -367,7 +367,7 @@ def searchreports(request):
 			results = results1
 			for report in results:
 				if report.private == True:
-					if request.user not in report.auth_users.all() and not siteManager:
+					if request.user not in report.auth_users.all() or not siteManager:
 						results.remove(report)
 			return render(request, 'secureshare/search-reports.html',
 										{'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
@@ -383,7 +383,7 @@ def searchreports(request):
 			results = list(results1)
 			for report in results:
 				if report.private == True:
-					if request.user not in report.auth_users.all() and not siteManager:
+					if request.user not in report.auth_users.all() or not siteManager:
 						results.remove(report)
 			return render(request, 'secureshare/search-reports.html',
 										{'results': results, 'query': "You searched for: " + query + ".", 'siteManager': siteManager})
@@ -427,7 +427,7 @@ def searchreportsadvanced(request):
 		results = list(results1)
 		for report in results:
 			if report.private == True:
-				if request.user not in report.auth_users.all() and not siteManager:
+				if request.user not in report.auth_users.all() or not siteManager:
 					results.remove(report)
 		return render(request, 'secureshare/search-reports.html',
 									{'results': results, 'query': "You used an advanced search.", 'siteManager': siteManager})
@@ -919,7 +919,7 @@ def fdaviewreports(request):
 		reportList = list(results1)
 		for report in reportList:
 			if report.private == True:
-				if request.user not in report.auth_users.all() and not siteManager:
+				if request.user not in report.auth_users.all() or not siteManager:
 					reportList.remove(report)
 		if len(reportList) == 0:
 			return HttpResponse("You don't have any reports to view.")
@@ -945,7 +945,7 @@ def fdadisplayreport(request):
 			reportList = list(results1)
 			for report in reportList:
 				if report.private == True:
-					if request.user not in report.auth_users.all() and not siteManager:
+					if request.user not in report.auth_users.all() or not siteManager:
 						reportList.remove(report)
 			if len(reportList) == 0:
 				return HttpResponse("You don't have any reports to view.")
@@ -970,7 +970,8 @@ def fdadisplayreport(request):
 				h += "   Files?\n"
 
 				if not report.file1 and not report.file2 and not report.file3 and not report.file4 and not report.file5:
-					h += "      This report doesn't have any files."
+					# h += "      This report doesn't have any files."
+					h += "      "
 				else:
 					if report.file1:
 						h +=  "      "+str(report.file1)

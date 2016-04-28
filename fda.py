@@ -19,8 +19,8 @@ payload = {
     'password': password
 }
 
-host = "http://127.0.0.1:8000"
 # host = "http://127.0.0.1:8000"
+host = "https://radiant-peak-61887.herokuapp.com/"
 
 key = 'i_love_srikanth!'
 
@@ -44,6 +44,9 @@ with requests.Session() as s:
       exit()
     p1 = s.post(host + '/secureshare/fdaviewreports/', data=payload)
     print(p1.text)
+    if p1.text == "You don't have any reports to view.":
+      print("The FDA will now exit.")
+      exit()
 
     reportid = input("Enter the ID of the report you wish to display: ")
     payload['reportid'] = reportid

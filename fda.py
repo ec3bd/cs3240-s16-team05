@@ -7,9 +7,6 @@ import django
 import webbrowser
 from time import sleep
 
-# encryption/decryption, connect with heroku
-
-from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'home.settings')
@@ -23,23 +20,18 @@ payload = {
 }
 
 host = "http://127.0.0.1:8000"
-# host = ""
+# host = "http://127.0.0.1:8000"
 
 key = 'i_love_srikanth!'
 
 def decrypt_file(filename_input, symmetric_key):
     iv = b"1234567890123456" # Just some initialization vector
     AESkey = AES.new(symmetric_key, AES.MODE_CFB, iv)
-    # output_filename = "DEC_" + filename_input[:-4]
-    output_filename = filename_input[:-4]
+    output_filename = filename_input[:-4] # remove '.enc' from filename
     with open(filename_input, 'rb') as f:
         raw_file = f.read()
-        # print("reading file: " + str(raw_file) + " " + str(type(raw_file)))
         data_dec = AESkey.decrypt(raw_file)
-        # print("data_dec: " + str(data_dec) + " " + str(type(data_dec)))
-        # string = data_dec.decode("utf-8")
     with open(output_filename, 'wb') as o:
-        #o.write(string)
         o.write(data_dec)
         print('Decrypted file written to: ' + output_filename)
     return True
@@ -56,7 +48,8 @@ with requests.Session() as s:
     reportid = input("Enter the ID of the report you wish to display: ")
     payload['reportid'] = reportid
 
-    p2 = s.post('http://127.0.0.1:8000/secureshare/fdadisplayreport/', data=payload)
+    # p2 = s.post('http://127.0.0.1:8000/secureshare/fdadisplayreport/', data=payload)
+    p2 = s.post(host + '/secureshare/fdadisplayreport/', data=payload)
     parse = p2.text
     parse2 = p2.text
     myList = parse2.split('\n')
@@ -133,7 +126,8 @@ with requests.Session() as s:
           if not file5:
             file5Exist = True
 
-          directory = "/home/student/Downloads/"
+          # directory = "/home/student/Downloads/"
+          directory = "C:/Users/Srikanth/Desktop/"
 
           if file1:
             if os.path.isfile(directory + array[9].strip()[15:]):
@@ -154,34 +148,25 @@ with requests.Session() as s:
           if file1Exist and file2Exist and file3Exist and file4Exist and file5Exist:
             break
 
-      # print(str(myList[8]))
       encryptCheck = str(myList[7])
       if "True" in encryptCheck:
-
-        filename_input = "/home/student/Downloads/"
-        # filename_input = ""
-
+        # filename_input = "/home/student/Downloads/"
+        filename_input = "C:/Users/Srikanth/Desktop/"
         if file1:
           filename_input1 = filename_input + array[9].strip()[15:]
           decrypt_file(filename_input1, key)
-
         if file2:
           filename_input2 = filename_input + array[10].strip()[15:]
           decrypt_file(filename_input2, key)
-
         if file3:
           filename_input3 = filename_input + array[11].strip()[15:]
           decrypt_file(filename_input3, key)
-
         if file4:
           filename_input4 = filename_input + array[12].strip()[15:]
           decrypt_file(filename_input4, key)
-
         if file5:
           filename_input5 = filename_input + array[13].strip()[15:]
           decrypt_file(filename_input5, key)
-
-
       exit()
     else:
       print("The FDA will now exit.")
